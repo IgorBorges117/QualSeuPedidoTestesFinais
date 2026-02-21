@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>Perfil do Chef</title>
+    <h:outputStylesheet library="css" name="app.css"/>
+    <style type="text/css">
+        .public-chef-layout {
+            display: grid !important;
+            grid-template-columns: minmax(0, 1fr) 420px !important;
+            gap: 20px !important;
+            align-items: start !important;
+        }
+        .public-chef-chat {
+            width: 420px !important;
+            min-height: calc(100vh - 28px) !important;
+            position: sticky !important;
+            top: 10px !important;
+        }
+        @media (max-width: 760px) {
+            .public-chef-layout {
+                grid-template-columns: 1fr !important;
+            }
+            .public-chef-chat {
+                width: 100% !important;
+                min-height: auto !important;
+                position: static !important;
+                margin-top: 16px !important;
+            }
+        }
+    </style>
+</h:head>
+<h:body>
+    <button type="button" class="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">&#9776;</button>
+    <div class="menu-overlay" onclick="closeMenu()"></div>
+    <aside class="side-menu" aria-label="Navegação principal">
+        <h:form styleClass="side-menu-form">
+            <div class="side-menu-header">Menu</div>
+            <h:commandLink styleClass="side-menu-link" value="Home" action="/pages/cliente-home.xhtml?faces-redirect=true"/>
+            <h:commandLink styleClass="side-menu-link" value="Perfil" action="/pages/cliente-perfil.xhtml?faces-redirect=true"/>
+            <h:commandLink styleClass="side-menu-link" value="Configurações" action="/pages/cliente-perfil-edicao.xhtml?faces-redirect=true"/>
+            <h:commandButton styleClass="btn-submit" value="Sair" action="#{authBean.sair}"/>
+        </h:form>
+    </aside>
+
+    <h:panelGroup rendered="#{empty chefPerfilPublicoBean.chefSelecionado}">
+        <div class="register-page">
+            <div class="register-wrap">
+                <h1>Chef não encontrado</h1>
+            </div>
+        </div>
+    </h:panelGroup>
+
+    <h:panelGroup rendered="#{not empty chefPerfilPublicoBean.chefSelecionado}">
+        <div class="register-page">
+            <div class="register-wrap">
+                <h:messages globalOnly="true" showDetail="true" showSummary="false" styleClass="messages"/>
+
+                <div class="public-chef-layout">
+                    <main class="public-chef-main">
+                        <section class="chef-profile-shell">
+                            <div class="chef-cover-stage">
+                                <h:panelGroup rendered="#{not empty chefPerfilPublicoBean.chefSelecionado.fotoCapaDataUrl}">
+                                    <img src="#{chefPerfilPublicoBean.chefSelecionado.fotoCapaDataUrl}" alt="Capa do chef" class="chef-cover-photo"/>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{empty chefPerfilPublicoBean.chefSelecionado.fotoCapaDataUrl}">
+                                    <div class="chef-cover-photo placeholder" aria-label="Capa padrão" style="background: linear-gradient(120deg, #f4db53 0%, #f69448 100%); height: 220px;"></div>
+                                </h:panelGroup>
+
+                                <div class="chef-avatar-overlay">
+                                    <h:panelGroup rendered="#{not empty chefPerfilPublicoBean.chefSelecionado.fotoPerfilDataUrl}">
+                                        <img src="#{chefPerfilPublicoBean.chefSelecionado.fotoPerfilDataUrl}" alt="Foto de perfil do chef" class="profile-photo"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{empty chefPerfilPublicoBean.chefSelecionado.fotoPerfilDataUrl}">
+                                        <h:graphicImage library="images" name="chef-default.svg" styleClass="profile-photo" alt="Foto padrão do chef"/>
+                                    </h:panelGroup>
+                                </div>
+                            </div>
+
+                            <div class="chef-identity-meta">
+                                <h1>#{chefPerfilPublicoBean.chefSelecionado.nome}</h1>
+                                <p>
+                                    <strong>Especialidade:</strong>
+                                    <h:outputText value="#{chefPerfilPublicoBean.chefSelecionado.preferenciaAlimentar}" rendered="#{not empty chefPerfilPublicoBean.chefSelecionado.preferenciaAlimentar}"/>
+                                    <h:outputText value="Chef particular" rendered="#{empty chefPerfilPublicoBean.chefSelecionado.preferenciaAlimentar}"/>
+                                    <span> | </span>
+                                    <strong>Disponibilidade:</strong>
+                                    <h:outputText value="#{empty chefPerfilPublicoBean.chefSelecionado.disponibilidadeChef ? 'Hoje' : chefPerfilPublicoBean.chefSelecionado.disponibilidadeChef}"/>
+                                </p>
+                            </div>
+                        </section>
+
+                        <section class="chef-order-shell">
+                            <h2>Solicitar menu para evento</h2>
+
+                            <h3>Pratos em destaque</h3>
+                            <h:panelGroup rendered="#{not empty chefPerfilPublicoBean.pratosChefSelecionado}">
+                                <div class="public-chef-dish-grid">
+                                    <ui:repeat value="#{chefPerfilPublicoBean.pratosChefSelecionado}" var="prato">
+                                        <article class="dish-highlight-card">
+                                            <h:panelGroup rendered="#{not empty prato.fotoDataUrl}">
+                                                <img src="#{prato.fotoDataUrl}" alt="Foto do prato" class="dish-highlight-photo"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup rendered="#{empty prato.fotoDataUrl}">
+                                                <div class="dish-highlight-photo placeholder" aria-label="Prato sem foto"></div>
+                                            </h:panelGroup>
+                                            <h4>#{prato.nome}</h4>
+                                            <p>#{prato.descricao}</p>
+                                            <strong>R$ #{prato.preco}</strong>
+                                        </article>
+                                    </ui:repeat>
+                                </div>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{empty chefPerfilPublicoBean.pratosChefSelecionado}">
+                                <p>Este chef ainda não cadastrou pratos.</p>
+                            </h:panelGroup>
+
+                            <h:form id="pedidoForm" styleClass="chef-order-form">
+                                <h:messages id="pedidoMensagens" globalOnly="true" showDetail="true" showSummary="false" styleClass="messages"/>
+
+                                <h3>Monte seu pedido</h3>
+                                <p class="order-help">Selecione pelo menos um prato:</p>
+
+                                <h:panelGroup rendered="#{not empty chefPerfilPublicoBean.pratosChefSelecionado}">
+                                    <div class="dish-selection-strip">
+                                        <ui:repeat value="#{chefPerfilPublicoBean.pratosChefSelecionado}" var="prato">
+                                            <button type="button"
+                                                    class="dish-select-card #{chefPerfilPublicoBean.pratoSelecionado(prato.id) ? 'is-selected' : ''}"
+                                                    data-prato-id="#{prato.id}"
+                                                    onclick="toggleDishSelection(this)">
+                                                <h:panelGroup rendered="#{not empty prato.fotoDataUrl}">
+                                                    <img src="#{prato.fotoDataUrl}" alt="Foto do prato" class="dish-select-photo"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup rendered="#{empty prato.fotoDataUrl}">
+                                                    <div class="dish-select-photo placeholder" aria-label="Prato sem foto"></div>
+                                                </h:panelGroup>
+                                                <h4>#{prato.nome}</h4>
+                                                <p>#{prato.descricao}</p>
+                                                <strong>R$ #{prato.preco}</strong>
+                                            </button>
+                                        </ui:repeat>
+                                    </div>
+                                </h:panelGroup>
+
+                                <h:inputHidden id="pratosSelecionadosTexto" value="#{chefPerfilPublicoBean.pratosSelecionadosTexto}"/>
+
+                                <div class="event-schedule-fields">
+                                    <p><strong>Agendamento do evento</strong></p>
+                                    <div class="row2" style="margin-top:10px;">
+                                        <h:inputText id="dataEvento"
+                                                     value="#{chefPerfilPublicoBean.dataEvento}"
+                                                     required="true"
+                                                     requiredMessage="Informe a data do evento."
+                                                     pt:type="date"/>
+                                        <h:inputText id="horarioEvento"
+                                                     value="#{chefPerfilPublicoBean.horarioEvento}"
+                                                     required="true"
+                                                     requiredMessage="Informe o horário do evento."
+                                                     pt:type="time"/>
+                                    </div>
+                                    <h:message for="dataEvento" styleClass="messages"/>
+                                    <h:message for="horarioEvento" styleClass="messages"/>
+                                </div>
+
+                                <h:inputTextarea value="#{chefPerfilPublicoBean.observacoes}" styleClass="box" style="height:90px;" pt:placeholder="Observações do evento (opcional)"/>
+                                <h:commandButton styleClass="btn-submit" style="margin-top:12px;" value="Enviar solicitação" action="#{chefPerfilPublicoBean.solicitarMenu}">
+                                    <f:ajax execute="@form" render="@form"/>
+                                </h:commandButton>
+                            </h:form>
+                        </section>
+
+                        <section class="chef-posts-shell">
+                            <h2>Postagens do chef</h2>
+                            <ui:repeat value="#{chefPerfilPublicoBean.postagensChef}" var="post">
+                                <article class="auth-card chef-post-card">
+                                    <p>#{post.texto}</p>
+                                </article>
+                            </ui:repeat>
+                            <h:panelGroup rendered="#{empty chefPerfilPublicoBean.postagensChef}">
+                                <p>Este chef ainda não publicou novidades.</p>
+                            </h:panelGroup>
+
+                        </section>
+                    </main>
+
+                    <aside class="public-chef-chat">
+                        <h2>Chat direto com o chef</h2>
+                        <p class="chat-hint">Canal de conversa entre cliente e chef, separado dos pedidos.</p>
+
+                        <h:form id="chatChefForm">
+                            <h:messages id="chatMensagens" globalOnly="true" showDetail="true" showSummary="false" styleClass="messages"/>
+
+                            <h:panelGroup rendered="#{empty chefPerfilPublicoBean.historicoConversa}">
+                                <p>Nenhuma mensagem enviada ainda.</p>
+                            </h:panelGroup>
+
+                            <h:panelGroup rendered="#{not empty chefPerfilPublicoBean.historicoConversa}">
+                                <div class="chat-history">
+                                    <ui:repeat value="#{chefPerfilPublicoBean.historicoConversa}" var="msg">
+                                        <div class="chat-bubble client-bubble">
+                                            <strong>Você</strong>
+                                            <span>#{msg.textoCliente}</span>
+                                        </div>
+                                        <h:panelGroup rendered="#{not empty msg.respostaChef}">
+                                            <div class="chat-bubble chef-bubble">
+                                                <strong>Chef</strong>
+                                                <span>#{msg.respostaChef}</span>
+                                            </div>
+                                        </h:panelGroup>
+                                    </ui:repeat>
+                                </div>
+                            </h:panelGroup>
+
+                            <h:inputTextarea id="mensagemChef"
+                                             value="#{chefPerfilPublicoBean.mensagemCliente}"
+                                             styleClass="box"
+                                             style="height:100px;"
+                                             required="true"
+                                             requiredMessage="Digite uma mensagem para o chef."
+                                             pt:placeholder="Escreva sua mensagem"/>
+                            <h:message for="mensagemChef" styleClass="messages"/>
+                            <h:commandButton styleClass="btn-submit" style="margin-top:12px;" value="Enviar mensagem" action="#{chefPerfilPublicoBean.enviarMensagem}">
+                                <f:ajax execute="@form" render="@form"/>
+                            </h:commandButton>
+                        </h:form>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </h:panelGroup>
+
+    <script type="text/javascript">
+        function toggleMenu() {
+            document.body.classList.toggle('menu-open');
+        }
+        function closeMenu() {
+            document.body.classList.remove('menu-open');
+        }
+
+        function syncDishHiddenField(form) {
+            if (!form) {
+                return;
+            }
+            const hidden = form.querySelector("input[id$='pratosSelecionadosTexto']");
+            if (!hidden) {
+                return;
+            }
+            const selectedCards = form.querySelectorAll('.dish-select-card.is-selected');
+            const ids = Array.prototype.map.call(selectedCards, function (card) {
+                return card.getAttribute('data-prato-id');
+            });
+            hidden.value = ids.join(',');
+        }
+
+        function restoreDishSelection(context) {
+            const scope = context || document;
+            const forms = scope.querySelectorAll("form[id$='pedidoForm']");
+            Array.prototype.forEach.call(forms, function (form) {
+                const hidden = form.querySelector("input[id$='pratosSelecionadosTexto']");
+                if (!hidden) {
+                    return;
+                }
+                const selected = hidden.value ? hidden.value.split(',') : [];
+                const selectedSet = {};
+                selected.forEach(function (id) {
+                    const trimmed = (id || '').trim();
+                    if (trimmed) {
+                        selectedSet[trimmed] = true;
+                    }
+                });
+
+                const cards = form.querySelectorAll('.dish-select-card');
+                Array.prototype.forEach.call(cards, function (card) {
+                    const id = card.getAttribute('data-prato-id');
+                    if (selectedSet[id]) {
+                        card.classList.add('is-selected');
+                    } else {
+                        card.classList.remove('is-selected');
+                    }
+                });
+            });
+        }
+
+        function toggleDishSelection(card) {
+            card.classList.toggle('is-selected');
+            syncDishHiddenField(card.closest('form'));
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            restoreDishSelection(document);
+        });
+
+        if (window.jsf &amp;&amp; jsf.ajax) {
+            jsf.ajax.addOnEvent(function (data) {
+                if (data.status === 'success') {
+                    restoreDishSelection(document);
+                }
+            });
+        }
+    </script>
+</h:body>
+</html>
+

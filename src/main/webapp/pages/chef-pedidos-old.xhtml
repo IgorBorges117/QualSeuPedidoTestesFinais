@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>Pedidos Recebidos</title>
+</h:head>
+
+<h:body>
+
+<h1>Pedidos Recebidos</h1>
+
+<h:form>
+
+    <!-- força refresh da tela -->
+    <h:commandButton value="Atualizar lista"/>
+    <br/><br/>
+
+    <h:dataTable value="#{pedidoBean.pedidos}" var="p" border="1">
+
+        <h:column>
+            <f:facet name="header">Descrição</f:facet>
+            #{p.descricao}
+        </h:column>
+
+        <h:column>
+            <f:facet name="header">Status</f:facet>
+            #{p.status}
+        </h:column>
+
+        <h:column>
+            <f:facet name="header">Ações</f:facet>
+
+            <h:commandButton value="Aceitar"
+                             action="#{pedidoBean.aceitarPedido(p)}"/>
+
+            <h:commandButton value="Recusar"
+                             action="#{pedidoBean.recusarPedido(p)}"/>
+        </h:column>
+
+    </h:dataTable>
+
+</h:form>
+
+</h:body>
+</html>

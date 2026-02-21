@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>Cadastro</title>
+    <h:outputStylesheet library="css" name="app.css"/>
+</h:head>
+<h:body>
+    <div class="register-page">
+        <div class="register-wrap">
+            <div class="register-brand">Qual o seu pedido?</div>
+            <h1 class="register-heading">Crie sua conta grátis de forma rápida e segura</h1>
+
+            <h:messages globalOnly="false" showDetail="true" showSummary="false" styleClass="messages"/>
+
+            <h:form>
+                <div class="register-grid">
+                    <div>
+                        <div class="row2">
+                            <h:inputText styleClass="box" value="#{cadastroBean.nome}" label="Nome e sobrenome" required="true" requiredMessage="Informe seu nome e sobrenome." pt:placeholder="Insira seu nome e sobrenome"/>
+                            <h:inputText styleClass="box" value="#{cadastroBean.dataNascimento}" pt:placeholder="Data de nascimento"/>
+                        </div>
+                        <div class="row2">
+                            <h:inputText styleClass="box" value="#{cadastroBean.cpf}" pt:placeholder="Insira seu CPF"/>
+                            <h:selectOneMenu styleClass="box" value="#{cadastroBean.sexo}">
+                                <f:selectItem itemLabel="Selecione seu sexo" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{cadastroBean.sexosDisponiveis}"/>
+                            </h:selectOneMenu>
+                        </div>
+                        <div class="stack">
+                            <h:inputText styleClass="box" value="#{cadastroBean.email}" label="E-mail" required="true" requiredMessage="Informe seu e-mail." pt:placeholder="Insira seu e-mail"/>
+                            <h:inputSecret styleClass="box" value="#{cadastroBean.senha}" label="Senha" required="true" requiredMessage="Informe sua senha." pt:placeholder="Crie uma senha de 6 dígitos"/>
+                            <h:inputSecret styleClass="box" value="#{cadastroBean.confirmarSenha}" label="Confirmação de senha" required="true" requiredMessage="Confirme sua senha." pt:placeholder="Repita sua senha de 6 dígitos"/>
+                            <h:inputText styleClass="box" value="#{cadastroBean.telefone}" pt:placeholder="Insira seu número de telefone"/>
+                        </div>
+                        <small>Vamos enviar um código de verificação para você.</small>
+                    </div>
+
+                    <div>
+                        <div class="row3">
+                            <h:inputText styleClass="box" value="#{cadastroBean.endereco}" pt:placeholder="Endereço"/>
+                            <h:inputText styleClass="box" value="#{cadastroBean.complemento}" pt:placeholder="Complemento"/>
+                            <h:inputText styleClass="box" value="#{cadastroBean.numero}" pt:placeholder="Número"/>
+                        </div>
+                        <div class="row4">
+                            <h:inputText styleClass="box" value="#{cadastroBean.bairro}" pt:placeholder="Bairro"/>
+                            <h:inputText styleClass="box" value="#{cadastroBean.cep}" pt:placeholder="CEP"/>
+                            <h:inputText styleClass="box" value="#{cadastroBean.cidade}" pt:placeholder="Cidade"/>
+                            <h:inputText styleClass="box" value="#{cadastroBean.estado}" pt:placeholder="Estado"/>
+                        </div>
+
+                        <div class="section">
+                            <h2>Tipo de conta</h2>
+                            <div class="radio-line">
+                                <h:selectOneRadio value="#{cadastroBean.tipo}" layout="lineDirection">
+                                    <f:selectItems value="#{cadastroBean.tiposContaLabel}"/>
+                                </h:selectOneRadio>
+                            </div>
+
+                            <h:selectOneMenu styleClass="box" value="#{cadastroBean.preferenciaAlimentar}">
+                                <f:selectItem itemLabel="Preferência alimentar" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{cadastroBean.preferenciasDisponiveis}"/>
+                            </h:selectOneMenu>
+                        </div>
+
+                        <div class="section">
+                            <div class="policy">Privacidade e segurança</div>
+                            <div class="terms">
+                                <h:selectBooleanCheckbox value="#{cadastroBean.aceitouTermos}"/>
+                                <span> Li e aceito os </span>
+                                <a href="#">Termos de Uso</a>
+                            </div>
+                            <h:commandButton styleClass="btn-submit" value="Criar conta grátis" action="#{cadastroBean.cadastrar}"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="auth-links">
+                    <h:link value="Já tem conta? Entrar" outcome="/pages/login.xhtml"/>
+                    <br/>
+                    <h:link value="Voltar para início" outcome="/pages/index.xhtml"/>
+                </div>
+            </h:form>
+        </div>
+    </div>
+</h:body>
+</html>

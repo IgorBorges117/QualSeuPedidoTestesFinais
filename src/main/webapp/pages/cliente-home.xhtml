@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>Ãrea do Cliente</title>
+    <h:outputStylesheet library="css" name="app.css"/>
+</h:head>
+<h:body>
+    <button type="button" class="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">&#9776;</button>
+    <div class="menu-overlay" onclick="closeMenu()"></div>
+    <aside class="side-menu" aria-label="NavegaÃ§Ã£o principal">
+        <h:form styleClass="side-menu-form">
+            <div class="side-menu-header">Menu</div>
+            <h:commandLink styleClass="side-menu-link" value="Home" action="/pages/cliente-home.xhtml?faces-redirect=true"/>
+            <h:commandLink styleClass="side-menu-link" value="Perfil" action="/pages/cliente-perfil.xhtml?faces-redirect=true"/>
+            <h:commandLink styleClass="side-menu-link" value="ConfiguraÃ§Ãµes" action="/pages/cliente-perfil-edicao.xhtml?faces-redirect=true"/>
+            <h:commandButton styleClass="btn-submit" value="Sair" action="#{authBean.sair}"/>
+        </h:form>
+    </aside>
+
+    <div class="register-page client-home-page">
+        <div class="register-wrap">
+            <section class="client-home-hero">
+                <div>
+                    <p class="hero-kicker">Eventos sem dor de cabeÃ§a</p>
+                    <h1>Monte seu evento com chefs avaliados em poucos minutos</h1>
+                    <p class="hero-sub">Escolha o profissional, monte o menu e receba confirmaÃ§Ã£o com rapidez.</p>
+                    <h:link styleClass="btn btn-primary" value="Encontrar chef agora" outcome="/pages/cliente-home.xhtml"/>
+                </div>
+                <div class="hero-stat-grid">
+                    <div class="hero-stat-card">
+                        <strong>#{usuarioBean.chefsDisponiveis.size()}</strong>
+                        <span>Chefs ativos</span>
+                    </div>
+                    <div class="hero-stat-card">
+                        <strong>Pratos personalizados</strong>
+                        <span>Monte o menu com o chef</span>
+                    </div>
+                    <div class="hero-stat-card">
+                        <strong>AtÃ© 60 min</strong>
+                        <span>Tempo mÃ©dio de resposta</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="client-home-filters">
+                <div class="filter-grid">
+                    <input id="filter-search" class="box" type="text" placeholder="Busque por nome, cidade ou especialidade"/>
+                    <select id="filter-price" class="box">
+                        <option value="">Faixa de preÃ§o</option>
+                        <option value="$">$</option>
+                        <option value="$$">$$</option>
+                        <option value="$$$">$$$</option>
+                    </select>
+                    <select id="filter-availability" class="box">
+                        <option value="">Disponibilidade</option>
+                        <option value="Hoje">Hoje</option>
+                        <option value="Fim de semana">Fim de semana</option>
+                    </select>
+                    <button type="button" class="btn-submit" onclick="applyChefFilters()">Aplicar filtros</button>
+                </div>
+            </section>
+
+            <section>
+                <h2>Chefs em destaque da sua regiÃ£o</h2>
+                <div id="chef-feed" class="chef-feed-grid">
+                    <ui:repeat value="#{usuarioBean.chefsDisponiveis}" var="chef" varStatus="status">
+                        <article class="chef-feed-card"
+                                 data-name="#{chef.nome}"
+                                 data-city="#{chef.cidade}"
+                                 data-specialty="#{empty chef.preferenciaAlimentar ? 'Chef particular' : chef.preferenciaAlimentar}"
+                                 data-price="#{empty chef.faixaPrecoChef ? '$$' : chef.faixaPrecoChef}"
+                                 data-availability="#{empty chef.disponibilidadeChef ? 'Hoje' : chef.disponibilidadeChef}">
+                            <div class="chef-feed-header">
+                                <h3>#{chef.nome}</h3>
+                                <span class="availability-pill">#{empty chef.disponibilidadeChef ? 'Hoje' : chef.disponibilidadeChef}</span>
+                            </div>
+
+                            <h:panelGroup rendered="#{not empty chef.fotoPerfilDataUrl}">
+                                <img src="#{chef.fotoPerfilDataUrl}" alt="Foto do chef #{chef.nome}" class="chef-suggestion-photo"/>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{empty chef.fotoPerfilDataUrl}">
+                                <h:graphicImage library="images" name="chef-default.svg" styleClass="chef-suggestion-photo" alt="Foto padrÃ£o do chef"/>
+                            </h:panelGroup>
+
+                            <p><strong>Especialidade:</strong> #{empty chef.preferenciaAlimentar ? 'Chef particular' : chef.preferenciaAlimentar}</p>
+
+                            <div class="chef-feed-meta">
+                                <span>Nota #{4.2 + (status.index mod 7) / 10.0}</span>
+                                <span>Faixa #{empty chef.faixaPrecoChef ? '$$' : chef.faixaPrecoChef}</span>
+                                <span>Resposta ~#{chefConteudoBean.possuiRespostasDoChef(chef.id) ? 30 : 90} min</span>
+                                <span>#{pratoBean.pratosPublicosDoChef(chef.id).size()} pratos</span>
+                            </div>
+
+                            <div class="chef-feed-badges">
+                                <h:panelGroup rendered="#{chef.chefVerificado}"><span class="chef-badge">Chef verificado</span></h:panelGroup>
+                                <h:panelGroup rendered="#{chefConteudoBean.possuiRespostasDoChef(chef.id)}"><span class="chef-badge">Resposta rÃ¡pida</span></h:panelGroup>
+                            </div>
+
+                            <div class="chef-feed-actions">
+                                <h:link styleClass="btn" value="Ver perfil" outcome="/pages/chef-perfil-publico.xhtml">
+                                    <f:param name="chefId" value="#{chef.id}"/>
+                                </h:link>
+                            </div>
+                        </article>
+                    </ui:repeat>
+                </div>
+                <p id="empty-filter-msg" style="display:none;">Nenhum chef encontrado com os filtros atuais.</p>
+            </section>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function toggleMenu() {
+            document.body.classList.toggle('menu-open');
+        }
+        function closeMenu() {
+            document.body.classList.remove('menu-open');
+        }
+
+        function applyChefFilters() {
+            const q = (document.getElementById('filter-search').value || '').toLowerCase().trim();
+            const price = document.getElementById('filter-price').value;
+            const availability = document.getElementById('filter-availability').value;
+            const cards = document.querySelectorAll('#chef-feed .chef-feed-card');
+
+            let visibleCount = 0;
+            cards.forEach(card => {
+                const name = (card.dataset.name || '').toLowerCase();
+                const city = (card.dataset.city || '').toLowerCase();
+                const specialty = (card.dataset.specialty || '').toLowerCase();
+                const cardPrice = card.dataset.price || '';
+                const cardAvailability = card.dataset.availability || '';
+
+                const matchesSearch = !q || name.includes(q) || city.includes(q) || specialty.includes(q);
+                const matchesPrice = !price || cardPrice === price;
+                const matchesAvailability = !availability || cardAvailability === availability;
+                const show = matchesSearch &amp;&amp; matchesPrice &amp;&amp; matchesAvailability;
+
+                card.style.display = show ? '' : 'none';
+                if (show) visibleCount++;
+            });
+
+            const empty = document.getElementById('empty-filter-msg');
+            empty.style.display = visibleCount === 0 ? '' : 'none';
+        }
+    </script>
+</h:body>
+</html>

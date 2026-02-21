@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>Painel do Cliente</title>
+</h:head>
+
+<h:body>
+<h:panelGroup rendered="#{not authBean.logado}">
+    <p>Você precisa fazer login para acessar esta página.</p>
+    <h:button value="Ir para login" outcome="/pages/login.xhtml"/>
+</h:panelGroup>
+
+<h:panelGroup rendered="#{authBean.logado}">
+<p>Logado como: <strong>#{authBean.usuarioLogado.nome}</strong></p>
+<h:form>
+    <h:commandButton value="Sair" action="#{authBean.sair}"/>
+</h:form>
+
+<h1>Painel do Cliente</h1>
+
+<!-- ====== MENU DISPONÍVEL + CARRINHO ====== -->
+<h:form>
+
+    <h2>Menu Disponível</h2>
+
+    <h:dataTable value="#{pratoBean.pratos}" var="p" border="1">
+
+        <h:column>
+            <f:facet name="header">Nome</f:facet>
+            #{p.nome}
+        </h:column>
+
+        <h:column>
+            <f:facet name="header">Descrição</f:facet>
+            #{p.descricao}
+        </h:column>
+
+        <h:column>
+            <f:facet name="header">Preço</f:facet>
+            R$ #{p.preco}
+        </h:column>
+
+        <h:column>
+            <f:facet name="header">Ação</f:facet>
+            <h:commandButton value="Selecionar"
+                             action="#{clientePedidoBean.adicionar(p.nome, p.preco)}"/>
+        </h:column>
+
+    </h:dataTable>
+
+    <hr/>
+
+    <h2>Meu Pedido</h2>
+
+    <h:dataTable value="#{clientePedidoBean.carrinho}" var="i" border="0"
+                 rendered="#{not empty clientePedidoBean.carrinho}">
+        <h:column>
+            #{i.nome} - R$ #{i.preco}
+        </h:column>
+    </h:dataTable>
+
+    <p><strong>Total:</strong> R$ #{clientePedidoBean.total}</p>
+
+    <h:commandButton value="Enviar pedido"
+                     action="#{clientePedidoBean.enviarPedido}"/>
+
+</h:form>
+
+<hr/>
+
+<!-- ====== STATUS DO PEDIDO ENVIADO ====== -->
+<h:panelGroup rendered="#{clientePedidoBean.pedidoEnviado}">
+
+    <h2>Pedido enviado</h2>
+
+    <p>
+        <strong>Status:</strong>
+        #{clientePedidoBean.pedidoAtual.status}
+    </p>
+
+    <p>
+        <strong>Resumo:</strong>
+        #{clientePedidoBean.pedidoAtual.descricao}
+    </p>
+
+    <h:form>
+        <h:commandButton value="Atualizar status"
+                         action="#{clientePedidoBean.atualizarStatus}"/>
+    </h:form>
+
+    <!-- ====== PRÓXIMA ETAPA (CHAT) ====== -->
+    <h:panelGroup rendered="#{clientePedidoBean.pedidoAceito}">
+        <hr/>
+        <h2>Chat com o Chef</h2>
+        <p>(Próxima etapa: aqui entraremos com as mensagens.)</p>
+    </h:panelGroup>
+
+</h:panelGroup>
+
+</h:panelGroup>
+</h:body>
+</html>

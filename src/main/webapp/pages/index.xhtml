@@ -1,34 +1,64 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="../templates/layout.xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:p="http://primefaces.org/ui">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>Qual o seu pedido?</title>
+    <h:outputStylesheet library="css" name="app.css"/>
+</h:head>
+<h:body>
+    <div class="page">
+        <header class="topbar">
+            <div class="logo">Qual o seu pedido?</div>
+            <nav class="top-actions">
+                <h:link value="FAÇA SEU CADASTRO AGORA >" outcome="/pages/cadastro.xhtml"/>
+                <h:link value="LOGIN >" outcome="/pages/login.xhtml"/>
+            </nav>
+        </header>
 
-    <ui:define name="titulo">Página Inicial</ui:define>
+        <main class="hero">
+            <section>
+                <h1>A MAIOR PLATAFORMA PARA QUEM QUER CONTRATAR UM CHEFE PARTICULAR 5 ESTRELAS!</h1>
+                <p class="sub">Encontre cozinheiros e chefs para eventos, datas especiais e experiências personalizadas.</p>
 
-    <ui:define name="corpo">
-        <div class="wrapper">
-            <h1>Bem-vindo ao SeuChef</h1>
-            <article>
-                <p>A <b>maior plataforma</b> para quem quer contratar um chefe particular 5 estrelas</p>
-                <p>Mais de <b>10000</b> clientes cadastrados.</p>
-                <p>Mais de <b>10000</b> chefs a escolha.</p>
-                <p>Explore opções de prato para sua cerimônia com especialistas!</p>
-            </article>
-            <button>Divulgar serviços de chef</button>
-            <button>Cadastrar como cliente</button>
-            <p:carousel value="#{chefBean.destaques}" var="chef" numVisible="3" circular="true">
-                <f:facet name="header">
-                    <h5>Chefe em destaque</h5>
-                </f:facet>
-                <div class="product-item">
-                    <h:graphicImage name="imagens/#{chef.foto}" />
-                    <h4>#{chef.nome}</h4>
+                <div class="metrics">
+                    <div class="metric">
+                        <strong>+ 1 milhão</strong>
+                        <span>de usuários</span>
+                    </div>
+                    <div class="metric">
+                        <strong>+ 500 mil</strong>
+                        <span>chefs</span>
+                    </div>
+                    <div class="metric">
+                        <strong>+ 1 milhão</strong>
+                        <span>de opções de pratos</span>
+                    </div>
+                    <div class="metric">
+                        <strong>+ 1 milhão</strong>
+                        <span>de avaliações</span>
+                    </div>
                 </div>
-            </p:carousel>
-        </div>
-    </ui:define>
 
-</ui:composition>
+                <div class="hero-cta">
+                    <h:link styleClass="btn btn-primary" value="Anunciar como Chef" outcome="/pages/cadastro.xhtml"/>
+                    <h:link styleClass="btn" value="Cadastrar como cliente" outcome="/pages/cadastro.xhtml"/>
+                </div>
+
+                <input class="hero-search" type="text" placeholder="Busque um chef agora na sua cidade"/>
+            </section>
+
+            <aside class="hero-card">
+                <div class="chef-avatar"></div>
+                <div class="chef-name">Erick Jacquin</div>
+                <div class="stars">*****</div>
+            </aside>
+        </main>
+
+        <footer class="footer">
+            <div class="logo">Qual o seu pedido?</div>
+            <div>Copyright 2025 © Dev/Telebogas.</div>
+        </footer>
+    </div>
+</h:body>
+</html>

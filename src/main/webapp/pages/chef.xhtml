@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>Painel do Chef</title>
+    <h:outputStylesheet library="css" name="app.css"/>
+</h:head>
+
+<h:body>
+    <button type="button" class="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">&#9776;</button>
+    <div class="menu-overlay" onclick="closeMenu()"></div>
+    <aside class="side-menu" aria-label="Navegação principal">
+        <h:form styleClass="side-menu-form">
+            <div class="side-menu-header">Menu</div>
+            <h:commandLink styleClass="side-menu-link" value="Home" action="/pages/chef.xhtml?faces-redirect=true"/>
+            <h:commandLink styleClass="side-menu-link" value="Perfil" action="/pages/chef-perfil.xhtml?faces-redirect=true"/>
+            <h:commandLink styleClass="side-menu-link" value="Configurações" action="/pages/chef-onboarding.xhtml?faces-redirect=true"/>
+            <h:commandButton styleClass="btn-submit" value="Sair" action="#{authBean.sair}"/>
+        </h:form>
+    </aside>
+
+    <h:panelGroup rendered="#{not authBean.logado}">
+        <p>Você precisa fazer login para acessar esta página.</p>
+        <h:button value="Ir para login" outcome="/pages/login.xhtml"/>
+    </h:panelGroup>
+
+    <h:panelGroup rendered="#{authBean.logado}">
+        <div class="register-page">
+            <div class="register-wrap">
+                <p>Logado como: <strong>#{authBean.usuarioLogado.nome}</strong></p>
+                <h1>Painel do Chef</h1>
+
+                <h:messages globalOnly="true" showDetail="true" showSummary="false" styleClass="messages"/>
+
+                <h2>Perfil público</h2>
+                <div class="auth-card">
+                    <h:panelGroup rendered="#{not empty authBean.usuarioLogado.fotoCapaDataUrl}">
+                        <img src="#{authBean.usuarioLogado.fotoCapaDataUrl}" alt="Capa do perfil" class="chef-cover-photo"/>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{empty authBean.usuarioLogado.fotoCapaDataUrl}">
+                        <div class="chef-cover-photo placeholder" aria-label="Capa padrão" style="background: linear-gradient(120deg, #f4db53 0%, #f69448 100%); height: 220px;"></div>
+                    </h:panelGroup>
+
+                    <div style="margin-top:10px;">
+                        <h:panelGroup rendered="#{not empty authBean.usuarioLogado.fotoPerfilDataUrl}">
+                            <img src="#{authBean.usuarioLogado.fotoPerfilDataUrl}" alt="Foto de perfil do chef" class="profile-photo"/>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{empty authBean.usuarioLogado.fotoPerfilDataUrl}">
+                            <div class="profile-photo placeholder">Sem foto</div>
+                        </h:panelGroup>
+                    </div>
+                    <h:link value="Alterar fotos" outcome="/pages/chef-onboarding.xhtml"/>
+                </div>
+
+                <h2>Meu Cardápio</h2>
+                <h:form enctype="multipart/form-data">
+                    <h:messages globalOnly="false" showDetail="true" showSummary="false" styleClass="messages"/>
+
+                    <p>Nome:</p>
+                    <h:inputText id="nomePrato" value="#{pratoBean.nome}" required="true" requiredMessage="Informe o nome do prato."/>
+                    <h:message for="nomePrato" styleClass="messages"/>
+
+                    <p>Descrição:</p>
+                    <h:inputText id="descricaoPrato" value="#{pratoBean.descricao}" required="true" requiredMessage="Informe a descrição do prato."/>
+                    <h:message for="descricaoPrato" styleClass="messages"/>
+
+                    <p>Preço:</p>
+                    <h:inputText id="precoPrato"
+                                 value="#{pratoBean.preco}"
+                                 required="true"
+                                 requiredMessage="Informe o preço do prato."
+                                 converterMessage="Preço inválido. Use o formato 0.00."
+                                 pt:placeholder="0.00"
+                                 pt:inputmode="decimal"
+                                 pt:oninput="maskPriceInput(this)">
+                        <f:convertNumber locale="en_US" pattern="#0.00"/>
+                    </h:inputText>
+                    <h:message for="precoPrato" styleClass="messages"/>
+
+                    <p>Foto do prato (opcional):</p>
+                    <h:inputFile id="fotoPrato" value="#{pratoBean.fotoPrato}" pt:accept="image/*"/>
+                    <h:message for="fotoPrato" styleClass="messages"/>
+                    <br/><br/>
+
+                    <h:commandButton styleClass="btn-submit" value="Adicionar prato" action="#{pratoBean.adicionarPrato(authBean.usuarioLogado.id)}"/>
+                </h:form>
+
+                <br/>
+
+                <h:dataTable value="#{pratoBean.pratosDoChef(authBean.usuarioLogado.id)}" var="p" border="1">
+                    <h:column>
+                        <f:facet name="header">Foto</f:facet>
+                        <h:panelGroup rendered="#{not empty p.fotoDataUrl}">
+                            <img src="#{p.fotoDataUrl}" alt="Foto do prato" class="dish-photo-thumb"/>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{empty p.fotoDataUrl}">
+                            <div class="dish-photo-thumb placeholder" aria-label="Prato sem foto"></div>
+                        </h:panelGroup>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Nome</f:facet>
+                        #{p.nome}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Descrição</f:facet>
+                        #{p.descricao}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Preço</f:facet>
+                        R$ #{p.preco}
+                    </h:column>
+                </h:dataTable>
+
+                <hr/>
+
+                <h2>Solicitações de serviço</h2>
+                <h:form>
+                    <h:dataTable value="#{solicitacaoServicoBean.listarPorChef(authBean.usuarioLogado.id)}" var="sol" border="1" rendered="#{not empty solicitacaoServicoBean.listarPorChef(authBean.usuarioLogado.id)}">
+                        <h:column>
+                            <f:facet name="header">Cliente</f:facet>
+                            #{sol.clienteNome}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Pratos</f:facet>
+                            #{sol.pratosResumo}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Data/Hora</f:facet>
+                            #{sol.dataEvento} #{sol.horarioEvento}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Status</f:facet>
+                            #{sol.status}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Ações</f:facet>
+                            <h:commandButton value="Aceitar" action="#{solicitacaoServicoBean.aceitar(sol.id, authBean.usuarioLogado.id)}" rendered="#{sol.status eq 'PENDENTE'}"/>
+                            <h:commandButton value="Recusar" action="#{solicitacaoServicoBean.recusar(sol.id, authBean.usuarioLogado.id)}" rendered="#{sol.status eq 'PENDENTE'}"/>
+                        </h:column>
+                    </h:dataTable>
+                </h:form>
+                <h:panelGroup rendered="#{empty solicitacaoServicoBean.listarPorChef(authBean.usuarioLogado.id)}">
+                    <p>Nenhuma solicitação de serviço recebida.</p>
+                </h:panelGroup>
+
+                <hr/>
+
+                <h2>Mensagens de clientes</h2>
+                <ui:repeat value="#{chefPainelBean.mensagensRecebidas}" var="msg">
+                    <div class="auth-card" style="margin-bottom:12px;">
+                        <p><strong>Cliente:</strong> #{msg.nomeCliente}</p>
+                        <p><strong>Mensagem:</strong> #{msg.textoCliente}</p>
+                        <p><strong>Resposta:</strong> #{empty msg.respostaChef ? 'Sem resposta ainda' : msg.respostaChef}</p>
+                        <h:form>
+                            <h:inputText value="#{chefPainelBean.respostas[msg.id]}" pt:placeholder="Digite a resposta para este cliente"/>
+                            <h:commandButton styleClass="btn-submit" style="margin-top:10px;" value="Responder" action="#{chefPainelBean.responder(msg.id)}"/>
+                        </h:form>
+                    </div>
+                </ui:repeat>
+                <h:panelGroup rendered="#{empty chefPainelBean.mensagensRecebidas}">
+                    <p>Nenhuma mensagem recebida até o momento.</p>
+                </h:panelGroup>
+
+                <hr/>
+
+                <h2>Minhas postagens</h2>
+                <h:form>
+                    <h:inputTextarea value="#{chefPainelBean.novaPostagem}" styleClass="box" style="height:110px;" required="true" requiredMessage="Escreva algo para publicar."/>
+                    <h:commandButton styleClass="btn-submit" style="margin-top:12px;" value="Publicar" action="#{chefPainelBean.publicar}"/>
+                </h:form>
+
+                <ui:repeat value="#{chefPainelBean.postagensChef}" var="post">
+                    <div class="auth-card" style="margin-top:12px;">
+                        <p>#{post.texto}</p>
+                    </div>
+                </ui:repeat>
+                <h:panelGroup rendered="#{empty chefPainelBean.postagensChef}">
+                    <p>Você ainda não publicou nada.</p>
+                </h:panelGroup>
+            </div>
+        </div>
+    </h:panelGroup>
+
+    <script type="text/javascript">
+        function maskPriceInput(input) {
+            const digits = input.value.replace(/\D/g, '');
+            if (!digits) {
+                input.value = '';
+                return;
+            }
+            input.value = (parseInt(digits, 10) / 100).toFixed(2);
+        }
+
+        function toggleMenu() {
+            document.body.classList.toggle('menu-open');
+        }
+        function closeMenu() {
+            document.body.classList.remove('menu-open');
+        }
+    </script>
+</h:body>
+</html>

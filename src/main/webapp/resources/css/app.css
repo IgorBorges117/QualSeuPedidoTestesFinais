@@ -1,0 +1,1063 @@
+:root {
+    --bg: #efefef;
+    --text: #1b1b1b;
+    --muted: #727272;
+    --line: #c6c6c6;
+    --brand-a: #f4db53;
+    --brand-b: #f69448;
+    --cta: linear-gradient(90deg, #f0d34f 0%, #f69a4a 100%);
+    --font-base: "Calibri", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-base);
+    color: var(--text);
+    background: var(--bg);
+}
+
+input,
+select,
+button,
+textarea {
+    font-family: var(--font-base);
+}
+
+a {
+    color: #0f2b52;
+}
+
+.page {
+    min-height: 100vh;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 12px 24px;
+    background: linear-gradient(90deg, #f3dd57 0%, #f58e47 100%);
+    border-bottom: 1px solid #0000001a;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    font-family: "Brush Script MT", cursive;
+}
+
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-weight: 700;
+}
+
+.top-actions a {
+    text-decoration: none;
+}
+
+.hero {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 24px;
+    padding: 46px 48px 30px;
+    align-items: center;
+}
+
+.hero h1 {
+    margin: 0 0 20px;
+    max-width: 760px;
+    font-size: 44px;
+    line-height: 1.16;
+}
+
+.hero .sub {
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 22px;
+    margin-top: 24px;
+}
+
+.metric {
+    line-height: 1.15;
+}
+
+.metric strong {
+    display: block;
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.metric span {
+    font-size: 29px;
+    font-weight: 700;
+}
+
+.hero-cta {
+    margin-top: 28px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    border: 1px solid #ababab;
+    border-radius: 26px;
+    padding: 12px 22px;
+    font-size: 18px;
+    font-weight: 700;
+    background: #fff;
+    text-decoration: none;
+    color: #111;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: #bfbfbf;
+}
+
+.hero-search {
+    margin-top: 22px;
+    width: 100%;
+    max-width: 560px;
+    border: 2px solid #b4b4b4;
+    border-radius: 28px;
+    padding: 12px 18px;
+    font-size: 16px;
+}
+
+.hero-card {
+    text-align: center;
+}
+
+.chef-avatar {
+    width: 270px;
+    height: 330px;
+    border-radius: 52% 48% 42% 58%;
+    background: radial-gradient(circle at 30% 20%, #ffffff 0%, #e6e6e6 66%, #dbdbdb 100%);
+    margin: 0 auto 12px;
+    border: 1px solid #d2d2d2;
+}
+
+.chef-name {
+    font-size: 52px;
+    font-family: "Brush Script MT", cursive;
+}
+
+.stars {
+    color: #efc51a;
+    font-size: 44px;
+    letter-spacing: 5px;
+}
+
+.footer {
+    margin-top: 16px;
+    padding: 12px 20px;
+    background: linear-gradient(90deg, #f3dd57 0%, #f58e47 100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+.card-page {
+    min-height: 100vh;
+    background:
+            linear-gradient(rgba(40, 30, 20, 0.45), rgba(40, 30, 20, 0.45)),
+            linear-gradient(120deg, #7a5539 0%, #b8794e 38%, #d28947 62%, #8a5f3f 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 16px;
+}
+
+.auth-card {
+    width: min(420px, 100%);
+    background: #f1f1f1;
+    border: 1px solid #949494;
+    border-radius: 10px;
+    padding: 20px 18px 24px;
+    box-shadow: 0 12px 40px #0000002e;
+}
+
+.auth-logo {
+    text-align: center;
+    font-size: 44px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.auth-title {
+    margin: 0 0 16px;
+    text-align: center;
+    font-size: 54px;
+    line-height: 0.95;
+    font-family: "Brush Script MT", cursive;
+}
+
+.field {
+    width: 100%;
+    height: 46px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fafafa;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+}
+
+.btn-submit {
+    width: 100%;
+    height: 46px;
+    border: none;
+    border-radius: 10px;
+    background: var(--cta);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.auth-links {
+    text-align: center;
+    margin-top: 14px;
+    line-height: 1.9;
+    font-weight: 600;
+}
+
+.register-page {
+    min-height: 100vh;
+    background: #ebebeb;
+    padding: 18px 16px 24px;
+}
+
+.register-wrap {
+    max-width: 1160px;
+    margin: 0 auto;
+}
+
+.register-brand {
+    text-align: center;
+    font-size: 52px;
+    font-family: "Brush Script MT", cursive;
+    margin: 4px 0 2px;
+}
+
+.register-heading {
+    text-align: center;
+    margin: 0 0 18px;
+}
+
+.register-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.box {
+    width: 100%;
+    height: 42px;
+    border: 1px solid #bbbbbb;
+    border-radius: 10px;
+    background: #f2f2f2;
+    padding: 9px 12px;
+    font-size: 14px;
+}
+
+.field-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #424242;
+}
+
+.row2 {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.row3 {
+    display: grid;
+    grid-template-columns: 2fr 1.4fr 0.8fr;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.row4 {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr 0.8fr;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.stack > * {
+    margin-bottom: 8px;
+}
+
+.section {
+    border-top: 1px solid #adadad;
+    margin-top: 10px;
+    padding-top: 14px;
+}
+
+.radio-line {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    font-weight: 700;
+    margin: 8px 0 10px;
+}
+
+.policy {
+    margin: 14px 0 8px;
+    background: #b2ea5e;
+    border-radius: 10px;
+    padding: 9px 12px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.terms {
+    margin: 10px 0;
+    font-size: 13px;
+}
+
+.messages {
+    margin-bottom: 10px;
+    color: #9f1111;
+    font-size: 14px;
+}
+
+.hamburger-btn {
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    width: 44px;
+    height: 44px;
+    border: 1px solid #8f8f8f;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #202020;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 999;
+}
+
+.menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 998;
+}
+
+.side-menu {
+    position: fixed;
+    top: 66px;
+    left: 14px;
+    width: 280px;
+    max-width: calc(100vw - 28px);
+    background: linear-gradient(180deg, #f5dd56 0%, #f49749 100%);
+    border: 1px solid #ce8341;
+    border-radius: 14px;
+    box-shadow: 0 12px 30px #0000002b;
+    padding: 16px 14px;
+    transform: translateY(-10px) scale(0.98);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+body.menu-open .side-menu {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+body.menu-open .menu-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.side-menu-header {
+    font-size: 22px;
+    font-weight: 800;
+    margin: 2px 0 8px;
+    color: #3e250f;
+}
+
+.side-menu > a,
+.side-menu > span,
+.side-menu > form {
+    width: 100%;
+}
+
+.side-menu > a,
+.side-menu > span {
+    display: block;
+}
+
+.side-menu > span > a,
+.side-menu > a {
+    display: block;
+    width: 100%;
+    border: 1px solid #e8b279;
+    background: #fff8ee;
+    border-radius: 10px;
+    padding: 10px 12px;
+    color: #1d1d1d;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.side-menu > span > a:hover,
+.side-menu > a:hover {
+    background: #fff2e2;
+}
+
+.side-menu-link {
+    display: block;
+    width: 100%;
+    border: 1px solid #e8b279;
+    background: #fff8ee;
+    border-radius: 10px;
+    padding: 10px 12px;
+    color: #1d1d1d;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.side-menu-link:hover {
+    background: #fff2e2;
+}
+
+.side-menu .btn-submit {
+    margin-top: 2px;
+}
+
+.side-menu-form {
+    width: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.side-menu form {
+    width: 100%;
+    margin: 0;
+}
+
+.profile-photo {
+    width: 220px;
+    height: 220px;
+    border-radius: 14px;
+    object-fit: cover;
+    border: 1px solid #c6c6c6;
+}
+
+.profile-photo.placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f2f2f2;
+    color: #6f6f6f;
+    font-weight: 700;
+}
+
+.chef-suggestion-card {
+    text-align: center;
+}
+
+.chef-suggestion-photo {
+    display: block;
+    width: min(100%, 240px);
+    height: 160px;
+    margin: 10px auto 12px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 1px solid #c7c7c7;
+    background: #f4f4f4;
+}
+
+.chef-cover-photo {
+    display: block;
+    width: 100%;
+    max-width: 860px;
+    height: 220px;
+    border-radius: 12px;
+    border: 1px solid #c7c7c7;
+    object-fit: cover;
+    background: linear-gradient(120deg, #e6e6e6 0%, #d8d8d8 100%);
+}
+
+.chef-cover-photo.placeholder {
+    background: linear-gradient(120deg, #f7b36a 0%, var(--brand-b) 100%) !important;
+    min-height: 220px;
+}
+
+.event-schedule-fields {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border: 1px dashed #cfcfcf;
+    border-radius: 10px;
+    background: #f7f7f7;
+}
+
+.event-schedule-fields p {
+    margin: 0;
+    font-size: 13px;
+    color: #5d5d5d;
+}
+
+.public-chef-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 390px;
+    gap: 20px;
+    align-items: start;
+}
+
+.public-chef-main {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.chef-profile-shell,
+.chef-order-shell,
+.chef-posts-shell {
+    background: #f8f8f8;
+    border: 1px solid #d7d7d7;
+    border-radius: 12px;
+    padding: 14px;
+}
+
+.chef-profile-shell {
+    padding: 0 14px 14px;
+    overflow: hidden;
+}
+
+.chef-cover-stage {
+    position: relative;
+    margin: -14px -14px 0;
+}
+
+.chef-avatar-overlay {
+    position: absolute;
+    left: 16px;
+    bottom: -48px;
+}
+
+.chef-avatar-overlay .profile-photo {
+    width: 130px;
+    height: 130px;
+    border: 3px solid #f8f8f8;
+    background: #f8f8f8;
+}
+
+.chef-identity-meta h1 {
+    margin: 56px 0 0;
+}
+
+.chef-identity-meta p {
+    margin: 8px 0 0;
+    color: #404040;
+}
+
+.public-chef-dish-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 6px;
+}
+
+.dish-highlight-card {
+    background: #ffffff;
+    border: 1px solid #d5d5d5;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.dish-highlight-card h4 {
+    margin: 0 0 6px;
+}
+
+.dish-highlight-card p {
+    margin: 0 0 8px;
+    color: #555;
+    font-size: 13px;
+}
+
+.dish-highlight-card strong {
+    font-size: 15px;
+}
+
+.chef-order-form {
+    margin-top: 10px;
+}
+
+.chef-order-form h3 {
+    margin: 0 0 6px;
+}
+
+.order-help {
+    margin: 0 0 10px;
+    color: #555;
+    font-size: 13px;
+}
+
+.chef-post-card {
+    margin-top: 10px;
+    width: 100%;
+}
+
+.public-chef-chat {
+    width: 100%;
+    position: sticky;
+    top: 10px;
+    align-self: start;
+    background: #f5f5f5;
+    border: 1px solid #d7d7d7;
+    border-radius: 12px;
+    padding: 14px;
+    min-height: calc(100vh - 28px);
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-hint {
+    margin-top: 0;
+    color: #666;
+    font-size: 13px;
+}
+
+.chat-history {
+    max-height: none;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding-right: 4px;
+    margin-bottom: 10px;
+}
+
+.chat-bubble {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border-radius: 10px;
+    padding: 9px 10px;
+    margin-bottom: 8px;
+    border: 1px solid #d3d3d3;
+}
+
+.client-bubble {
+    background: #fffdf5;
+}
+
+.chef-bubble {
+    background: #f2f8ff;
+}
+
+.client-home-page {
+    background: radial-gradient(circle at top right, #f8e2c6 0%, #ececec 36%, #ececec 100%);
+}
+
+.client-home-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 18px;
+    background: #f9f9f9;
+    border: 1px solid #d7d7d7;
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 14px;
+}
+
+.hero-kicker {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #6b6b6b;
+}
+
+.client-home-hero h1 {
+    margin: 8px 0 10px;
+    line-height: 1.1;
+}
+
+.hero-sub {
+    margin: 0 0 14px;
+    color: #4f4f4f;
+}
+
+.hero-stat-grid {
+    display: grid;
+    gap: 10px;
+}
+
+.hero-stat-card {
+    background: #fff;
+    border: 1px solid #dadada;
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+.hero-stat-card strong {
+    display: block;
+    font-size: 21px;
+}
+
+.hero-stat-card span {
+    color: #5f5f5f;
+    font-size: 13px;
+}
+
+.client-home-filters {
+    background: #f7f7f7;
+    border: 1px solid #d7d7d7;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 14px;
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 220px;
+    gap: 10px;
+}
+
+.chef-feed-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 18px;
+}
+
+.chef-feed-card {
+    background: #f8f8f8;
+    border: 1px solid #d4d4d4;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chef-feed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.chef-feed-header h3 {
+    margin: 0;
+    line-height: 1.2;
+}
+
+.chef-feed-card p {
+    margin: 0;
+    line-height: 1.35;
+}
+
+.availability-pill {
+    border: 1px solid #d5a66c;
+    background: #fff1e2;
+    color: #7a4718;
+    font-size: 12px;
+    border-radius: 999px;
+    padding: 3px 9px;
+    font-weight: 700;
+}
+
+.chef-feed-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 10px;
+    margin: 2px 0;
+    font-size: 13px;
+    color: #4b4b4b;
+}
+
+.chef-feed-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-height: 28px;
+    margin-top: 2px;
+}
+
+.chef-badge {
+    background: #eef5ff;
+    color: #183a5f;
+    border: 1px solid #c6d9f2;
+    border-radius: 999px;
+    padding: 3px 8px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.chef-feed-actions {
+    margin-top: auto;
+    padding-top: 8px;
+}
+
+@media (max-width: 760px) {
+    .hero {
+        grid-template-columns: 1fr;
+        padding: 28px 20px;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+    }
+
+    .metric strong {
+        font-size: 26px;
+    }
+
+    .metric span {
+        font-size: 23px;
+    }
+
+    .register-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .row3,
+    .row4 {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar,
+    .footer {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .public-chef-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .public-chef-chat {
+        min-height: auto;
+        position: static;
+        margin-top: 16px;
+    }
+
+    .chef-avatar-overlay {
+        bottom: -36px;
+        left: 12px;
+    }
+
+    .chef-avatar-overlay .profile-photo {
+        width: 96px;
+        height: 96px;
+        border-width: 1px;
+    }
+
+    .chef-identity-meta h1 {
+        margin-top: 48px;
+    }
+
+    .client-home-hero {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.dish-photo-thumb {
+    display: block;
+    width: 96px;
+    height: 72px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid #cccccc;
+    background: #d5d5d5;
+}
+
+.dish-photo-thumb.placeholder {
+    background: #cfcfcf;
+}
+
+.dish-highlight-photo {
+    width: 100%;
+    height: 120px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid #d5d5d5;
+    margin-bottom: 8px;
+    background: #d4d4d4;
+}
+
+.dish-highlight-photo.placeholder {
+    background: #cfcfcf;
+}
+
+.dish-selection-strip {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 12px;
+    max-width: 760px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px 2px 10px;
+    margin: 4px 0 10px;
+    scrollbar-width: thin;
+}
+
+.dish-selection-strip::-webkit-scrollbar {
+    height: 9px;
+}
+
+.dish-selection-strip::-webkit-scrollbar-thumb {
+    background: #c8c8c8;
+    border-radius: 999px;
+}
+
+.dish-selection-strip::-webkit-scrollbar-track {
+    background: #ececec;
+    border-radius: 999px;
+}
+
+.dish-select-card {
+    flex: 0 0 220px;
+    border: 1px solid #d5d5d5;
+    border-radius: 10px;
+    background: #ffffff;
+    padding: 10px;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.dish-select-card:hover {
+    border-color: #c4c4c4;
+}
+
+.dish-select-card.is-selected {
+    border-color: #f2994a;
+    box-shadow: 0 0 0 2px #f9d2ac inset;
+    background: #fff8ef;
+}
+
+.dish-select-photo {
+    width: 100%;
+    height: 108px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid #d4d4d4;
+    margin-bottom: 8px;
+    background: #d4d4d4;
+}
+
+.dish-select-photo.placeholder {
+    background: #cfcfcf;
+}
+
+.dish-select-card h4 {
+    margin: 0 0 6px;
+    font-size: 15px;
+    line-height: 1.25;
+}
+
+.dish-select-card p {
+    margin: 0 0 8px;
+    color: #555555;
+    font-size: 13px;
+    line-height: 1.3;
+}
+
+.dish-select-card strong {
+    font-size: 14px;
+}
+
+@media (max-width: 760px) {
+    .dish-selection-strip {
+        max-width: 100%;
+    }
+
+    .dish-select-card {
+        flex-basis: 190px;
+    }
+}
+
+.btn-submit-small {
+    height: 38px;
+    font-size: 13px;
+}
+
+.chef-manage-dish-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.chef-manage-dish-card h4 {
+    margin-bottom: 2px;
+}
+
+.chef-manage-dish-card .btn-submit {
+    margin-top: 2px;
+}
+
+.dish-visibility-chip {
+    display: inline-block;
+    margin: 0;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.dish-visibility-chip.on {
+    border: 1px solid #91c69a;
+    background: #ebf8ed;
+    color: #215a2f;
+}
+
+.dish-visibility-chip.off {
+    border: 1px solid #cfcfcf;
+    background: #f2f2f2;
+    color: #616161;
+}
+
+.chat-client-select {
+    margin-bottom: 8px;
+}
+
+.chef-post-edit-card {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.chef-post-edit-card .box {
+    min-height: 80px;
+}

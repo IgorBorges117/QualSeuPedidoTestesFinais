@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>Novo Pedido</title>
+</h:head>
+
+<h:body>
+
+<h1>Solicitar Serviço</h1>
+
+<h:form>
+
+    <h:outputLabel value="Descrição do evento:"/>
+    <br/>
+
+    <h:inputText value="#{pedidoBean.novaDescricao}" size="50"/>
+    <br/><br/>
+
+    <h:commandButton value="Enviar Pedido"
+                     action="#{pedidoBean.criarPedido}"/>
+
+</h:form>
+
+</h:body>
+</html>

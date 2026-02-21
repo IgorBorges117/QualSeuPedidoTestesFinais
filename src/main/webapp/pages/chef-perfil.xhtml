@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>Perfil do Chef</title>
+    <h:outputStylesheet library="css" name="app.css"/>
+    <style type="text/css">
+        .public-chef-layout {
+            display: grid !important;
+            grid-template-columns: minmax(0, 1fr) 420px !important;
+            gap: 20px !important;
+            align-items: start !important;
+        }
+        .public-chef-chat {
+            width: 420px !important;
+            min-height: calc(100vh - 28px) !important;
+            position: sticky !important;
+            top: 10px !important;
+        }
+        @media (max-width: 760px) {
+            .public-chef-layout {
+                grid-template-columns: 1fr !important;
+            }
+            .public-chef-chat {
+                width: 100% !important;
+                min-height: auto !important;
+                position: static !important;
+                margin-top: 16px !important;
+            }
+        }
+    </style>
+</h:head>
+<h:body>
+    <button type="button" class="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">&#9776;</button>
+    <div class="menu-overlay" onclick="closeMenu()"></div>
+    <aside class="side-menu" aria-label="Navegacao principal">
+        <h:form styleClass="side-menu-form">
+            <div class="side-menu-header">Menu</div>
+            <h:commandLink styleClass="side-menu-link" value="Home" action="/pages/chef.xhtml?faces-redirect=true"/>
+            <h:commandLink styleClass="side-menu-link" value="Perfil" action="/pages/chef-perfil.xhtml?faces-redirect=true"/>
+            <h:commandLink styleClass="side-menu-link" value="Configuracoes" action="/pages/chef-onboarding.xhtml?faces-redirect=true"/>
+            <h:commandButton styleClass="btn-submit" value="Sair" action="#{authBean.sair}"/>
+        </h:form>
+    </aside>
+
+    <h:panelGroup rendered="#{not authBean.cozinheiro}">
+        <div class="register-page">
+            <div class="register-wrap">
+                <h1>Area exclusiva para chefs</h1>
+                <p>Faca login como chef para acessar este perfil.</p>
+                <h:link value="Ir para login" outcome="/pages/login.xhtml"/>
+            </div>
+        </div>
+    </h:panelGroup>
+
+    <h:panelGroup rendered="#{authBean.cozinheiro}">
+        <div class="register-page">
+            <div class="register-wrap">
+                <h:messages id="msgsChef" globalOnly="true" showDetail="true" showSummary="false" styleClass="messages"/>
+
+                <div class="public-chef-layout">
+                    <main class="public-chef-main">
+                        <section class="chef-profile-shell">
+                            <div class="chef-cover-stage">
+                                <h:panelGroup rendered="#{not empty authBean.usuarioLogado.fotoCapaDataUrl}">
+                                    <img src="#{authBean.usuarioLogado.fotoCapaDataUrl}" alt="Capa do chef" class="chef-cover-photo"/>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{empty authBean.usuarioLogado.fotoCapaDataUrl}">
+                                    <div class="chef-cover-photo placeholder" aria-label="Capa padrao" style="background: linear-gradient(120deg, #f4db53 0%, #f69448 100%); height: 220px;"></div>
+                                </h:panelGroup>
+
+                                <div class="chef-avatar-overlay">
+                                    <h:panelGroup rendered="#{not empty authBean.usuarioLogado.fotoPerfilDataUrl}">
+                                        <img src="#{authBean.usuarioLogado.fotoPerfilDataUrl}" alt="Foto de perfil do chef" class="profile-photo"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{empty authBean.usuarioLogado.fotoPerfilDataUrl}">
+                                        <h:graphicImage library="images" name="chef-default.svg" styleClass="profile-photo" alt="Foto padrao do chef"/>
+                                    </h:panelGroup>
+                                </div>
+                            </div>
+
+                            <div class="chef-identity-meta">
+                                <h1>#{authBean.usuarioLogado.nome}</h1>
+                                <p>
+                                    <strong>Especialidade:</strong>
+                                    <h:outputText value="#{authBean.usuarioLogado.preferenciaAlimentar}" rendered="#{not empty authBean.usuarioLogado.preferenciaAlimentar}"/>
+                                    <h:outputText value="Chef particular" rendered="#{empty authBean.usuarioLogado.preferenciaAlimentar}"/>
+                                    <span> | </span>
+                                    <strong>Disponibilidade:</strong>
+                                    <h:outputText value="#{empty authBean.usuarioLogado.disponibilidadeChef ? 'Hoje' : authBean.usuarioLogado.disponibilidadeChef}"/>
+                                </p>
+                            </div>
+                        </section>
+
+                        <section class="chef-order-shell">
+                            <h2>Pratos visiveis para clientes</h2>
+                            <p class="order-help">Aqui voce escolhe quais pratos aparecem no seu perfil publico.</p>
+
+                            <h:panelGroup id="pratosArea" layout="block">
+                                <h:panelGroup rendered="#{not empty chefPerfilPainelBean.pratosDoChef}">
+                                    <div class="public-chef-dish-grid">
+                                        <ui:repeat value="#{chefPerfilPainelBean.pratosDoChef}" var="prato">
+                                            <article class="dish-highlight-card chef-manage-dish-card">
+                                                <h:panelGroup rendered="#{not empty prato.fotoDataUrl}">
+                                                    <img src="#{prato.fotoDataUrl}" alt="Foto do prato" class="dish-highlight-photo"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup rendered="#{empty prato.fotoDataUrl}">
+                                                    <div class="dish-highlight-photo placeholder" aria-label="Prato sem foto"></div>
+                                                </h:panelGroup>
+
+                                                <h4>#{prato.nome}</h4>
+                                                <p>#{prato.descricao}</p>
+                                                <strong>R$ #{prato.preco}</strong>
+
+                                                <p class="dish-visibility-chip #{prato.visivelNoPerfilPublico ? 'on' : 'off'}">
+                                                    #{prato.visivelNoPerfilPublico ? 'Visivel no perfil publico' : 'Oculto no perfil publico'}
+                                                </p>
+
+                                                <h:form>
+                                                    <h:commandButton styleClass="btn-submit btn-submit-small"
+                                                                     value="#{prato.visivelNoPerfilPublico ? 'Ocultar no perfil' : 'Exibir no perfil'}"
+                                                                     action="#{chefPerfilPainelBean.alternarVisibilidadePrato(prato.id)}">
+                                                        <f:ajax execute="@form" render=":pratosArea :msgsChef"/>
+                                                    </h:commandButton>
+                                                </h:form>
+                                            </article>
+                                        </ui:repeat>
+                                    </div>
+                                </h:panelGroup>
+
+                                <h:panelGroup rendered="#{empty chefPerfilPainelBean.pratosDoChef}">
+                                    <p>Voce ainda nao cadastrou pratos. Use a tela Home para montar seu cardapio.</p>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </section>
+
+                        <section class="chef-posts-shell">
+                            <h2>Postagens do chef</h2>
+
+                            <h:form id="novaPostagemChefForm">
+                                <h:inputTextarea id="novaPostagemChef"
+                                                 value="#{chefPerfilPainelBean.novaPostagem}"
+                                                 styleClass="box"
+                                                 style="height:100px;"
+                                                 required="true"
+                                                 requiredMessage="Digite algo para publicar."/>
+                                <h:message for="novaPostagemChef" styleClass="messages"/>
+                                <h:commandButton styleClass="btn-submit" style="margin-top:12px;" value="Publicar" action="#{chefPerfilPainelBean.publicarPostagem}">
+                                    <f:ajax execute="@form" render="@form :postagensArea :msgsChef"/>
+                                </h:commandButton>
+                            </h:form>
+
+                            <h:panelGroup id="postagensArea" layout="block">
+                                <ui:repeat value="#{chefPerfilPainelBean.postagens}" var="post">
+                                    <article class="auth-card chef-post-card chef-post-edit-card">
+                                        <p>#{post.texto}</p>
+
+                                        <h:form>
+                                            <h:inputTextarea value="#{chefPerfilPainelBean.textosEdicaoPorPostagem[post.id]}"
+                                                             styleClass="box"
+                                                             style="height:80px;"/>
+                                            <h:commandButton styleClass="btn-submit btn-submit-small"
+                                                             style="margin-top:10px;"
+                                                             value="Salvar edicao"
+                                                             action="#{chefPerfilPainelBean.salvarEdicaoPostagem(post.id)}">
+                                                <f:ajax execute="@form" render=":postagensArea :msgsChef"/>
+                                            </h:commandButton>
+                                        </h:form>
+                                    </article>
+                                </ui:repeat>
+                                <h:panelGroup rendered="#{empty chefPerfilPainelBean.postagens}">
+                                    <p>Voce ainda nao publicou novidades.</p>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </section>
+                    </main>
+
+                    <aside class="public-chef-chat">
+                        <h2>Chat com clientes</h2>
+                        <p class="chat-hint">Selecione um cliente para ler e responder o historico de mensagens.</p>
+
+                        <h:form id="chatChefPainelForm">
+                            <h:messages id="chatMensagens" globalOnly="true" showDetail="true" showSummary="false" styleClass="messages"/>
+
+                            <h:panelGroup rendered="#{empty chefPerfilPainelBean.clientesComMensagens}">
+                                <p>Nenhuma mensagem de cliente ate o momento.</p>
+                            </h:panelGroup>
+
+                            <h:panelGroup rendered="#{not empty chefPerfilPainelBean.clientesComMensagens}">
+                                <h:selectOneMenu id="clienteSelecionado"
+                                                 value="#{chefPerfilPainelBean.clienteSelecionadoId}"
+                                                 styleClass="box chat-client-select">
+                                    <f:selectItems value="#{chefPerfilPainelBean.clientesComMensagens}"
+                                                   var="cliente"
+                                                   itemValue="#{cliente.clienteId}"
+                                                   itemLabel="#{cliente.rotulo}"/>
+                                    <f:ajax execute="@this" render="conversaClienteArea respostaClienteArea chatMensagens"/>
+                                </h:selectOneMenu>
+
+                                <h:panelGroup id="conversaClienteArea" layout="block" style="margin-top:10px;">
+                                    <div class="chat-history">
+                                        <ui:repeat value="#{chefPerfilPainelBean.conversaClienteSelecionado}" var="msg">
+                                            <div class="chat-bubble client-bubble">
+                                                <strong>#{msg.nomeCliente}</strong>
+                                                <span>#{msg.textoCliente}</span>
+                                            </div>
+                                            <h:panelGroup rendered="#{not empty msg.respostaChef}">
+                                                <div class="chat-bubble chef-bubble">
+                                                    <strong>Voce</strong>
+                                                    <span>#{msg.respostaChef}</span>
+                                                </div>
+                                            </h:panelGroup>
+                                        </ui:repeat>
+                                    </div>
+                                </h:panelGroup>
+
+                                <h:panelGroup id="respostaClienteArea" layout="block">
+                                    <h:inputTextarea id="respostaCliente"
+                                                     value="#{chefPerfilPainelBean.respostaChat}"
+                                                     styleClass="box"
+                                                     style="height:100px;"
+                                                     required="true"
+                                                     requiredMessage="Digite a resposta para o cliente."/>
+                                    <h:message for="respostaCliente" styleClass="messages"/>
+
+                                    <h:commandButton styleClass="btn-submit" style="margin-top:12px;" value="Enviar resposta" action="#{chefPerfilPainelBean.responderClienteSelecionado}">
+                                        <f:ajax execute="@form" render="@form :msgsChef"/>
+                                    </h:commandButton>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:form>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </h:panelGroup>
+
+    <script type="text/javascript">
+        function toggleMenu() {
+            document.body.classList.toggle('menu-open');
+        }
+        function closeMenu() {
+            document.body.classList.remove('menu-open');
+        }
+    </script>
+</h:body>
+</html>

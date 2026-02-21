@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240">
+  <rect width="320" height="240" fill="#f4f4f4"/>
+  <circle cx="160" cy="88" r="44" fill="#d3d3d3"/>
+  <rect x="74" y="146" width="172" height="70" rx="35" fill="#d3d3d3"/>
+  <text x="160" y="226" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#767676">Sem foto</text>
+</svg>

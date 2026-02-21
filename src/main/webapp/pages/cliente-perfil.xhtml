@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>Perfil do Cliente</title>
+    <h:outputStylesheet library="css" name="app.css"/>
+</h:head>
+<h:body>
+    <button type="button" class="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">&#9776;</button>
+    <div class="menu-overlay" onclick="closeMenu()"></div>
+    <aside class="side-menu" aria-label="Navegação principal">
+        <h:form styleClass="side-menu-form">
+            <div class="side-menu-header">Menu</div>
+            <h:commandLink styleClass="side-menu-link" value="Home" action="/pages/cliente-home.xhtml?faces-redirect=true"/>
+            <h:commandLink styleClass="side-menu-link" value="Perfil" action="/pages/cliente-perfil.xhtml?faces-redirect=true"/>
+            <h:commandLink styleClass="side-menu-link" value="Configurações" action="/pages/cliente-perfil-edicao.xhtml?faces-redirect=true"/>
+            <h:commandButton styleClass="btn-submit" value="Sair" action="#{authBean.sair}"/>
+        </h:form>
+    </aside>
+
+    <div class="register-page">
+        <div class="register-wrap">
+            <h1>Perfil do cliente</h1>
+            <p>Confira seus dados e acompanhe suas solicitações.</p>
+
+            <h:panelGroup rendered="#{not authBean.cliente}">
+                <p>Essa área é exclusiva para clientes.</p>
+                <h:link value="Ir para início" outcome="/pages/index.xhtml"/>
+            </h:panelGroup>
+
+            <h:panelGroup rendered="#{authBean.cliente}">
+                <div class="register-grid">
+                    <div class="auth-card">
+                        <h2>Foto de perfil</h2>
+                        <h:panelGroup rendered="#{not empty authBean.usuarioLogado.fotoPerfilDataUrl}">
+                            <img src="#{authBean.usuarioLogado.fotoPerfilDataUrl}" alt="Foto de perfil" class="profile-photo"/>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{empty authBean.usuarioLogado.fotoPerfilDataUrl}">
+                            <div class="profile-photo placeholder">Sem foto</div>
+                        </h:panelGroup>
+                    </div>
+
+                    <div class="auth-card">
+                        <h2>Informações do cadastro</h2>
+                        <p><strong>Nome:</strong> #{authBean.usuarioLogado.nome}</p>
+                        <p><strong>E-mail:</strong> #{authBean.usuarioLogado.email}</p>
+                        <p><strong>Telefone:</strong> #{authBean.usuarioLogado.telefone}</p>
+                        <p><strong>Cidade:</strong> #{authBean.usuarioLogado.cidade}</p>
+                        <p><strong>Estado:</strong> #{authBean.usuarioLogado.estado}</p>
+                        <p><strong>Endereço:</strong> #{authBean.usuarioLogado.endereco} #{authBean.usuarioLogado.numero}</p>
+                    </div>
+                </div>
+
+                <h2 style="margin-top:20px;">Solicitações para chefs</h2>
+                <h:form>
+                    <h:dataTable value="#{solicitacaoServicoBean.listarPorCliente(authBean.usuarioLogado.id)}" var="sol" border="1" rendered="#{not empty solicitacaoServicoBean.listarPorCliente(authBean.usuarioLogado.id)}">
+                        <h:column>
+                            <f:facet name="header">Chef</f:facet>
+                            #{sol.chefNome}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Pratos</f:facet>
+                            #{sol.pratosResumo}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Data/Hora</f:facet>
+                            #{sol.dataEvento} #{sol.horarioEvento}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Status</f:facet>
+                            #{sol.status}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Acao</f:facet>
+                            <h:commandButton value="Cancelar" action="#{solicitacaoServicoBean.cancelarComoCliente(sol.id, authBean.usuarioLogado.id)}" rendered="#{sol.status ne 'RECUSADO' and sol.status ne 'CANCELADO'}"/>
+                        </h:column>
+                    </h:dataTable>
+                </h:form>
+                <h:panelGroup rendered="#{empty solicitacaoServicoBean.listarPorCliente(authBean.usuarioLogado.id)}">
+                    <p>Você ainda não enviou solicitações.</p>
+                </h:panelGroup>
+
+                <h:form style="margin-top:16px;">
+                    <h:commandButton styleClass="btn-submit" value="Ir para área do cliente" action="/pages/cliente-home.xhtml?faces-redirect=true"/>
+                </h:form>
+            </h:panelGroup>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function toggleMenu() {
+            document.body.classList.toggle('menu-open');
+        }
+        function closeMenu() {
+            document.body.classList.remove('menu-open');
+        }
+    </script>
+</h:body>
+</html>

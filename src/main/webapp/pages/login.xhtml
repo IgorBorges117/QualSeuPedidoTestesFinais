@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>Login</title>
+    <h:outputStylesheet library="css" name="app.css"/>
+</h:head>
+<h:body>
+    <div class="card-page">
+        <section class="auth-card">
+            <div class="auth-logo">CHEF</div>
+            <h1 class="auth-title">Qual o seu pedido?</h1>
+
+            <h:messages globalOnly="true" styleClass="messages"/>
+
+            <h:form>
+                <h:inputText styleClass="field" value="#{authBean.login}" required="true"
+                             requiredMessage="Informe seu login" pt:placeholder="Telefone, usuário ou e-mail"/>
+
+                <h:inputSecret styleClass="field" value="#{authBean.senha}" required="true"
+                               requiredMessage="Informe sua senha" pt:placeholder="Senha"/>
+
+                <h:commandButton styleClass="btn-submit" value="Entrar" action="#{authBean.entrar}"/>
+            </h:form>
+
+            <div class="auth-links">
+                <h:link value="Esqueceu a senha?" outcome="/pages/recuperar-senha.xhtml"/>
+                <br/>
+                <span>Não tem uma conta? </span>
+                <h:link value="Cadastre-se" outcome="/pages/cadastro.xhtml"/>
+                <br/>
+                <h:link value="Voltar para início" outcome="/pages/index.xhtml"/>
+            </div>
+        </section>
+    </div>
+</h:body>
+</html>

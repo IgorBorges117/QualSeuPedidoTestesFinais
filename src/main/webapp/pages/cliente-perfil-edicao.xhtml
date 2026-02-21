@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>Configuração do Cliente</title>
+    <h:outputStylesheet library="css" name="app.css"/>
+</h:head>
+<h:body>
+    <button type="button" class="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">&#9776;</button>
+    <div class="menu-overlay" onclick="closeMenu()"></div>
+    <aside class="side-menu" aria-label="Navegação principal">
+        <h:form styleClass="side-menu-form">
+            <div class="side-menu-header">Menu</div>
+            <h:commandLink styleClass="side-menu-link" value="Home" action="/pages/cliente-home.xhtml?faces-redirect=true"/>
+            <h:commandLink styleClass="side-menu-link" value="Perfil" action="/pages/cliente-perfil.xhtml?faces-redirect=true"/>
+            <h:commandLink styleClass="side-menu-link" value="Configurações" action="/pages/cliente-perfil-edicao.xhtml?faces-redirect=true"/>
+            <h:commandButton styleClass="btn-submit" value="Sair" action="#{authBean.sair}"/>
+        </h:form>
+    </aside>
+
+    <div class="register-page">
+        <div class="register-wrap">
+            <div class="auth-logo">CLIENTE</div>
+            <div class="register-brand">Qual o seu pedido?</div>
+            <h1 class="register-heading">Configurações do cliente</h1>
+
+            <h:messages globalOnly="true" showDetail="true" showSummary="false" styleClass="messages"/>
+
+            <h:panelGroup rendered="#{not authBean.cliente}">
+                <p>Essa área é exclusiva para clientes.</p>
+                <h:link value="Ir para início" outcome="/pages/index.xhtml"/>
+            </h:panelGroup>
+
+            <h:panelGroup rendered="#{authBean.cliente}">
+                <h2>Foto de perfil</h2>
+                <h:panelGroup rendered="#{not empty authBean.usuarioLogado.fotoPerfilDataUrl}">
+                    <div style="text-align:center;">
+                        <img src="#{authBean.usuarioLogado.fotoPerfilDataUrl}" alt="Foto de perfil do cliente" class="profile-photo"/>
+                    </div>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{empty authBean.usuarioLogado.fotoPerfilDataUrl}">
+                    <div class="profile-photo placeholder" style="margin: 0 auto;">Sem foto</div>
+                </h:panelGroup>
+
+                <h:form enctype="multipart/form-data" style="max-width:520px; margin: 16px auto 0;">
+                    <h:inputFile value="#{clientePerfilBean.fotoPerfil}" required="true" requiredMessage="Selecione uma foto."/>
+                    <h:commandButton styleClass="btn-submit" style="margin-top:16px;" value="Salvar foto" action="#{clientePerfilBean.salvarFotoPerfilCliente}"/>
+                </h:form>
+
+                <h2 style="margin-top: 24px;">Dados pessoais</h2>
+                <h:form style="max-width: 760px; margin: 0 auto;">
+                    <div class="row2">
+                        <div class="field-stack">
+                            <h:outputText value="Nome completo" styleClass="field-label"/>
+                            <h:inputText value="#{authBean.usuarioLogado.nome}" styleClass="box" required="true" requiredMessage="Informe seu nome."/>
+                        </div>
+                        <div class="field-stack">
+                            <h:outputText value="Telefone" styleClass="field-label"/>
+                            <h:inputText value="#{authBean.usuarioLogado.telefone}" styleClass="box"/>
+                        </div>
+                    </div>
+                    <div class="row2">
+                        <div class="field-stack">
+                            <h:outputText value="Data de nascimento" styleClass="field-label"/>
+                            <h:inputText value="#{authBean.usuarioLogado.dataNascimento}" styleClass="box"/>
+                        </div>
+                        <div class="field-stack">
+                            <h:outputText value="Sexo" styleClass="field-label"/>
+                            <h:selectOneMenu value="#{authBean.usuarioLogado.sexo}" styleClass="box">
+                                <f:selectItem itemLabel="Selecione" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{cadastroBean.sexosDisponiveis}"/>
+                            </h:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="row2">
+                        <div class="field-stack">
+                            <h:outputText value="CPF" styleClass="field-label"/>
+                            <h:inputText value="#{authBean.usuarioLogado.cpf}" styleClass="box"/>
+                        </div>
+                        <div class="field-stack">
+                            <h:outputText value="Preferência alimentar" styleClass="field-label"/>
+                            <h:selectOneMenu value="#{authBean.usuarioLogado.preferenciaAlimentar}" styleClass="box">
+                                <f:selectItem itemLabel="Selecione" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{cadastroBean.preferenciasDisponiveis}"/>
+                            </h:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="row3">
+                        <div class="field-stack">
+                            <h:outputText value="Endereço" styleClass="field-label"/>
+                            <h:inputText value="#{authBean.usuarioLogado.endereco}" styleClass="box"/>
+                        </div>
+                        <div class="field-stack">
+                            <h:outputText value="Número" styleClass="field-label"/>
+                            <h:inputText value="#{authBean.usuarioLogado.numero}" styleClass="box"/>
+                        </div>
+                        <div class="field-stack">
+                            <h:outputText value="Complemento" styleClass="field-label"/>
+                            <h:inputText value="#{authBean.usuarioLogado.complemento}" styleClass="box"/>
+                        </div>
+                    </div>
+                    <div class="row3">
+                        <div class="field-stack">
+                            <h:outputText value="Bairro" styleClass="field-label"/>
+                            <h:inputText value="#{authBean.usuarioLogado.bairro}" styleClass="box"/>
+                        </div>
+                        <div class="field-stack">
+                            <h:outputText value="Cidade" styleClass="field-label"/>
+                            <h:inputText value="#{authBean.usuarioLogado.cidade}" styleClass="box"/>
+                        </div>
+                        <div class="field-stack">
+                            <h:outputText value="Estado" styleClass="field-label"/>
+                            <h:inputText value="#{authBean.usuarioLogado.estado}" styleClass="box"/>
+                        </div>
+                    </div>
+                    <div class="row2">
+                        <div class="field-stack">
+                            <h:outputText value="CEP" styleClass="field-label"/>
+                            <h:inputText value="#{authBean.usuarioLogado.cep}" styleClass="box"/>
+                        </div>
+                        <div class="field-stack">
+                            <h:outputText value="Ações" styleClass="field-label"/>
+                            <h:commandButton styleClass="btn-submit" value="Salvar configurações" action="#{clientePerfilBean.salvarDadosCliente}"/>
+                        </div>
+                    </div>
+                </h:form>
+            </h:panelGroup>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function toggleMenu() {
+            document.body.classList.toggle('menu-open');
+        }
+        function closeMenu() {
+            document.body.classList.remove('menu-open');
+        }
+    </script>
+</h:body>
+</html>
