@@ -71,6 +71,18 @@ public class ChefPerfilPublicoBean implements Serializable {
         return pratoBean.getPratosPublicosDoChef(chef.getId());
     }
 
+    public List<Prato> getPratosChefSelecionadoPorCategoria(String categoria) {
+        UsuarioSistema chef = getChefSelecionado();
+        if (chef == null) {
+            return Collections.emptyList();
+        }
+        return pratoBean.getPratosPublicosDoChefPorCategoria(chef.getId(), categoria);
+    }
+
+    public List<Prato> pratosChefSelecionadoPorCategoria(String categoria) {
+        return getPratosChefSelecionadoPorCategoria(categoria);
+    }
+
     public boolean pratoSelecionado(Long pratoId) {
         if (pratoId == null) {
             return false;

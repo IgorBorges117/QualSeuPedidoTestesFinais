@@ -105,7 +105,21 @@
                     <div class="row2">
                         <div class="field-stack">
                             <h:outputText value="Especialidade" styleClass="field-label"/>
-                            <h:inputText value="#{authBean.usuarioLogado.preferenciaAlimentar}" styleClass="box"/>
+                            <h:selectOneMenu value="#{authBean.usuarioLogado.preferenciaAlimentar}" styleClass="box">
+                                <f:selectItem itemLabel="Selecione a especialidade principal" itemValue="" noSelectionOption="true"/>
+                                <f:selectItem itemValue="Chef particular" itemLabel="Chef particular"/>
+                                <f:selectItem itemValue="Culinaria brasileira" itemLabel="Culinaria brasileira"/>
+                                <f:selectItem itemValue="Culinaria italiana" itemLabel="Culinaria italiana"/>
+                                <f:selectItem itemValue="Culinaria japonesa" itemLabel="Culinaria japonesa"/>
+                                <f:selectItem itemValue="Culinaria francesa" itemLabel="Culinaria francesa"/>
+                                <f:selectItem itemValue="Churrasco e grelhados" itemLabel="Churrasco e grelhados"/>
+                                <f:selectItem itemValue="Massas artesanais" itemLabel="Massas artesanais"/>
+                                <f:selectItem itemValue="Confeitaria e sobremesas" itemLabel="Confeitaria e sobremesas"/>
+                                <f:selectItem itemValue="Cozinha vegetariana" itemLabel="Cozinha vegetariana"/>
+                                <f:selectItem itemValue="Cozinha vegana" itemLabel="Cozinha vegana"/>
+                                <f:selectItem itemValue="Cozinha fitness" itemLabel="Cozinha fitness"/>
+                                <f:selectItem itemValue="Eventos corporativos" itemLabel="Eventos corporativos"/>
+                            </h:selectOneMenu>
                         </div>
                         <div class="field-stack">
                             <h:outputText value="Cidade" styleClass="field-label"/>

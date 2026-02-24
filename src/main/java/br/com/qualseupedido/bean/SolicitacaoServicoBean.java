@@ -13,8 +13,39 @@ import java.util.List;
 @ApplicationScoped
 public class SolicitacaoServicoBean implements Serializable {
 
+    public static final String STATUS_PENDENTE = "PENDENTE";
+    public static final String STATUS_ACEITO = "ACEITO";
+    public static final String STATUS_RECUSADO = "RECUSADO";
+    public static final String STATUS_CANCELADO = "CANCELADO";
+    public static final String STATUS_EM_NEGOCIACAO = "EM_NEGOCIACAO";
+    public static final String STATUS_CONTRATADO = "CONTRATADO";
+
     private long seq = 1L;
     private final List<SolicitacaoServico> solicitacoes = new ArrayList<>();
+
+    public String getStatusPendente() {
+        return STATUS_PENDENTE;
+    }
+
+    public String getStatusAceito() {
+        return STATUS_ACEITO;
+    }
+
+    public String getStatusRecusado() {
+        return STATUS_RECUSADO;
+    }
+
+    public String getStatusCancelado() {
+        return STATUS_CANCELADO;
+    }
+
+    public String getStatusEmNegociacao() {
+        return STATUS_EM_NEGOCIACAO;
+    }
+
+    public String getStatusContratado() {
+        return STATUS_CONTRATADO;
+    }
 
     public synchronized void criarSolicitacao(Long chefId,
                                               String chefNome,
@@ -60,6 +91,32 @@ public class SolicitacaoServicoBean implements Serializable {
         return resultado;
     }
 
+    public synchronized int contarPendentesPorChef(Long chefId) {
+        if (chefId == null) {
+            return 0;
+        }
+        int total = 0;
+        for (SolicitacaoServico s : solicitacoes) {
+            if (chefId.equals(s.getChefId()) && STATUS_PENDENTE.equals(s.getStatus())) {
+                total++;
+            }
+        }
+        return total;
+    }
+
+    public synchronized int contarAceitasPorCliente(Long clienteId) {
+        if (clienteId == null) {
+            return 0;
+        }
+        int total = 0;
+        for (SolicitacaoServico s : solicitacoes) {
+            if (clienteId.equals(s.getClienteId()) && STATUS_ACEITO.equals(s.getStatus())) {
+                total++;
+            }
+        }
+        return total;
+    }
+
     public synchronized List<SolicitacaoServico> listarPorCliente(Long clienteId) {
         if (clienteId == null) {
             return Collections.emptyList();
@@ -78,10 +135,12 @@ public class SolicitacaoServicoBean implements Serializable {
         if (solicitacao == null || !chefCorresponde(solicitacao, chefId)) {
             return;
         }
-        if (!"PENDENTE".equals(solicitacao.getStatus())) {
+        if (!STATUS_PENDENTE.equals(solicitacao.getStatus())) {
             return;
         }
-        solicitacao.setStatus("ACEITO");
+        solicitacao.setStatus(STATUS_ACEITO);
+        solicitacao.setContratacaoConfirmadaChef(false);
+        solicitacao.setContratacaoConfirmadaCliente(false);
     }
 
     public synchronized void recusar(Long id, Long chefId) {
@@ -89,10 +148,10 @@ public class SolicitacaoServicoBean implements Serializable {
         if (solicitacao == null || !chefCorresponde(solicitacao, chefId)) {
             return;
         }
-        if (!"PENDENTE".equals(solicitacao.getStatus())) {
+        if (!STATUS_PENDENTE.equals(solicitacao.getStatus())) {
             return;
         }
-        solicitacao.setStatus("RECUSADO");
+        solicitacao.setStatus(STATUS_RECUSADO);
     }
 
     public synchronized void cancelarComoCliente(Long id, Long clienteId) {
@@ -100,13 +159,71 @@ public class SolicitacaoServicoBean implements Serializable {
         if (solicitacao == null || !clienteCorresponde(solicitacao, clienteId)) {
             return;
         }
-        if ("RECUSADO".equals(solicitacao.getStatus()) || "CANCELADO".equals(solicitacao.getStatus())) {
+        if (STATUS_RECUSADO.equals(solicitacao.getStatus())
+                || STATUS_CANCELADO.equals(solicitacao.getStatus())
+                || STATUS_CONTRATADO.equals(solicitacao.getStatus())) {
             return;
         }
-        solicitacao.setStatus("CANCELADO");
+        solicitacao.setStatus(STATUS_CANCELADO);
     }
 
-    private SolicitacaoServico buscarPorId(Long id) {
+    public synchronized boolean enviarMensagemChef(Long id, Long chefId, String texto) {
+        SolicitacaoServico solicitacao = buscarPorId(id);
+        if (solicitacao == null || !chefCorresponde(solicitacao, chefId)) {
+            return false;
+        }
+        if (texto == null || texto.trim().isEmpty()) {
+            return false;
+        }
+        if (!statusPermiteNegociacao(solicitacao.getStatus())) {
+            return false;
+        }
+        solicitacao.getMensagensNegociacao().add(new MensagemNegociacao(true, texto.trim()));
+        if (STATUS_ACEITO.equals(solicitacao.getStatus())) {
+            solicitacao.setStatus(STATUS_EM_NEGOCIACAO);
+        }
+        return true;
+    }
+
+    public synchronized boolean enviarMensagemCliente(Long id, Long clienteId, String texto) {
+        SolicitacaoServico solicitacao = buscarPorId(id);
+        if (solicitacao == null || !clienteCorresponde(solicitacao, clienteId)) {
+            return false;
+        }
+        if (texto == null || texto.trim().isEmpty()) {
+            return false;
+        }
+        if (!statusPermiteNegociacao(solicitacao.getStatus())) {
+            return false;
+        }
+        solicitacao.getMensagensNegociacao().add(new MensagemNegociacao(false, texto.trim()));
+        if (STATUS_ACEITO.equals(solicitacao.getStatus())) {
+            solicitacao.setStatus(STATUS_EM_NEGOCIACAO);
+        }
+        return true;
+    }
+
+    public synchronized boolean confirmarContratacaoChef(Long id, Long chefId) {
+        SolicitacaoServico solicitacao = buscarPorId(id);
+        if (solicitacao == null || !chefCorresponde(solicitacao, chefId) || !statusPermiteNegociacao(solicitacao.getStatus())) {
+            return false;
+        }
+        solicitacao.setContratacaoConfirmadaChef(true);
+        atualizarStatusContratacao(solicitacao);
+        return true;
+    }
+
+    public synchronized boolean confirmarContratacaoCliente(Long id, Long clienteId) {
+        SolicitacaoServico solicitacao = buscarPorId(id);
+        if (solicitacao == null || !clienteCorresponde(solicitacao, clienteId) || !statusPermiteNegociacao(solicitacao.getStatus())) {
+            return false;
+        }
+        solicitacao.setContratacaoConfirmadaCliente(true);
+        atualizarStatusContratacao(solicitacao);
+        return true;
+    }
+
+    public synchronized SolicitacaoServico buscarPorId(Long id) {
         if (id == null) {
             return null;
         }
@@ -126,6 +243,18 @@ public class SolicitacaoServicoBean implements Serializable {
         return clienteId != null && clienteId.equals(s.getClienteId());
     }
 
+    private boolean statusPermiteNegociacao(String status) {
+        return STATUS_ACEITO.equals(status) || STATUS_EM_NEGOCIACAO.equals(status) || STATUS_CONTRATADO.equals(status);
+    }
+
+    private void atualizarStatusContratacao(SolicitacaoServico solicitacao) {
+        if (solicitacao.isContratacaoConfirmadaChef() && solicitacao.isContratacaoConfirmadaCliente()) {
+            solicitacao.setStatus(STATUS_CONTRATADO);
+        } else if (STATUS_ACEITO.equals(solicitacao.getStatus())) {
+            solicitacao.setStatus(STATUS_EM_NEGOCIACAO);
+        }
+    }
+
     public static class SolicitacaoServico implements Serializable {
         private final Long id;
         private final Long chefId;
@@ -137,6 +266,9 @@ public class SolicitacaoServicoBean implements Serializable {
         private final String dataEvento;
         private final String horarioEvento;
         private final String observacoes;
+        private final List<MensagemNegociacao> mensagensNegociacao;
+        private boolean contratacaoConfirmadaChef;
+        private boolean contratacaoConfirmadaCliente;
         private String status;
 
         public SolicitacaoServico(Long id,
@@ -159,7 +291,10 @@ public class SolicitacaoServicoBean implements Serializable {
             this.dataEvento = dataEvento;
             this.horarioEvento = horarioEvento;
             this.observacoes = observacoes;
-            this.status = "PENDENTE";
+            this.mensagensNegociacao = new ArrayList<>();
+            this.status = STATUS_PENDENTE;
+            this.contratacaoConfirmadaChef = false;
+            this.contratacaoConfirmadaCliente = false;
         }
 
         public Long getId() {
@@ -212,6 +347,44 @@ public class SolicitacaoServicoBean implements Serializable {
 
         public void setStatus(String status) {
             this.status = status;
+        }
+
+        public List<MensagemNegociacao> getMensagensNegociacao() {
+            return mensagensNegociacao;
+        }
+
+        public boolean isContratacaoConfirmadaChef() {
+            return contratacaoConfirmadaChef;
+        }
+
+        public void setContratacaoConfirmadaChef(boolean contratacaoConfirmadaChef) {
+            this.contratacaoConfirmadaChef = contratacaoConfirmadaChef;
+        }
+
+        public boolean isContratacaoConfirmadaCliente() {
+            return contratacaoConfirmadaCliente;
+        }
+
+        public void setContratacaoConfirmadaCliente(boolean contratacaoConfirmadaCliente) {
+            this.contratacaoConfirmadaCliente = contratacaoConfirmadaCliente;
+        }
+    }
+
+    public static class MensagemNegociacao implements Serializable {
+        private final boolean enviadaPorChef;
+        private final String texto;
+
+        public MensagemNegociacao(boolean enviadaPorChef, String texto) {
+            this.enviadaPorChef = enviadaPorChef;
+            this.texto = texto;
+        }
+
+        public boolean isEnviadaPorChef() {
+            return enviadaPorChef;
+        }
+
+        public String getTexto() {
+            return texto;
         }
     }
 }

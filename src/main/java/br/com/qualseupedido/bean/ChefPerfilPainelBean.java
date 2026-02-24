@@ -1,16 +1,18 @@
 package br.com.qualseupedido.bean;
 
 import br.com.qualseupedido.entidade.Prato;
+import br.com.qualseupedido.util.ImagemUtil;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.Part;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +20,11 @@ import java.util.Map;
 @Named
 @ViewScoped
 public class ChefPerfilPainelBean implements Serializable {
+
+    private static final long TAMANHO_MAXIMO = 3L * 1024L * 1024L;
+    private static final int MAX_LARGURA_POSTAGEM = 1400;
+    private static final int MAX_ALTURA_POSTAGEM = 900;
+    private static final float QUALIDADE_JPEG = 0.82f;
 
     @Inject
     private AuthBean authBean;
@@ -27,7 +34,7 @@ public class ChefPerfilPainelBean implements Serializable {
     private ChefConteudoBean chefConteudoBean;
 
     private String novaPostagem;
-    private final Map<Long, String> textosEdicaoPorPostagem = new HashMap<>();
+    private transient Part fotoPostagem;
     private Long clienteSelecionadoId;
     private String respostaChat;
 
@@ -36,6 +43,17 @@ public class ChefPerfilPainelBean implements Serializable {
             return Collections.emptyList();
         }
         return pratoBean.getPratosDoChef(authBean.getUsuarioLogado().getId());
+    }
+
+    public List<Prato> getPratosDoChefPorCategoria(String categoria) {
+        if (!authBean.isCozinheiro() || authBean.getUsuarioLogado() == null) {
+            return Collections.emptyList();
+        }
+        return pratoBean.getPratosDoChefPorCategoria(authBean.getUsuarioLogado().getId(), categoria);
+    }
+
+    public List<Prato> pratosDoChefPorCategoria(String categoria) {
+        return getPratosDoChefPorCategoria(categoria);
     }
 
     public String alternarVisibilidadePrato(Long pratoId) {
@@ -50,13 +68,45 @@ public class ChefPerfilPainelBean implements Serializable {
         if (!authBean.isCozinheiro() || authBean.getUsuarioLogado() == null) {
             return null;
         }
-        if (novaPostagem == null || novaPostagem.trim().isEmpty()) {
+
+        boolean textoVazio = novaPostagem == null || novaPostagem.trim().isEmpty();
+        boolean semFoto = fotoPostagem == null || fotoPostagem.getSize() == 0;
+        if (textoVazio && semFoto) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Postagem obrigatoria", "Escreva algo para publicar."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Postagem vazia", "Escreva um texto ou envie uma foto."));
             return null;
         }
-        chefConteudoBean.adicionarPostagem(authBean.getUsuarioLogado().getId(), novaPostagem);
+
+        String fotoDataUrl = null;
+        if (!semFoto) {
+            if (fotoPostagem.getSize() > TAMANHO_MAXIMO) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Arquivo muito grande", "Use uma imagem de ate 3MB."));
+                return null;
+            }
+            String contentType = fotoPostagem.getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato invalido", "Envie apenas arquivos de imagem."));
+                return null;
+            }
+            try {
+                fotoDataUrl = ImagemUtil.processarDataUrl(
+                        fotoPostagem.getInputStream(),
+                        MAX_LARGURA_POSTAGEM,
+                        MAX_ALTURA_POSTAGEM,
+                        QUALIDADE_JPEG
+                );
+            } catch (IOException e) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Falha no upload", "Nao foi possivel processar a foto da postagem."));
+                return null;
+            }
+        }
+
+        chefConteudoBean.adicionarPostagem(authBean.getUsuarioLogado().getId(), novaPostagem, fotoDataUrl);
         novaPostagem = "";
+        fotoPostagem = null;
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage(FacesMessage.SEVERITY_INFO, "Publicado", "Postagem criada com sucesso."));
         return null;
@@ -67,35 +117,6 @@ public class ChefPerfilPainelBean implements Serializable {
             return Collections.emptyList();
         }
         return chefConteudoBean.listarPostagensChef(authBean.getUsuarioLogado().getId());
-    }
-
-    public Map<Long, String> getTextosEdicaoPorPostagem() {
-        preencherRascunhosPostagem();
-        return textosEdicaoPorPostagem;
-    }
-
-    public String salvarEdicaoPostagem(Long postagemId) {
-        if (!authBean.isCozinheiro() || authBean.getUsuarioLogado() == null) {
-            return null;
-        }
-        preencherRascunhosPostagem();
-
-        String novoTexto = textosEdicaoPorPostagem.get(postagemId);
-        if (novoTexto == null || novoTexto.trim().isEmpty()) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Texto obrigatorio", "Digite o texto atualizado da postagem."));
-            return null;
-        }
-
-        boolean ok = chefConteudoBean.editarPostagem(authBean.getUsuarioLogado().getId(), postagemId, novoTexto);
-        if (ok) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Postagem atualizada", "Edicao salva com sucesso."));
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Falha", "Nao foi possivel atualizar a postagem."));
-        }
-        return null;
     }
 
     public List<ClienteChatResumo> getClientesComMensagens() {
@@ -179,12 +200,6 @@ public class ChefPerfilPainelBean implements Serializable {
         return null;
     }
 
-    private void preencherRascunhosPostagem() {
-        for (ChefConteudoBean.PostagemChef post : getPostagens()) {
-            textosEdicaoPorPostagem.putIfAbsent(post.getId(), post.getTexto());
-        }
-    }
-
     private void ajustarClienteSelecionado(List<ClienteChatResumo> clientes) {
         if (clientes.isEmpty()) {
             clienteSelecionadoId = null;
@@ -208,6 +223,14 @@ public class ChefPerfilPainelBean implements Serializable {
 
     public void setNovaPostagem(String novaPostagem) {
         this.novaPostagem = novaPostagem;
+    }
+
+    public Part getFotoPostagem() {
+        return fotoPostagem;
+    }
+
+    public void setFotoPostagem(Part fotoPostagem) {
+        this.fotoPostagem = fotoPostagem;
     }
 
     public Long getClienteSelecionadoId() {

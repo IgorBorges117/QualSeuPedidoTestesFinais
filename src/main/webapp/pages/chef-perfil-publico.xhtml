@@ -99,20 +99,81 @@
 
                             <h3>Pratos em destaque</h3>
                             <h:panelGroup rendered="#{not empty chefPerfilPublicoBean.pratosChefSelecionado}">
-                                <div class="public-chef-dish-grid">
-                                    <ui:repeat value="#{chefPerfilPublicoBean.pratosChefSelecionado}" var="prato">
-                                        <article class="dish-highlight-card">
-                                            <h:panelGroup rendered="#{not empty prato.fotoDataUrl}">
-                                                <img src="#{prato.fotoDataUrl}" alt="Foto do prato" class="dish-highlight-photo"/>
-                                            </h:panelGroup>
-                                            <h:panelGroup rendered="#{empty prato.fotoDataUrl}">
-                                                <div class="dish-highlight-photo placeholder" aria-label="Prato sem foto"></div>
-                                            </h:panelGroup>
-                                            <h4>#{prato.nome}</h4>
-                                            <p>#{prato.descricao}</p>
-                                            <strong>R$ #{prato.preco}</strong>
-                                        </article>
-                                    </ui:repeat>
+                                <div class="chef-cardapio-categorias">
+                                    <section class="chef-category-block">
+                                        <h3>Entrada</h3>
+                                        <h:panelGroup rendered="#{not empty chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('ENTRADA')}">
+                                            <div class="chef-carousel-strip">
+                                                <ui:repeat value="#{chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('ENTRADA')}" var="prato">
+                                                    <article class="dish-highlight-card">
+                                                        <h:panelGroup rendered="#{not empty prato.fotoDataUrl}">
+                                                            <img src="#{prato.fotoDataUrl}" alt="Foto do prato" class="dish-highlight-photo"/>
+                                                        </h:panelGroup>
+                                                        <h:panelGroup rendered="#{empty prato.fotoDataUrl}">
+                                                            <div class="dish-highlight-photo placeholder" aria-label="Prato sem foto"></div>
+                                                        </h:panelGroup>
+                                                        <h4>#{prato.nome}</h4>
+                                                        <p>#{prato.descricao}</p>
+                                                        <p class="dish-highlight-category">#{pratoBean.categoriaLabel(prato.categoria)}</p>
+                                                        <strong>R$ #{prato.preco}</strong>
+                                                    </article>
+                                                </ui:repeat>
+                                            </div>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{empty chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('ENTRADA')}">
+                                            <p class="order-help">Nenhum prato de Entrada publicado.</p>
+                                        </h:panelGroup>
+                                    </section>
+
+                                    <section class="chef-category-block">
+                                        <h3>Prato principal</h3>
+                                        <h:panelGroup rendered="#{not empty chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('PRINCIPAL')}">
+                                            <div class="chef-carousel-strip">
+                                                <ui:repeat value="#{chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('PRINCIPAL')}" var="prato">
+                                                    <article class="dish-highlight-card">
+                                                        <h:panelGroup rendered="#{not empty prato.fotoDataUrl}">
+                                                            <img src="#{prato.fotoDataUrl}" alt="Foto do prato" class="dish-highlight-photo"/>
+                                                        </h:panelGroup>
+                                                        <h:panelGroup rendered="#{empty prato.fotoDataUrl}">
+                                                            <div class="dish-highlight-photo placeholder" aria-label="Prato sem foto"></div>
+                                                        </h:panelGroup>
+                                                        <h4>#{prato.nome}</h4>
+                                                        <p>#{prato.descricao}</p>
+                                                        <p class="dish-highlight-category">#{pratoBean.categoriaLabel(prato.categoria)}</p>
+                                                        <strong>R$ #{prato.preco}</strong>
+                                                    </article>
+                                                </ui:repeat>
+                                            </div>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{empty chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('PRINCIPAL')}">
+                                            <p class="order-help">Nenhum prato principal publicado.</p>
+                                        </h:panelGroup>
+                                    </section>
+
+                                    <section class="chef-category-block">
+                                        <h3>Sobremesa</h3>
+                                        <h:panelGroup rendered="#{not empty chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('SOBREMESA')}">
+                                            <div class="chef-carousel-strip">
+                                                <ui:repeat value="#{chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('SOBREMESA')}" var="prato">
+                                                    <article class="dish-highlight-card">
+                                                        <h:panelGroup rendered="#{not empty prato.fotoDataUrl}">
+                                                            <img src="#{prato.fotoDataUrl}" alt="Foto do prato" class="dish-highlight-photo"/>
+                                                        </h:panelGroup>
+                                                        <h:panelGroup rendered="#{empty prato.fotoDataUrl}">
+                                                            <div class="dish-highlight-photo placeholder" aria-label="Prato sem foto"></div>
+                                                        </h:panelGroup>
+                                                        <h4>#{prato.nome}</h4>
+                                                        <p>#{prato.descricao}</p>
+                                                        <p class="dish-highlight-category">#{pratoBean.categoriaLabel(prato.categoria)}</p>
+                                                        <strong>R$ #{prato.preco}</strong>
+                                                    </article>
+                                                </ui:repeat>
+                                            </div>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{empty chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('SOBREMESA')}">
+                                            <p class="order-help">Nenhuma sobremesa publicada.</p>
+                                        </h:panelGroup>
+                                    </section>
                                 </div>
                             </h:panelGroup>
                             <h:panelGroup rendered="#{empty chefPerfilPublicoBean.pratosChefSelecionado}">
@@ -126,23 +187,90 @@
                                 <p class="order-help">Selecione pelo menos um prato:</p>
 
                                 <h:panelGroup rendered="#{not empty chefPerfilPublicoBean.pratosChefSelecionado}">
-                                    <div class="dish-selection-strip">
-                                        <ui:repeat value="#{chefPerfilPublicoBean.pratosChefSelecionado}" var="prato">
-                                            <button type="button"
-                                                    class="dish-select-card #{chefPerfilPublicoBean.pratoSelecionado(prato.id) ? 'is-selected' : ''}"
-                                                    data-prato-id="#{prato.id}"
-                                                    onclick="toggleDishSelection(this)">
-                                                <h:panelGroup rendered="#{not empty prato.fotoDataUrl}">
-                                                    <img src="#{prato.fotoDataUrl}" alt="Foto do prato" class="dish-select-photo"/>
-                                                </h:panelGroup>
-                                                <h:panelGroup rendered="#{empty prato.fotoDataUrl}">
-                                                    <div class="dish-select-photo placeholder" aria-label="Prato sem foto"></div>
-                                                </h:panelGroup>
-                                                <h4>#{prato.nome}</h4>
-                                                <p>#{prato.descricao}</p>
-                                                <strong>R$ #{prato.preco}</strong>
-                                            </button>
-                                        </ui:repeat>
+                                    <div class="chef-cardapio-categorias">
+                                        <section class="chef-category-block">
+                                            <h3>Entrada</h3>
+                                            <h:panelGroup rendered="#{not empty chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('ENTRADA')}">
+                                                <div class="dish-selection-strip">
+                                                    <ui:repeat value="#{chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('ENTRADA')}" var="prato">
+                                                        <button type="button"
+                                                                class="dish-select-card #{chefPerfilPublicoBean.pratoSelecionado(prato.id) ? 'is-selected' : ''}"
+                                                                data-prato-id="#{prato.id}"
+                                                                onclick="toggleDishSelection(this)">
+                                                            <h:panelGroup rendered="#{not empty prato.fotoDataUrl}">
+                                                                <img src="#{prato.fotoDataUrl}" alt="Foto do prato" class="dish-select-photo"/>
+                                                            </h:panelGroup>
+                                                            <h:panelGroup rendered="#{empty prato.fotoDataUrl}">
+                                                                <div class="dish-select-photo placeholder" aria-label="Prato sem foto"></div>
+                                                            </h:panelGroup>
+                                                            <h4>#{prato.nome}</h4>
+                                                            <p>#{prato.descricao}</p>
+                                                            <p class="dish-highlight-category">#{pratoBean.categoriaLabel(prato.categoria)}</p>
+                                                            <strong>R$ #{prato.preco}</strong>
+                                                        </button>
+                                                    </ui:repeat>
+                                                </div>
+                                            </h:panelGroup>
+                                            <h:panelGroup rendered="#{empty chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('ENTRADA')}">
+                                                <p class="order-help">Sem pratos de Entrada neste momento.</p>
+                                            </h:panelGroup>
+                                        </section>
+
+                                        <section class="chef-category-block">
+                                            <h3>Prato principal</h3>
+                                            <h:panelGroup rendered="#{not empty chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('PRINCIPAL')}">
+                                                <div class="dish-selection-strip">
+                                                    <ui:repeat value="#{chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('PRINCIPAL')}" var="prato">
+                                                        <button type="button"
+                                                                class="dish-select-card #{chefPerfilPublicoBean.pratoSelecionado(prato.id) ? 'is-selected' : ''}"
+                                                                data-prato-id="#{prato.id}"
+                                                                onclick="toggleDishSelection(this)">
+                                                            <h:panelGroup rendered="#{not empty prato.fotoDataUrl}">
+                                                                <img src="#{prato.fotoDataUrl}" alt="Foto do prato" class="dish-select-photo"/>
+                                                            </h:panelGroup>
+                                                            <h:panelGroup rendered="#{empty prato.fotoDataUrl}">
+                                                                <div class="dish-select-photo placeholder" aria-label="Prato sem foto"></div>
+                                                            </h:panelGroup>
+                                                            <h4>#{prato.nome}</h4>
+                                                            <p>#{prato.descricao}</p>
+                                                            <p class="dish-highlight-category">#{pratoBean.categoriaLabel(prato.categoria)}</p>
+                                                            <strong>R$ #{prato.preco}</strong>
+                                                        </button>
+                                                    </ui:repeat>
+                                                </div>
+                                            </h:panelGroup>
+                                            <h:panelGroup rendered="#{empty chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('PRINCIPAL')}">
+                                                <p class="order-help">Sem pratos principais neste momento.</p>
+                                            </h:panelGroup>
+                                        </section>
+
+                                        <section class="chef-category-block">
+                                            <h3>Sobremesa</h3>
+                                            <h:panelGroup rendered="#{not empty chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('SOBREMESA')}">
+                                                <div class="dish-selection-strip">
+                                                    <ui:repeat value="#{chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('SOBREMESA')}" var="prato">
+                                                        <button type="button"
+                                                                class="dish-select-card #{chefPerfilPublicoBean.pratoSelecionado(prato.id) ? 'is-selected' : ''}"
+                                                                data-prato-id="#{prato.id}"
+                                                                onclick="toggleDishSelection(this)">
+                                                            <h:panelGroup rendered="#{not empty prato.fotoDataUrl}">
+                                                                <img src="#{prato.fotoDataUrl}" alt="Foto do prato" class="dish-select-photo"/>
+                                                            </h:panelGroup>
+                                                            <h:panelGroup rendered="#{empty prato.fotoDataUrl}">
+                                                                <div class="dish-select-photo placeholder" aria-label="Prato sem foto"></div>
+                                                            </h:panelGroup>
+                                                            <h4>#{prato.nome}</h4>
+                                                            <p>#{prato.descricao}</p>
+                                                            <p class="dish-highlight-category">#{pratoBean.categoriaLabel(prato.categoria)}</p>
+                                                            <strong>R$ #{prato.preco}</strong>
+                                                        </button>
+                                                    </ui:repeat>
+                                                </div>
+                                            </h:panelGroup>
+                                            <h:panelGroup rendered="#{empty chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('SOBREMESA')}">
+                                                <p class="order-help">Sem sobremesas neste momento.</p>
+                                            </h:panelGroup>
+                                        </section>
                                     </div>
                                 </h:panelGroup>
 
@@ -177,7 +305,12 @@
                             <h2>Postagens do chef</h2>
                             <ui:repeat value="#{chefPerfilPublicoBean.postagensChef}" var="post">
                                 <article class="auth-card chef-post-card">
-                                    <p>#{post.texto}</p>
+                                    <h:panelGroup rendered="#{not empty post.fotoDataUrl}">
+                                        <img src="#{post.fotoDataUrl}" alt="Foto da postagem do chef" class="chef-post-image"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{not empty post.texto}">
+                                        <p>#{post.texto}</p>
+                                    </h:panelGroup>
                                 </article>
                             </ui:repeat>
                             <h:panelGroup rendered="#{empty chefPerfilPublicoBean.postagensChef}">
@@ -186,47 +319,45 @@
 
                         </section>
                     </main>
+                    <aside class="public-chef-chat public-chef-ratings">
+                        <h2>Avaliacoes de clientes</h2>
+                        <p class="chat-hint">Veja as notas e comentarios de quem ja contratou este chef.</p>
 
-                    <aside class="public-chef-chat">
-                        <h2>Chat direto com o chef</h2>
-                        <p class="chat-hint">Canal de conversa entre cliente e chef, separado dos pedidos.</p>
+                        <div class="chef-rating-summary">
+                            <strong>#{avaliacaoServicoBean.formatarMediaChef(chefPerfilPublicoBean.chefSelecionado.id)} / 5</strong>
+                            <span class="rating-stars-line" aria-label="Media de estrelas do chef">
+                                <ui:repeat value="#{avaliacaoServicoBean.estrelas}" var="estrela">
+                                    <span class="rating-star #{estrela &lt;= avaliacaoServicoBean.notaArredondadaChef(chefPerfilPublicoBean.chefSelecionado.id) ? 'on' : ''}">&#9733;</span>
+                                </ui:repeat>
+                            </span>
+                            <span class="rating-count">#{avaliacaoServicoBean.totalAvaliacoesChef(chefPerfilPublicoBean.chefSelecionado.id)} avaliacao(oes)</span>
+                        </div>
 
-                        <h:form id="chatChefForm">
-                            <h:messages id="chatMensagens" globalOnly="true" showDetail="true" showSummary="false" styleClass="messages"/>
+                        <h:panelGroup rendered="#{empty avaliacaoServicoBean.avaliacoesChef(chefPerfilPublicoBean.chefSelecionado.id)}">
+                            <p>Nenhuma avaliacao registrada ainda.</p>
+                        </h:panelGroup>
 
-                            <h:panelGroup rendered="#{empty chefPerfilPublicoBean.historicoConversa}">
-                                <p>Nenhuma mensagem enviada ainda.</p>
-                            </h:panelGroup>
-
-                            <h:panelGroup rendered="#{not empty chefPerfilPublicoBean.historicoConversa}">
-                                <div class="chat-history">
-                                    <ui:repeat value="#{chefPerfilPublicoBean.historicoConversa}" var="msg">
-                                        <div class="chat-bubble client-bubble">
-                                            <strong>Você</strong>
-                                            <span>#{msg.textoCliente}</span>
-                                        </div>
-                                        <h:panelGroup rendered="#{not empty msg.respostaChef}">
-                                            <div class="chat-bubble chef-bubble">
-                                                <strong>Chef</strong>
-                                                <span>#{msg.respostaChef}</span>
+                        <h:panelGroup rendered="#{not empty avaliacaoServicoBean.avaliacoesChef(chefPerfilPublicoBean.chefSelecionado.id)}">
+                            <div class="chef-rating-list">
+                                <ui:repeat value="#{avaliacaoServicoBean.avaliacoesChef(chefPerfilPublicoBean.chefSelecionado.id)}" var="av">
+                                    <article class="chef-rating-card">
+                                        <div class="chef-rating-head">
+                                            <span class="chef-rating-avatar">#{avaliacaoServicoBean.iniciaisNome(av.clienteNome)}</span>
+                                            <div>
+                                                <p class="chef-rating-client">#{av.clienteNome}</p>
+                                                <p class="chef-rating-meta">Contrato #{solicitacaoPainelBean.codigoComprovante(av.solicitacaoId)} - #{av.dataAvaliacaoFormatada}</p>
                                             </div>
-                                        </h:panelGroup>
-                                    </ui:repeat>
-                                </div>
-                            </h:panelGroup>
-
-                            <h:inputTextarea id="mensagemChef"
-                                             value="#{chefPerfilPublicoBean.mensagemCliente}"
-                                             styleClass="box"
-                                             style="height:100px;"
-                                             required="true"
-                                             requiredMessage="Digite uma mensagem para o chef."
-                                             pt:placeholder="Escreva sua mensagem"/>
-                            <h:message for="mensagemChef" styleClass="messages"/>
-                            <h:commandButton styleClass="btn-submit" style="margin-top:12px;" value="Enviar mensagem" action="#{chefPerfilPublicoBean.enviarMensagem}">
-                                <f:ajax execute="@form" render="@form"/>
-                            </h:commandButton>
-                        </h:form>
+                                        </div>
+                                        <div class="rating-stars-line" aria-label="Nota da avaliacao">
+                                            <ui:repeat value="#{avaliacaoServicoBean.estrelas}" var="estrelaItem">
+                                                <span class="rating-star #{estrelaItem &lt;= av.nota ? 'on' : ''}">&#9733;</span>
+                                            </ui:repeat>
+                                        </div>
+                                        <p class="chef-rating-comment">#{av.comentarioExibicao}</p>
+                                    </article>
+                                </ui:repeat>
+                            </div>
+                        </h:panelGroup>
                     </aside>
                 </div>
             </div>
@@ -304,4 +435,5 @@
     </script>
 </h:body>
 </html>
+
 

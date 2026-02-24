@@ -601,6 +601,9 @@ body.menu-open .menu-overlay {
     border: 1px solid #d5d5d5;
     border-radius: 10px;
     padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
 .dish-highlight-card h4 {
@@ -634,6 +637,26 @@ body.menu-open .menu-overlay {
 .chef-post-card {
     margin-top: 10px;
     width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.chef-post-image {
+    display: block;
+    width: 100% !important;
+    height: 280px;
+    max-height: 280px;
+    object-fit: cover !important;
+    object-position: center;
+    border-radius: 10px;
+    border: 1px solid #d7d7d7;
+    margin-bottom: 10px;
+    background: #efefef;
+}
+
+.chef-post-card p {
+    margin: 0;
+    line-height: 1.45;
 }
 
 .public-chef-chat {
@@ -682,6 +705,78 @@ body.menu-open .menu-overlay {
     background: #f2f8ff;
 }
 
+.public-chef-ratings {
+    gap: 10px;
+}
+
+.chef-rating-summary {
+    border: 1px solid #d9d9d9;
+    border-radius: 10px;
+    background: #ffffff;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.chef-rating-summary strong {
+    font-size: 24px;
+    line-height: 1.1;
+}
+
+.chef-rating-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    padding-right: 2px;
+}
+
+.chef-rating-card {
+    border: 1px solid #d2d2d2;
+    border-radius: 10px;
+    background: #ffffff;
+    padding: 10px;
+}
+
+.chef-rating-head {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 8px;
+    align-items: center;
+}
+
+.chef-rating-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid #d5d5d5;
+    background: #f5f5f5;
+    color: #505050;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+}
+
+.chef-rating-client {
+    margin: 0;
+    font-weight: 700;
+}
+
+.chef-rating-meta {
+    margin: 2px 0 0;
+    font-size: 12px;
+    color: #666;
+}
+
+.chef-rating-comment {
+    margin: 8px 0 0;
+    color: #333;
+    line-height: 1.35;
+    font-size: 13px;
+}
+
 .client-home-page {
     background: radial-gradient(circle at top right, #f8e2c6 0%, #ececec 36%, #ececec 100%);
 }
@@ -690,11 +785,13 @@ body.menu-open .menu-overlay {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 340px;
     gap: 18px;
-    background: #f9f9f9;
-    border: 1px solid #d7d7d7;
+    align-items: start;
+    background: #ffffff;
+    border: 1px solid #d2d2d2;
     border-radius: 14px;
-    padding: 18px;
-    margin-bottom: 14px;
+    padding: 22px;
+    margin-bottom: 18px;
+    box-shadow: 0 6px 18px #00000012;
 }
 
 .hero-kicker {
@@ -708,28 +805,43 @@ body.menu-open .menu-overlay {
 .client-home-hero h1 {
     margin: 8px 0 10px;
     line-height: 1.1;
+    font-size: 46px;
 }
 
 .hero-sub {
     margin: 0 0 14px;
     color: #4f4f4f;
+    max-width: 740px;
+    font-size: 18px;
+}
+
+.hero-main-cta {
+    min-width: 250px;
+    text-align: center;
+    font-size: 17px;
+    border-radius: 12px;
+    border: 1px solid #d3d3d3;
+    box-shadow: 0 2px 10px #00000010;
 }
 
 .hero-stat-grid {
     display: grid;
     gap: 10px;
+    align-content: start;
 }
 
 .hero-stat-card {
-    background: #fff;
-    border: 1px solid #dadada;
+    background: #fffdf8;
+    border: 1px solid #e9d6ba;
+    border-left: 4px solid #f39b4a;
     border-radius: 10px;
-    padding: 10px 12px;
+    padding: 12px 14px;
+    box-shadow: 0 2px 8px #00000010;
 }
 
 .hero-stat-card strong {
     display: block;
-    font-size: 21px;
+    font-size: 22px;
 }
 
 .hero-stat-card span {
@@ -738,11 +850,12 @@ body.menu-open .menu-overlay {
 }
 
 .client-home-filters {
-    background: #f7f7f7;
+    background: #ffffff;
     border: 1px solid #d7d7d7;
     border-radius: 12px;
-    padding: 12px;
-    margin-bottom: 14px;
+    padding: 14px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 14px #0000000f;
 }
 
 .filter-grid {
@@ -751,20 +864,72 @@ body.menu-open .menu-overlay {
     gap: 10px;
 }
 
+.filter-grid .box {
+    height: 46px;
+    background: #ffffff;
+    border: 1px solid #cfcfcf;
+    font-size: 14px;
+}
+
+.btn-filter {
+    height: 46px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 800;
+}
+
 .chef-feed-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-    gap: 18px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 340px));
+    justify-content: start;
+    gap: 22px;
 }
 
 .chef-feed-card {
-    background: #f8f8f8;
-    border: 1px solid #d4d4d4;
+    background: #ffffff;
+    border: 1px solid #d2d2d2;
     border-radius: 12px;
-    padding: 16px;
+    padding: 18px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
+    width: 100%;
+    min-height: 100%;
+    box-shadow: 0 8px 18px #00000012;
+    cursor: pointer;
+    transition: transform 0.14s ease, box-shadow 0.14s ease;
+}
+
+.chef-feed-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px #0000001f;
+}
+
+.chef-feed-card:focus-visible {
+    outline: 3px solid #f2994a;
+    outline-offset: 2px;
+}
+
+.chef-card-vertical {
+    min-height: 520px;
+}
+
+.chef-card-ygo {
+    position: relative;
+    border: 2px solid #9e7f44;
+    border-radius: 16px;
+    background: linear-gradient(165deg, #f8e8bd 0%, #edd7a1 48%, #cfb47d 100%);
+    box-shadow: 0 12px 24px #0000001f;
+    padding: 14px;
+}
+
+.chef-card-ygo::before {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    border: 1px solid #ffffff80;
+    border-radius: 12px;
+    pointer-events: none;
 }
 
 .chef-feed-header {
@@ -777,6 +942,31 @@ body.menu-open .menu-overlay {
 .chef-feed-header h3 {
     margin: 0;
     line-height: 1.2;
+    font-size: 30px;
+    min-width: 0;
+}
+
+.chef-card-titlebar {
+    background: linear-gradient(90deg, #b17a35 0%, #d79f4d 55%, #f0c164 100%);
+    border: 1px solid #8d5f28;
+    border-radius: 10px;
+    padding: 8px 10px;
+    box-shadow: inset 0 1px 0 #ffffff66;
+}
+
+.chef-card-titlebar h3 {
+    color: #2b1908;
+    font-size: 22px;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chef-city-line {
+    margin: 0;
+    color: #575757;
+    font-size: 13px;
 }
 
 .chef-feed-card p {
@@ -788,19 +978,21 @@ body.menu-open .menu-overlay {
     border: 1px solid #d5a66c;
     background: #fff1e2;
     color: #7a4718;
-    font-size: 12px;
+    font-size: 13px;
     border-radius: 999px;
     padding: 3px 9px;
     font-weight: 700;
+    white-space: nowrap;
 }
 
 .chef-feed-meta {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px 10px;
-    margin: 2px 0;
+    gap: 9px 10px;
+    margin: 4px 0;
     font-size: 13px;
-    color: #4b4b4b;
+    color: #3e2d15;
+    line-height: 1.25;
 }
 
 .chef-feed-badges {
@@ -824,6 +1016,409 @@ body.menu-open .menu-overlay {
 .chef-feed-actions {
     margin-top: auto;
     padding-top: 8px;
+}
+
+.chef-feed-actions .btn {
+    width: 100%;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 800;
+    padding: 12px 14px;
+}
+
+.chef-feed-card .chef-suggestion-photo {
+    width: 100%;
+    max-width: none;
+    height: 200px;
+    margin: 2px 0 4px;
+    object-position: center;
+    border-radius: 12px;
+    border: 1px solid #d0d0d0;
+    background: #f3f3f3;
+}
+
+.chef-card-image-frame {
+    background: #f2f2f2;
+    border: 2px solid #8f8f8f;
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: inset 0 2px 6px #0000001f;
+}
+
+.chef-card-image-frame .chef-suggestion-photo {
+    margin: 0;
+    height: 210px;
+    border: 1px solid #b8b8b8;
+    border-radius: 8px;
+}
+
+.chef-card-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.chef-card-stat-box {
+    background: #fff9ea;
+    border: 1px solid #caa467;
+    border-radius: 10px;
+    padding: 8px 10px;
+    min-height: 72px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.chef-card-stat-box .stat-label {
+    color: #6a4920;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.35px;
+}
+
+.chef-card-stat-box strong {
+    font-size: 15px;
+    color: #25170b;
+    line-height: 1.2;
+}
+
+.rating-stars-line,
+.rating-stars {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    line-height: 1;
+}
+
+.rating-star {
+    color: #b9b9b9;
+    font-size: 14px;
+}
+
+.rating-star.on {
+    color: #e2a326;
+}
+
+.rating-count {
+    display: inline-block;
+    margin-top: 2px;
+    color: #5e5e5e;
+    font-size: 12px;
+}
+
+.chef-card-meta {
+    border-top: 1px dashed #ad8b53;
+    padding-top: 8px;
+}
+
+.chef-card-meta > span,
+.chef-card-meta > span > span {
+    display: block;
+    background: #f6e8c5;
+    border: 1px solid #c99f62;
+    border-radius: 8px;
+    padding: 4px 6px;
+    font-weight: 700;
+}
+
+.chef-dashboard-header h1 {
+    margin: 8px 0 10px;
+    line-height: 1.1;
+    font-size: 36px;
+}
+
+.chef-dashboard-header.auth-card,
+.chef-dashboard-section.auth-card {
+    width: 100%;
+    max-width: none;
+}
+
+.chef-dashboard-header .hero-sub {
+    margin-bottom: 0;
+    font-size: 16px;
+}
+
+.chef-dashboard-top {
+    display: grid;
+    grid-template-columns: 112px minmax(0, 1fr);
+    gap: 14px;
+    align-items: start;
+}
+
+.chef-dashboard-avatar-wrap {
+    display: flex;
+    justify-content: center;
+}
+
+.chef-dashboard-avatar {
+    width: 104px;
+    height: 104px;
+    border-radius: 12px;
+}
+
+.chef-dashboard-section {
+    margin-top: 14px;
+}
+
+.chef-dashboard-section h2 {
+    margin: 0 0 10px;
+}
+
+.chef-dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 14px;
+    align-items: start;
+}
+
+.chef-stats-row {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.chef-stat-mini {
+    background: #fffdf8;
+    border: 1px solid #e7d5bc;
+    border-left: 4px solid #f39b4a;
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+.chef-stat-mini strong {
+    display: block;
+    font-size: 22px;
+}
+
+.chef-stat-mini span {
+    color: #5f5f5f;
+    font-size: 13px;
+}
+
+.chef-dish-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.chef-cardapio-categorias {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.chef-category-block {
+    border: 1px solid #d8d8d8;
+    border-radius: 10px;
+    background: #fcfcfc;
+    padding: 10px;
+}
+
+.chef-category-block h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+}
+
+.chef-carousel-strip {
+    display: flex !important;
+    flex-wrap: nowrap;
+    gap: 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px 2px 8px;
+    scrollbar-width: thin;
+    align-items: stretch;
+    scroll-snap-type: x proximity;
+}
+
+.chef-carousel-strip::-webkit-scrollbar {
+    height: 8px;
+}
+
+.chef-carousel-strip::-webkit-scrollbar-thumb {
+    background: #c7c7c7;
+    border-radius: 999px;
+}
+
+.chef-carousel-strip::-webkit-scrollbar-track {
+    background: #ececec;
+    border-radius: 999px;
+}
+
+.chef-carousel-strip .dish-highlight-card {
+    flex: 0 0 270px !important;
+    max-width: 270px;
+    min-height: 100%;
+    scroll-snap-align: start;
+}
+
+.dish-highlight-category {
+    margin: 0 0 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #6f4e22;
+}
+
+.chef-request-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chef-request-card {
+    border: 1px solid #d2d2d2;
+    border-radius: 10px;
+    background: #ffffff;
+    padding: 10px;
+}
+
+.chef-request-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 10px;
+}
+
+.chef-request-meta p {
+    margin: 0;
+    font-size: 13px;
+}
+
+.chef-request-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.chef-request-actions input[type="submit"] {
+    border: 1px solid #c8c8c8;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-weight: 700;
+    background: #fff;
+}
+
+.chef-request-actions input[type="submit"]:hover {
+    background: #f7f7f7;
+}
+
+.status-chip {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid #cfcfcf;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 700;
+    background: #f4f4f4;
+    color: #4a4a4a;
+}
+
+.status-chip.pending {
+    border-color: #d8b475;
+    background: #fff4df;
+    color: #7f5318;
+}
+
+.status-chip.accepted {
+    border-color: #9ac6a3;
+    background: #ebf9ee;
+    color: #235b30;
+}
+
+.status-chip.rejected,
+.status-chip.canceled {
+    border-color: #ddafaf;
+    background: #fff0f0;
+    color: #7d2222;
+}
+
+.status-chip.negotiating {
+    border-color: #b6c8ec;
+    background: #edf3ff;
+    color: #214078;
+}
+
+.status-chip.contracted {
+    border-color: #8fbf97;
+    background: #e8f7eb;
+    color: #184e25;
+}
+
+.sol-chat-shell {
+    margin-top: 8px;
+    border-top: 1px dashed #d6d6d6;
+    padding-top: 10px;
+}
+
+.sol-chat-history {
+    max-height: 220px;
+    padding-right: 4px;
+    margin-bottom: 8px;
+}
+
+.contracted-msg {
+    margin: 8px 0 0;
+    color: #1f5b2d;
+    font-weight: 700;
+}
+
+.contract-proof-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.contract-proof-card {
+    border: 1px solid #cfdac8;
+    border-radius: 10px;
+    background: #f5fbf2;
+    padding: 10px;
+}
+
+.contract-proof-card p {
+    margin: 0 0 5px;
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+.contract-proof-card p:last-child {
+    margin-bottom: 0;
+}
+
+.contract-proof-badge {
+    display: inline-block;
+    margin-top: 6px;
+    border: 1px solid #93bf95;
+    border-radius: 999px;
+    padding: 3px 8px;
+    background: #e6f7e5;
+    color: #1f5a25;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.rating-form-shell {
+    margin-top: 8px;
+    border: 1px dashed #cfd6de;
+    border-radius: 10px;
+    background: #ffffff;
+    padding: 9px;
+}
+
+.rating-form-shell p {
+    margin: 0 0 6px;
+}
+
+.rating-select {
+    height: 38px;
+    background: #ffffff;
 }
 
 @media (max-width: 760px) {
@@ -886,10 +1481,73 @@ body.menu-open .menu-overlay {
 
     .client-home-hero {
         grid-template-columns: 1fr;
+        padding: 16px;
     }
 
     .filter-grid {
         grid-template-columns: 1fr;
+    }
+
+    .client-home-hero h1 {
+        font-size: 34px;
+    }
+
+    .hero-sub {
+        font-size: 16px;
+    }
+
+    .chef-feed-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chef-card-vertical {
+        min-height: auto;
+    }
+
+    .chef-card-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chef-card-image-frame .chef-suggestion-photo {
+        height: 185px;
+    }
+
+    .chef-dashboard-header h1 {
+        font-size: 30px;
+    }
+
+    .chef-stats-row {
+        grid-template-columns: 1fr;
+    }
+
+    .chef-dashboard-top {
+        grid-template-columns: 1fr;
+    }
+
+    .chef-dashboard-avatar-wrap {
+        justify-content: flex-start;
+    }
+
+    .chef-dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chef-dish-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chef-request-meta {
+        grid-template-columns: 1fr;
+    }
+
+    .chef-carousel-strip .dish-highlight-card {
+        flex-basis: 220px !important;
+        max-width: 220px;
+    }
+
+    .chef-post-image {
+        height: 210px;
+        max-height: 210px;
     }
 }
 
@@ -909,12 +1567,12 @@ body.menu-open .menu-overlay {
 
 .dish-highlight-photo {
     width: 100%;
-    height: 120px;
+    height: 158px;
     border-radius: 8px;
-    object-fit: cover;
+    object-fit: contain;
     border: 1px solid #d5d5d5;
     margin-bottom: 8px;
-    background: #d4d4d4;
+    background: #efefef;
 }
 
 .dish-highlight-photo.placeholder {
@@ -931,6 +1589,10 @@ body.menu-open .menu-overlay {
     padding: 4px 2px 10px;
     margin: 4px 0 10px;
     scrollbar-width: thin;
+}
+
+.chef-category-block .dish-selection-strip {
+    max-width: 100%;
 }
 
 .dish-selection-strip::-webkit-scrollbar {

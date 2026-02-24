@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 public class Prato implements Serializable {
 
+    public static final String CATEGORIA_ENTRADA = "ENTRADA";
+    public static final String CATEGORIA_PRINCIPAL = "PRINCIPAL";
+    public static final String CATEGORIA_SOBREMESA = "SOBREMESA";
+
     private Long id;
     private Long chefId;
     private String nome;
@@ -11,9 +15,11 @@ public class Prato implements Serializable {
     private Double preco;
     private String fotoDataUrl;
     private boolean visivelNoPerfilPublico;
+    private String categoria;
 
     public Prato() {
         this.visivelNoPerfilPublico = true;
+        this.categoria = CATEGORIA_PRINCIPAL;
     }
 
     public Prato(String nome, String descricao, Double preco) {
@@ -21,6 +27,7 @@ public class Prato implements Serializable {
         this.descricao = descricao;
         this.preco = preco;
         this.visivelNoPerfilPublico = true;
+        this.categoria = CATEGORIA_PRINCIPAL;
     }
 
     public Prato(Long id, Long chefId, String nome, String descricao, Double preco) {
@@ -38,6 +45,17 @@ public class Prato implements Serializable {
                  Double preco,
                  String fotoDataUrl,
                  boolean visivelNoPerfilPublico) {
+        this(id, chefId, nome, descricao, preco, fotoDataUrl, visivelNoPerfilPublico, CATEGORIA_PRINCIPAL);
+    }
+
+    public Prato(Long id,
+                 Long chefId,
+                 String nome,
+                 String descricao,
+                 Double preco,
+                 String fotoDataUrl,
+                 boolean visivelNoPerfilPublico,
+                 String categoria) {
         this.id = id;
         this.chefId = chefId;
         this.nome = nome;
@@ -45,6 +63,7 @@ public class Prato implements Serializable {
         this.preco = preco;
         this.fotoDataUrl = fotoDataUrl;
         this.visivelNoPerfilPublico = visivelNoPerfilPublico;
+        this.categoria = categoria;
     }
 
     public Long getId() {
@@ -97,5 +116,13 @@ public class Prato implements Serializable {
 
     public void setVisivelNoPerfilPublico(boolean visivelNoPerfilPublico) {
         this.visivelNoPerfilPublico = visivelNoPerfilPublico;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 }

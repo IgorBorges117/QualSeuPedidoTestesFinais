@@ -1,22 +1,24 @@
 package br.com.qualseupedido.bean;
 
+import br.com.qualseupedido.util.ImagemUtil;
+
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.Part;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
-import java.util.Base64;
 
 @Named
 @RequestScoped
 public class ClientePerfilBean implements Serializable {
 
     private static final long TAMANHO_MAXIMO = 3L * 1024L * 1024L;
+    private static final int MAX_LARGURA_PERFIL = 720;
+    private static final int MAX_ALTURA_PERFIL = 720;
+    private static final float QUALIDADE_JPEG = 0.82f;
     private Part fotoPerfil;
 
     @Inject
@@ -55,9 +57,13 @@ public class ClientePerfilBean implements Serializable {
         }
 
         try {
-            byte[] bytes = lerBytes(fotoPerfil.getInputStream());
-            String base64 = Base64.getEncoder().encodeToString(bytes);
-            authBean.getUsuarioLogado().setFotoPerfilDataUrl("data:" + contentType + ";base64," + base64);
+            String dataUrl = ImagemUtil.processarDataUrl(
+                    fotoPerfil.getInputStream(),
+                    MAX_LARGURA_PERFIL,
+                    MAX_ALTURA_PERFIL,
+                    QUALIDADE_JPEG
+            );
+            authBean.getUsuarioLogado().setFotoPerfilDataUrl(dataUrl);
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Imagem salva", "Foto de perfil atualizada."));
             return null;
@@ -91,25 +97,19 @@ public class ClientePerfilBean implements Serializable {
         }
 
         try {
-            byte[] bytes = lerBytes(fotoPerfil.getInputStream());
-            String base64 = Base64.getEncoder().encodeToString(bytes);
-            authBean.getUsuarioLogado().setFotoPerfilDataUrl("data:" + contentType + ";base64," + base64);
+            String dataUrl = ImagemUtil.processarDataUrl(
+                    fotoPerfil.getInputStream(),
+                    MAX_LARGURA_PERFIL,
+                    MAX_ALTURA_PERFIL,
+                    QUALIDADE_JPEG
+            );
+            authBean.getUsuarioLogado().setFotoPerfilDataUrl(dataUrl);
             return authBean.concluirOnboardingCliente();
         } catch (IOException e) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Falha no upload", "Não foi possível salvar a imagem."));
             return null;
         }
-    }
-
-    private byte[] lerBytes(InputStream in) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        byte[] buffer = new byte[4096];
-        int lidos;
-        while ((lidos = in.read(buffer)) != -1) {
-            out.write(buffer, 0, lidos);
-        }
-        return out.toByteArray();
     }
 
     public Part getFotoPerfil() {

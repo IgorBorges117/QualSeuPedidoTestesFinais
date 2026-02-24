@@ -73,14 +73,23 @@ public class ChefConteudoBean implements Serializable {
     }
 
     public synchronized void adicionarPostagem(Long chefId, String texto) {
-        if (texto == null || texto.trim().isEmpty()) {
+        adicionarPostagem(chefId, texto, null);
+    }
+
+    public synchronized void adicionarPostagem(Long chefId, String texto, String fotoDataUrl) {
+        String textoNormalizado = texto == null ? "" : texto.trim();
+        String fotoDataUrlNormalizada = fotoDataUrl == null ? null : fotoDataUrl.trim();
+        boolean semTexto = textoNormalizado.isEmpty();
+        boolean semFoto = fotoDataUrlNormalizada == null || fotoDataUrlNormalizada.isEmpty();
+
+        if (semTexto && semFoto) {
             return;
         }
         if (chefId == null) {
             return;
         }
         List<PostagemChef> posts = postagensPorChef.computeIfAbsent(chefId, k -> new ArrayList<>());
-        posts.add(0, new PostagemChef(seqPostagem++, texto.trim()));
+        posts.add(0, new PostagemChef(seqPostagem++, textoNormalizado, fotoDataUrlNormalizada));
     }
 
     public synchronized List<PostagemChef> listarPostagensChef(Long chefId) {
@@ -162,10 +171,12 @@ public class ChefConteudoBean implements Serializable {
     public static class PostagemChef implements Serializable {
         private final Long id;
         private String texto;
+        private final String fotoDataUrl;
 
-        public PostagemChef(Long id, String texto) {
+        public PostagemChef(Long id, String texto, String fotoDataUrl) {
             this.id = id;
             this.texto = texto;
+            this.fotoDataUrl = fotoDataUrl;
         }
 
         public Long getId() {
@@ -178,6 +189,10 @@ public class ChefConteudoBean implements Serializable {
 
         public void setTexto(String texto) {
             this.texto = texto;
+        }
+
+        public String getFotoDataUrl() {
+            return fotoDataUrl;
         }
     }
 }

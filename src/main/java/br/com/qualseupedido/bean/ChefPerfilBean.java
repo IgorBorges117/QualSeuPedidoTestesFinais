@@ -1,22 +1,41 @@
 package br.com.qualseupedido.bean;
 
+import br.com.qualseupedido.util.ImagemUtil;
+
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.Part;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
-import java.util.Base64;
 
 @Named
 @RequestScoped
 public class ChefPerfilBean implements Serializable {
 
+    private static final String[] ESPECIALIDADES_DISPONIVEIS = new String[]{
+            "Chef particular",
+            "Culinaria brasileira",
+            "Culinaria italiana",
+            "Culinaria japonesa",
+            "Culinaria francesa",
+            "Churrasco e grelhados",
+            "Massas artesanais",
+            "Confeitaria e sobremesas",
+            "Cozinha vegetariana",
+            "Cozinha vegana",
+            "Cozinha fitness",
+            "Eventos corporativos"
+    };
+
     private static final long TAMANHO_MAXIMO = 3L * 1024L * 1024L;
+    private static final int MAX_LARGURA_PERFIL = 720;
+    private static final int MAX_ALTURA_PERFIL = 720;
+    private static final int MAX_LARGURA_CAPA = 1600;
+    private static final int MAX_ALTURA_CAPA = 700;
+    private static final float QUALIDADE_JPEG = 0.82f;
     private Part fotoPerfil;
     private Part fotoCapa;
 
@@ -83,9 +102,12 @@ public class ChefPerfilBean implements Serializable {
         }
 
         try {
-            byte[] bytes = lerBytes(arquivo.getInputStream());
-            String base64 = Base64.getEncoder().encodeToString(bytes);
-            String dataUrl = "data:" + contentType + ";base64," + base64;
+            String dataUrl = ImagemUtil.processarDataUrl(
+                    arquivo.getInputStream(),
+                    perfil ? MAX_LARGURA_PERFIL : MAX_LARGURA_CAPA,
+                    perfil ? MAX_ALTURA_PERFIL : MAX_ALTURA_CAPA,
+                    QUALIDADE_JPEG
+            );
             if (perfil) {
                 authBean.getUsuarioLogado().setFotoPerfilDataUrl(dataUrl);
             } else {
@@ -99,16 +121,6 @@ public class ChefPerfilBean implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Falha no upload", "Não foi possível salvar a imagem."));
             return null;
         }
-    }
-
-    private byte[] lerBytes(InputStream in) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        byte[] buffer = new byte[4096];
-        int lidos;
-        while ((lidos = in.read(buffer)) != -1) {
-            out.write(buffer, 0, lidos);
-        }
-        return out.toByteArray();
     }
 
     public Part getFotoPerfil() {
@@ -125,5 +137,9 @@ public class ChefPerfilBean implements Serializable {
 
     public void setFotoCapa(Part fotoCapa) {
         this.fotoCapa = fotoCapa;
+    }
+
+    public String[] getEspecialidadesDisponiveis() {
+        return ESPECIALIDADES_DISPONIVEIS;
     }
 }

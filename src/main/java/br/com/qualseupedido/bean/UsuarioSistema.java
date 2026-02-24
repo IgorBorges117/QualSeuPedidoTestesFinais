@@ -7,7 +7,7 @@ public class UsuarioSistema implements Serializable {
     private final Long id;
     private final String email;
     private final String senha;
-    private final String nome;
+    private String nome;
     private final TipoUsuario tipo;
     private boolean perfilChefConfigurado;
     private boolean perfilClienteConfigurado;
@@ -56,6 +56,10 @@ public class UsuarioSistema implements Serializable {
 
     public String getNome() {
         return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public TipoUsuario getTipo() {

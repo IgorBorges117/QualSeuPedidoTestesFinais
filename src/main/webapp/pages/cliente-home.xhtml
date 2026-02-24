@@ -5,18 +5,18 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
     <meta charset="UTF-8"/>
-    <title>Ãrea do Cliente</title>
+    <title>Area do Cliente</title>
     <h:outputStylesheet library="css" name="app.css"/>
 </h:head>
 <h:body>
     <button type="button" class="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">&#9776;</button>
     <div class="menu-overlay" onclick="closeMenu()"></div>
-    <aside class="side-menu" aria-label="NavegaÃ§Ã£o principal">
+    <aside class="side-menu" aria-label="Navegacao principal">
         <h:form styleClass="side-menu-form">
             <div class="side-menu-header">Menu</div>
             <h:commandLink styleClass="side-menu-link" value="Home" action="/pages/cliente-home.xhtml?faces-redirect=true"/>
             <h:commandLink styleClass="side-menu-link" value="Perfil" action="/pages/cliente-perfil.xhtml?faces-redirect=true"/>
-            <h:commandLink styleClass="side-menu-link" value="ConfiguraÃ§Ãµes" action="/pages/cliente-perfil-edicao.xhtml?faces-redirect=true"/>
+            <h:commandLink styleClass="side-menu-link" value="Configuracoes" action="/pages/cliente-perfil-edicao.xhtml?faces-redirect=true"/>
             <h:commandButton styleClass="btn-submit" value="Sair" action="#{authBean.sair}"/>
         </h:form>
     </aside>
@@ -25,10 +25,10 @@
         <div class="register-wrap">
             <section class="client-home-hero">
                 <div>
-                    <p class="hero-kicker">Eventos sem dor de cabeÃ§a</p>
+                    <p class="hero-kicker">Eventos sem dor de cabeca</p>
                     <h1>Monte seu evento com chefs avaliados em poucos minutos</h1>
-                    <p class="hero-sub">Escolha o profissional, monte o menu e receba confirmaÃ§Ã£o com rapidez.</p>
-                    <h:link styleClass="btn btn-primary" value="Encontrar chef agora" outcome="/pages/cliente-home.xhtml"/>
+                    <p class="hero-sub">Escolha o profissional, monte o menu e receba confirmacao com rapidez.</p>
+                    <h:link styleClass="btn btn-primary hero-main-cta" value="Encontrar chef agora" outcome="/pages/cliente-home.xhtml"/>
                 </div>
                 <div class="hero-stat-grid">
                     <div class="hero-stat-card">
@@ -40,8 +40,8 @@
                         <span>Monte o menu com o chef</span>
                     </div>
                     <div class="hero-stat-card">
-                        <strong>AtÃ© 60 min</strong>
-                        <span>Tempo mÃ©dio de resposta</span>
+                        <strong>Ate 60 min</strong>
+                        <span>Tempo medio de resposta</span>
                     </div>
                 </div>
             </section>
@@ -50,7 +50,7 @@
                 <div class="filter-grid">
                     <input id="filter-search" class="box" type="text" placeholder="Busque por nome, cidade ou especialidade"/>
                     <select id="filter-price" class="box">
-                        <option value="">Faixa de preÃ§o</option>
+                        <option value="">Faixa de preco</option>
                         <option value="$">$</option>
                         <option value="$$">$$</option>
                         <option value="$$$">$$$</option>
@@ -60,50 +60,73 @@
                         <option value="Hoje">Hoje</option>
                         <option value="Fim de semana">Fim de semana</option>
                     </select>
-                    <button type="button" class="btn-submit" onclick="applyChefFilters()">Aplicar filtros</button>
+                    <button type="button" class="btn-submit btn-filter" onclick="applyChefFilters()">Aplicar filtros</button>
                 </div>
             </section>
 
             <section>
-                <h2>Chefs em destaque da sua regiÃ£o</h2>
+                <h2>Chefs em destaque da sua regiao</h2>
                 <div id="chef-feed" class="chef-feed-grid">
                     <ui:repeat value="#{usuarioBean.chefsDisponiveis}" var="chef" varStatus="status">
-                        <article class="chef-feed-card"
+                        <ui:param name="mediaChefFormatada" value="#{avaliacaoServicoBean.formatarMediaChef(chef.id)}"/>
+                        <ui:param name="notaArredondadaChef" value="#{avaliacaoServicoBean.notaArredondadaChef(chef.id)}"/>
+                        <ui:param name="totalAvaliacoesChef" value="#{avaliacaoServicoBean.totalAvaliacoesChef(chef.id)}"/>
+                        <article class="chef-feed-card chef-card-vertical chef-card-ygo"
+                                 role="link"
+                                 tabindex="0"
+                                 onclick="openChefProfile(this)"
+                                 onkeydown="handleChefCardKey(event, this)"
+                                 data-profile-url="#{facesContext.externalContext.requestContextPath}/pages/chef-perfil-publico.xhtml?chefId=#{chef.id}"
                                  data-name="#{chef.nome}"
                                  data-city="#{chef.cidade}"
                                  data-specialty="#{empty chef.preferenciaAlimentar ? 'Chef particular' : chef.preferenciaAlimentar}"
                                  data-price="#{empty chef.faixaPrecoChef ? '$$' : chef.faixaPrecoChef}"
-                                 data-availability="#{empty chef.disponibilidadeChef ? 'Hoje' : chef.disponibilidadeChef}">
-                            <div class="chef-feed-header">
-                                <h3>#{chef.nome}</h3>
-                                <span class="availability-pill">#{empty chef.disponibilidadeChef ? 'Hoje' : chef.disponibilidadeChef}</span>
+                                  data-availability="#{empty chef.disponibilidadeChef ? 'Hoje' : chef.disponibilidadeChef}">
+                            <ui:param name="totalPratosChef" value="#{pratoBean.pratosPublicosDoChef(chef.id).size()}"/>
+                            <div class="chef-feed-header chef-card-titlebar">
+                                <h3 title="#{chef.nome}">#{chef.nome}</h3>
                             </div>
 
-                            <h:panelGroup rendered="#{not empty chef.fotoPerfilDataUrl}">
-                                <img src="#{chef.fotoPerfilDataUrl}" alt="Foto do chef #{chef.nome}" class="chef-suggestion-photo"/>
-                            </h:panelGroup>
-                            <h:panelGroup rendered="#{empty chef.fotoPerfilDataUrl}">
-                                <h:graphicImage library="images" name="chef-default.svg" styleClass="chef-suggestion-photo" alt="Foto padrÃ£o do chef"/>
-                            </h:panelGroup>
+                            <div class="chef-card-image-frame">
+                                <h:panelGroup rendered="#{not empty chef.fotoPerfilDataUrl}">
+                                    <img src="#{chef.fotoPerfilDataUrl}" alt="Foto do chef #{chef.nome}" class="chef-suggestion-photo"/>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{empty chef.fotoPerfilDataUrl}">
+                                    <h:graphicImage library="images" name="chef-default.svg" styleClass="chef-suggestion-photo" alt="Foto padrao do chef"/>
+                                </h:panelGroup>
+                            </div>
 
-                            <p><strong>Especialidade:</strong> #{empty chef.preferenciaAlimentar ? 'Chef particular' : chef.preferenciaAlimentar}</p>
+                            <div class="chef-card-stats-grid">
+                                <div class="chef-card-stat-box">
+                                    <span class="stat-label">Avaliacao</span>
+                                    <strong>#{mediaChefFormatada} / 5</strong>
+                                    <span class="rating-stars-line" aria-label="Avaliacao ate 5 estrelas">
+                                        <ui:repeat value="#{avaliacaoServicoBean.estrelas}" var="estrela">
+                                            <span class="rating-star #{estrela &lt;= notaArredondadaChef ? 'on' : ''}">&#9733;</span>
+                                        </ui:repeat>
+                                    </span>
+                                    <span class="rating-count">#{totalAvaliacoesChef} avaliacao(oes)</span>
+                                </div>
+                                <div class="chef-card-stat-box">
+                                    <span class="stat-label">Especialidade</span>
+                                    <strong>#{empty chef.preferenciaAlimentar ? 'Chef particular' : chef.preferenciaAlimentar}</strong>
+                                </div>
+                            </div>
 
-                            <div class="chef-feed-meta">
-                                <span>Nota #{4.2 + (status.index mod 7) / 10.0}</span>
+                            <div class="chef-feed-meta chef-card-meta">
+                                <span>Cidade #{empty chef.cidade ? 'Nao informada' : chef.cidade}</span>
                                 <span>Faixa #{empty chef.faixaPrecoChef ? '$$' : chef.faixaPrecoChef}</span>
                                 <span>Resposta ~#{chefConteudoBean.possuiRespostasDoChef(chef.id) ? 30 : 90} min</span>
-                                <span>#{pratoBean.pratosPublicosDoChef(chef.id).size()} pratos</span>
+                                <h:panelGroup rendered="#{totalPratosChef > 0}">
+                                    <span>#{totalPratosChef} pratos</span>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{totalPratosChef == 0}">
+                                    <span>Sem pratos publicados</span>
+                                </h:panelGroup>
                             </div>
 
                             <div class="chef-feed-badges">
-                                <h:panelGroup rendered="#{chef.chefVerificado}"><span class="chef-badge">Chef verificado</span></h:panelGroup>
-                                <h:panelGroup rendered="#{chefConteudoBean.possuiRespostasDoChef(chef.id)}"><span class="chef-badge">Resposta rÃ¡pida</span></h:panelGroup>
-                            </div>
-
-                            <div class="chef-feed-actions">
-                                <h:link styleClass="btn" value="Ver perfil" outcome="/pages/chef-perfil-publico.xhtml">
-                                    <f:param name="chefId" value="#{chef.id}"/>
-                                </h:link>
+                                <h:panelGroup rendered="#{chefConteudoBean.possuiRespostasDoChef(chef.id)}"><span class="chef-badge">Resposta rapida</span></h:panelGroup>
                             </div>
                         </article>
                     </ui:repeat>
@@ -119,6 +142,20 @@
         }
         function closeMenu() {
             document.body.classList.remove('menu-open');
+        }
+
+        function openChefProfile(card) {
+            const url = card.dataset.profileUrl;
+            if (url) {
+                window.location.href = url;
+            }
+        }
+
+        function handleChefCardKey(event, card) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                openChefProfile(card);
+            }
         }
 
         function applyChefFilters() {

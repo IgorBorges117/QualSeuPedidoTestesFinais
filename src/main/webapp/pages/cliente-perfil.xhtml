@@ -1,7 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
 <h:head>
     <meta charset="UTF-8"/>
     <title>Perfil do Cliente</title>
@@ -10,12 +12,12 @@
 <h:body>
     <button type="button" class="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">&#9776;</button>
     <div class="menu-overlay" onclick="closeMenu()"></div>
-    <aside class="side-menu" aria-label="Navegação principal">
+    <aside class="side-menu" aria-label="Navegacao principal">
         <h:form styleClass="side-menu-form">
             <div class="side-menu-header">Menu</div>
             <h:commandLink styleClass="side-menu-link" value="Home" action="/pages/cliente-home.xhtml?faces-redirect=true"/>
             <h:commandLink styleClass="side-menu-link" value="Perfil" action="/pages/cliente-perfil.xhtml?faces-redirect=true"/>
-            <h:commandLink styleClass="side-menu-link" value="Configurações" action="/pages/cliente-perfil-edicao.xhtml?faces-redirect=true"/>
+            <h:commandLink styleClass="side-menu-link" value="Configuracoes" action="/pages/cliente-perfil-edicao.xhtml?faces-redirect=true"/>
             <h:commandButton styleClass="btn-submit" value="Sair" action="#{authBean.sair}"/>
         </h:form>
     </aside>
@@ -23,68 +25,201 @@
     <div class="register-page">
         <div class="register-wrap">
             <h1>Perfil do cliente</h1>
-            <p>Confira seus dados e acompanhe suas solicitações.</p>
+            <p>Acompanhe suas solicitacoes e finalize contratacoes com os chefs.</p>
+            <h:messages id="clienteMsgs" globalOnly="true" showDetail="true" showSummary="false" styleClass="messages"/>
 
             <h:panelGroup rendered="#{not authBean.cliente}">
-                <p>Essa área é exclusiva para clientes.</p>
-                <h:link value="Ir para início" outcome="/pages/index.xhtml"/>
+                <p>Area exclusiva para clientes.</p>
+                <h:link value="Ir para inicio" outcome="/pages/index.xhtml"/>
             </h:panelGroup>
 
             <h:panelGroup rendered="#{authBean.cliente}">
-                <div class="register-grid">
-                    <div class="auth-card">
-                        <h2>Foto de perfil</h2>
-                        <h:panelGroup rendered="#{not empty authBean.usuarioLogado.fotoPerfilDataUrl}">
-                            <img src="#{authBean.usuarioLogado.fotoPerfilDataUrl}" alt="Foto de perfil" class="profile-photo"/>
-                        </h:panelGroup>
-                        <h:panelGroup rendered="#{empty authBean.usuarioLogado.fotoPerfilDataUrl}">
-                            <div class="profile-photo placeholder">Sem foto</div>
-                        </h:panelGroup>
-                    </div>
+                <div class="public-chef-layout">
+                    <main class="public-chef-main">
+                        <section class="chef-profile-shell">
+                            <div class="chef-cover-stage">
+                                <h:panelGroup rendered="#{not empty authBean.usuarioLogado.fotoCapaDataUrl}">
+                                    <img src="#{authBean.usuarioLogado.fotoCapaDataUrl}" alt="Capa do cliente" class="chef-cover-photo"/>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{empty authBean.usuarioLogado.fotoCapaDataUrl}">
+                                    <div class="chef-cover-photo placeholder" aria-label="Capa padrao" style="background: linear-gradient(120deg, #cfd6e6 0%, #b0b9cf 100%); height: 220px;"></div>
+                                </h:panelGroup>
 
-                    <div class="auth-card">
-                        <h2>Informações do cadastro</h2>
-                        <p><strong>Nome:</strong> #{authBean.usuarioLogado.nome}</p>
-                        <p><strong>E-mail:</strong> #{authBean.usuarioLogado.email}</p>
-                        <p><strong>Telefone:</strong> #{authBean.usuarioLogado.telefone}</p>
-                        <p><strong>Cidade:</strong> #{authBean.usuarioLogado.cidade}</p>
-                        <p><strong>Estado:</strong> #{authBean.usuarioLogado.estado}</p>
-                        <p><strong>Endereço:</strong> #{authBean.usuarioLogado.endereco} #{authBean.usuarioLogado.numero}</p>
-                    </div>
+                                <div class="chef-avatar-overlay">
+                                    <h:panelGroup rendered="#{not empty authBean.usuarioLogado.fotoPerfilDataUrl}">
+                                        <img src="#{authBean.usuarioLogado.fotoPerfilDataUrl}" alt="Foto de perfil do cliente" class="profile-photo"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{empty authBean.usuarioLogado.fotoPerfilDataUrl}">
+                                        <h:graphicImage library="images" name="chef-default.svg" styleClass="profile-photo" alt="Foto padrao"/>
+                                    </h:panelGroup>
+                                </div>
+                            </div>
+
+                            <div class="chef-identity-meta">
+                                <h1>#{authBean.usuarioLogado.nome}</h1>
+                                <p>
+                                    <strong>E-mail:</strong> #{authBean.usuarioLogado.email}
+                                    <span> | </span>
+                                    <strong>Telefone:</strong> #{authBean.usuarioLogado.telefone}
+                                </p>
+                                <p>
+                                    <strong>Cidade:</strong> #{empty authBean.usuarioLogado.cidade ? 'Nao informada' : authBean.usuarioLogado.cidade}
+                                    <span> | </span>
+                                    <strong>Estado:</strong> #{empty authBean.usuarioLogado.estado ? 'Nao informado' : authBean.usuarioLogado.estado}
+                                </p>
+                                <p>
+                                    <strong>Endereco:</strong>
+                                    #{empty authBean.usuarioLogado.endereco ? 'Nao informado' : authBean.usuarioLogado.endereco}
+                                    #{authBean.usuarioLogado.numero}
+                                </p>
+                            </div>
+                        </section>
+
+                        <h:panelGroup id="clienteNotificacoes" layout="block">
+                            <h:panelGroup rendered="#{solicitacaoPainelBean.notificacoesClienteAceite > 0}">
+                                <section class="chef-order-shell">
+                                    <h2>Notificacoes</h2>
+                                    <p>Voce tem #{solicitacaoPainelBean.notificacoesClienteAceite} solicitacao(oes) aceita(s). Abra a negociacao para alinhar os detalhes com o chef.</p>
+                                </section>
+                            </h:panelGroup>
+                        </h:panelGroup>
+
+                        <section class="chef-order-shell">
+                            <h2>Como contratar</h2>
+                            <p class="order-help">1. Escolha um chef na Home. 2. Envie sua solicitacao com pratos e data. 3. Negocie aqui ate confirmar a contratacao.</p>
+                            <h:link styleClass="btn" value="Buscar chefs na Home" outcome="/pages/cliente-home.xhtml"/>
+                            <h:link styleClass="btn" value="Atualizar meus dados" outcome="/pages/cliente-perfil-edicao.xhtml" style="margin-left:8px;"/>
+                        </section>
+                    </main>
+
+                    <aside class="public-chef-chat">
+                        <h2>Contratacoes e negociacoes</h2>
+                        <p class="chat-hint">Acompanhe todas as solicitacoes enviadas e converse com os chefs ate finalizar.</p>
+
+                        <h:form id="clienteSolicitacoesForm">
+                            <h:panelGroup id="solicitacoesClienteArea" layout="block">
+                                <h:panelGroup rendered="#{not empty solicitacaoPainelBean.solicitacoesCliente}">
+                                    <div class="chef-request-list">
+                                        <ui:repeat value="#{solicitacaoPainelBean.solicitacoesCliente}" var="sol">
+                                            <article class="chef-request-card">
+                                                <div class="chef-request-meta">
+                                                    <p><strong>Chef:</strong> #{sol.chefNome}</p>
+                                                    <p><strong>Pratos:</strong> #{sol.pratosResumo}</p>
+                                                    <p><strong>Data/Hora:</strong> #{solicitacaoPainelBean.formatarData(sol.dataEvento)} #{solicitacaoPainelBean.formatarHorario(sol.horarioEvento)}</p>
+                                                    <p><strong>Status:</strong> <span class="#{solicitacaoPainelBean.statusClass(sol.status)}">#{solicitacaoPainelBean.statusLabel(sol.status)}</span></p>
+                                                </div>
+
+                                                <div class="chef-request-actions">
+                                                    <h:commandButton value="Cancelar"
+                                                                     rendered="#{sol.status ne solicitacaoServicoBean.statusRecusado and sol.status ne solicitacaoServicoBean.statusCancelado and sol.status ne solicitacaoServicoBean.statusContratado}"
+                                                                     action="#{solicitacaoServicoBean.cancelarComoCliente(sol.id, authBean.usuarioLogado.id)}">
+                                                        <f:ajax execute="@this" render="@form :clienteMsgs :clienteNotificacoes"/>
+                                                    </h:commandButton>
+                                                </div>
+
+                                                <h:panelGroup rendered="#{solicitacaoPainelBean.exibeNegociacao(sol.status)}">
+                                                    <div class="sol-chat-shell">
+                                                        <p class="order-help" style="margin-top:10px;">
+                                                            Converse com o chef para fechar os detalhes finais.
+                                                        </p>
+
+                                                        <h:panelGroup rendered="#{not empty sol.mensagensNegociacao}">
+                                                            <div class="chat-history sol-chat-history">
+                                                                <ui:repeat value="#{sol.mensagensNegociacao}" var="msgNeg">
+                                                                    <div class="chat-bubble #{msgNeg.enviadaPorChef ? 'chef-bubble' : 'client-bubble'}">
+                                                                        <strong>#{msgNeg.enviadaPorChef ? 'Chef' : 'Voce'}</strong>
+                                                                        <span>#{msgNeg.texto}</span>
+                                                                    </div>
+                                                                </ui:repeat>
+                                                            </div>
+                                                        </h:panelGroup>
+                                                        <h:panelGroup rendered="#{empty sol.mensagensNegociacao}">
+                                                            <p class="order-help">O chat esta liberado. Envie a primeira mensagem.</p>
+                                                        </h:panelGroup>
+
+                                                        <h:inputTextarea value="#{solicitacaoPainelBean.rascunhosCliente[sol.id]}"
+                                                                         styleClass="box"
+                                                                         style="height:85px;"
+                                                                         pt:placeholder="Digite uma mensagem para o chef"/>
+                                                        <div class="chef-request-actions">
+                                                            <h:commandButton value="Enviar mensagem"
+                                                                             action="#{solicitacaoPainelBean.enviarMensagemCliente(sol.id)}">
+                                                                <f:ajax execute="@form" render="@form :clienteMsgs :clienteNotificacoes"/>
+                                                            </h:commandButton>
+                                                            <h:commandButton value="Confirmar contratacao"
+                                                                             rendered="#{sol.status ne solicitacaoServicoBean.statusContratado and not sol.contratacaoConfirmadaCliente}"
+                                                                             action="#{solicitacaoPainelBean.confirmarComoCliente(sol.id)}">
+                                                                <f:ajax execute="@this" render="@form :clienteMsgs :clienteNotificacoes"/>
+                                                            </h:commandButton>
+                                                        </div>
+
+                                                        <h:panelGroup rendered="#{sol.contratacaoConfirmadaCliente and sol.status ne solicitacaoServicoBean.statusContratado}">
+                                                            <p class="order-help">Confirmacao registrada. Aguardando confirmacao do chef.</p>
+                                                        </h:panelGroup>
+                                                        <h:panelGroup rendered="#{sol.status eq solicitacaoServicoBean.statusContratado}">
+                                                            <p class="contracted-msg">Contratacao finalizada com sucesso.</p>
+                                                        </h:panelGroup>
+                                                    </div>
+                                                </h:panelGroup>
+                                            </article>
+                                        </ui:repeat>
+                                    </div>
+                                </h:panelGroup>
+
+                                <h:panelGroup rendered="#{empty solicitacaoPainelBean.solicitacoesCliente}">
+                                    <p>Voce ainda nao enviou solicitacoes.</p>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:panelGroup id="contratacoesClienteArea" layout="block">
+                                <h3 style="margin-top:14px;">Comprovantes de chefs contratados</h3>
+                                <h:panelGroup rendered="#{not empty solicitacaoPainelBean.contratacoesCliente}">
+                                    <div class="contract-proof-list">
+                                        <ui:repeat value="#{solicitacaoPainelBean.contratacoesCliente}" var="contrato">
+                                            <article class="contract-proof-card">
+                                                <p><strong>Comprovante:</strong> #{solicitacaoPainelBean.codigoComprovante(contrato.id)}</p>
+                                                <p><strong>Chef:</strong> #{contrato.chefNome}</p>
+                                                <p><strong>Evento:</strong> #{solicitacaoPainelBean.formatarData(contrato.dataEvento)} #{solicitacaoPainelBean.formatarHorario(contrato.horarioEvento)}</p>
+                                                <p><strong>Pratos:</strong> #{contrato.pratosResumo}</p>
+                                                <h:panelGroup rendered="#{solicitacaoPainelBean.podeAvaliarCliente(contrato)}">
+                                                    <div class="rating-form-shell">
+                                                        <p><strong>Avaliar chef</strong></p>
+                                                        <p class="order-help">Sua avaliacao aparece no perfil publico do chef.</p>
+                                                        <h:selectOneMenu value="#{solicitacaoPainelBean.notasAvaliacaoCliente[contrato.id]}" styleClass="box rating-select">
+                                                            <f:selectItem itemValue="#{null}" itemLabel="Selecione a nota"/>
+                                                            <f:selectItem itemValue="5" itemLabel="5 - Excelente"/>
+                                                            <f:selectItem itemValue="4" itemLabel="4 - Muito bom"/>
+                                                            <f:selectItem itemValue="3" itemLabel="3 - Bom"/>
+                                                            <f:selectItem itemValue="2" itemLabel="2 - Regular"/>
+                                                            <f:selectItem itemValue="1" itemLabel="1 - Ruim"/>
+                                                        </h:selectOneMenu>
+                                                        <h:inputTextarea value="#{solicitacaoPainelBean.comentariosAvaliacaoCliente[contrato.id]}"
+                                                                         styleClass="box"
+                                                                         style="height:78px; margin-top:8px;"
+                                                                         pt:placeholder="Conte como foi a experiencia com o chef"/>
+                                                        <h:commandButton value="Enviar avaliacao"
+                                                                         styleClass="btn-submit"
+                                                                         style="margin-top:8px;"
+                                                                         action="#{solicitacaoPainelBean.enviarAvaliacaoCliente(contrato.id)}">
+                                                            <f:ajax execute="@form" render="@form :clienteMsgs :clienteNotificacoes"/>
+                                                        </h:commandButton>
+                                                    </div>
+                                                </h:panelGroup>
+                                                <h:panelGroup rendered="#{solicitacaoPainelBean.jaAvaliado(contrato.id)}">
+                                                    <p class="order-help" style="margin-top:6px;">Avaliacao enviada para este contrato.</p>
+                                                </h:panelGroup>
+                                                <p class="contract-proof-badge">Serviço confirmado</p>
+                                            </article>
+                                        </ui:repeat>
+                                    </div>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{empty solicitacaoPainelBean.contratacoesCliente}">
+                                    <p class="order-help">Nenhuma contratacao finalizada ainda.</p>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:form>
+                    </aside>
                 </div>
-
-                <h2 style="margin-top:20px;">Solicitações para chefs</h2>
-                <h:form>
-                    <h:dataTable value="#{solicitacaoServicoBean.listarPorCliente(authBean.usuarioLogado.id)}" var="sol" border="1" rendered="#{not empty solicitacaoServicoBean.listarPorCliente(authBean.usuarioLogado.id)}">
-                        <h:column>
-                            <f:facet name="header">Chef</f:facet>
-                            #{sol.chefNome}
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">Pratos</f:facet>
-                            #{sol.pratosResumo}
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">Data/Hora</f:facet>
-                            #{sol.dataEvento} #{sol.horarioEvento}
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">Status</f:facet>
-                            #{sol.status}
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">Acao</f:facet>
-                            <h:commandButton value="Cancelar" action="#{solicitacaoServicoBean.cancelarComoCliente(sol.id, authBean.usuarioLogado.id)}" rendered="#{sol.status ne 'RECUSADO' and sol.status ne 'CANCELADO'}"/>
-                        </h:column>
-                    </h:dataTable>
-                </h:form>
-                <h:panelGroup rendered="#{empty solicitacaoServicoBean.listarPorCliente(authBean.usuarioLogado.id)}">
-                    <p>Você ainda não enviou solicitações.</p>
-                </h:panelGroup>
-
-                <h:form style="margin-top:16px;">
-                    <h:commandButton styleClass="btn-submit" value="Ir para área do cliente" action="/pages/cliente-home.xhtml?faces-redirect=true"/>
-                </h:form>
             </h:panelGroup>
         </div>
     </div>
@@ -95,6 +230,25 @@
         }
         function closeMenu() {
             document.body.classList.remove('menu-open');
+        }
+
+        function scrollNegotiationToBottom() {
+            var historicos = document.querySelectorAll('.sol-chat-history');
+            historicos.forEach(function (historico) {
+                historico.scrollTop = historico.scrollHeight;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            scrollNegotiationToBottom();
+        });
+
+        if (window.jsf &amp;&amp; jsf.ajax) {
+            jsf.ajax.addOnEvent(function (data) {
+                if (data.status === 'success') {
+                    scrollNegotiationToBottom();
+                }
+            });
         }
     </script>
 </h:body>

@@ -7,20 +7,21 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.http.Part;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
+import br.com.qualseupedido.util.ImagemUtil;
 
 @Named
 @ApplicationScoped
 public class PratoBean implements Serializable {
 
     private static final long TAMANHO_MAXIMO = 3L * 1024L * 1024L;
+    private static final int MAX_LARGURA_PRATO = 1000;
+    private static final int MAX_ALTURA_PRATO = 700;
+    private static final float QUALIDADE_JPEG = 0.8f;
 
     private final List<Prato> pratos = new ArrayList<>();
     private long seq = 1L;
@@ -28,6 +29,8 @@ public class PratoBean implements Serializable {
     private String nome;
     private String descricao;
     private Double preco;
+    private String precoTexto;
+    private String categoria = Prato.CATEGORIA_PRINCIPAL;
     private transient Part fotoPrato;
 
     public List<Prato> getPratos() {
@@ -51,6 +54,21 @@ public class PratoBean implements Serializable {
         return getPratosDoChef(chefId);
     }
 
+    public List<Prato> getPratosDoChefPorCategoria(Long chefId, String categoria) {
+        String categoriaNormalizada = normalizarCategoria(categoria);
+        List<Prato> resultado = new ArrayList<>();
+        for (Prato prato : getPratosDoChef(chefId)) {
+            if (categoriaNormalizada.equals(normalizarCategoria(prato.getCategoria()))) {
+                resultado.add(prato);
+            }
+        }
+        return resultado;
+    }
+
+    public List<Prato> pratosDoChefPorCategoria(Long chefId, String categoria) {
+        return getPratosDoChefPorCategoria(chefId, categoria);
+    }
+
     public List<Prato> getPratosPublicosDoChef(Long chefId) {
         if (chefId == null) {
             return Collections.emptyList();
@@ -66,6 +84,21 @@ public class PratoBean implements Serializable {
 
     public List<Prato> pratosPublicosDoChef(Long chefId) {
         return getPratosPublicosDoChef(chefId);
+    }
+
+    public List<Prato> getPratosPublicosDoChefPorCategoria(Long chefId, String categoria) {
+        String categoriaNormalizada = normalizarCategoria(categoria);
+        List<Prato> resultado = new ArrayList<>();
+        for (Prato prato : getPratosPublicosDoChef(chefId)) {
+            if (categoriaNormalizada.equals(normalizarCategoria(prato.getCategoria()))) {
+                resultado.add(prato);
+            }
+        }
+        return resultado;
+    }
+
+    public List<Prato> pratosPublicosDoChefPorCategoria(Long chefId, String categoria) {
+        return getPratosPublicosDoChefPorCategoria(chefId, categoria);
     }
 
     public Prato buscarDoChefPorId(Long chefId, Long pratoId) {
@@ -165,6 +198,17 @@ public class PratoBean implements Serializable {
 
     public void setPreco(Double preco) {
         this.preco = preco;
+        if (preco != null) {
+            this.precoTexto = String.valueOf(preco);
+        }
+    }
+
+    public String getPrecoTexto() {
+        return precoTexto;
+    }
+
+    public void setPrecoTexto(String precoTexto) {
+        this.precoTexto = precoTexto;
     }
 
     public Part getFotoPrato() {
@@ -173,6 +217,25 @@ public class PratoBean implements Serializable {
 
     public void setFotoPrato(Part fotoPrato) {
         this.fotoPrato = fotoPrato;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = normalizarCategoria(categoria);
+    }
+
+    public String categoriaLabel(String categoria) {
+        String categoriaNormalizada = normalizarCategoria(categoria);
+        if (Prato.CATEGORIA_ENTRADA.equals(categoriaNormalizada)) {
+            return "Entrada";
+        }
+        if (Prato.CATEGORIA_SOBREMESA.equals(categoriaNormalizada)) {
+            return "Sobremesa";
+        }
+        return "Prato principal";
     }
 
     public void adicionarPrato(Long chefId) {
@@ -191,7 +254,11 @@ public class PratoBean implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Descricao obrigatoria", "Informe a descricao do prato."));
             return;
         }
-        if (preco == null || preco <= 0) {
+        Double precoValido = parsePreco(precoTexto);
+        if (precoValido == null) {
+            precoValido = preco;
+        }
+        if (precoValido == null || precoValido <= 0) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Preco invalido", "Informe um preco maior que zero."));
             return;
@@ -211,7 +278,12 @@ public class PratoBean implements Serializable {
                 return;
             }
             try {
-                fotoDataUrl = paraDataUrl(fotoPrato, contentType);
+                fotoDataUrl = ImagemUtil.processarDataUrl(
+                        fotoPrato.getInputStream(),
+                        MAX_LARGURA_PRATO,
+                        MAX_ALTURA_PRATO,
+                        QUALIDADE_JPEG
+                );
             } catch (IOException e) {
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_ERROR, "Falha no upload", "Nao foi possivel salvar a foto do prato."));
@@ -219,26 +291,72 @@ public class PratoBean implements Serializable {
             }
         }
 
-        pratos.add(new Prato(seq++, chefId, nome.trim(), descricao.trim(), preco, fotoDataUrl, true));
+        pratos.add(new Prato(
+                seq++,
+                chefId,
+                nome.trim(),
+                descricao.trim(),
+                precoValido,
+                fotoDataUrl,
+                true,
+                normalizarCategoria(categoria)
+        ));
         nome = "";
         descricao = "";
         preco = null;
+        precoTexto = "";
         fotoPrato = null;
     }
 
-    private String paraDataUrl(Part arquivo, String contentType) throws IOException {
-        byte[] bytes = lerBytes(arquivo.getInputStream());
-        String base64 = Base64.getEncoder().encodeToString(bytes);
-        return "data:" + contentType + ";base64," + base64;
+    private Double parsePreco(String valor) {
+        if (valor == null) {
+            return null;
+        }
+
+        String normalizado = valor
+                .trim()
+                .replace("R$", "")
+                .replace("r$", "")
+                .replace(" ", "");
+        if (normalizado.isEmpty()) {
+            return null;
+        }
+
+        normalizado = normalizado.replaceAll("[^0-9,\\.]", "");
+        if (normalizado.isEmpty()) {
+            return null;
+        }
+
+        int ultimaVirgula = normalizado.lastIndexOf(',');
+        int ultimoPonto = normalizado.lastIndexOf('.');
+
+        if (ultimaVirgula >= 0 && ultimoPonto >= 0) {
+            if (ultimaVirgula > ultimoPonto) {
+                normalizado = normalizado.replace(".", "");
+                normalizado = normalizado.replace(",", ".");
+            } else {
+                normalizado = normalizado.replace(",", "");
+            }
+        } else if (ultimaVirgula >= 0) {
+            normalizado = normalizado.replace(",", ".");
+        }
+
+        try {
+            return Double.valueOf(normalizado);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
-    private byte[] lerBytes(InputStream in) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        byte[] buffer = new byte[4096];
-        int lidos;
-        while ((lidos = in.read(buffer)) != -1) {
-            out.write(buffer, 0, lidos);
+    private String normalizarCategoria(String categoria) {
+        if (categoria == null) {
+            return Prato.CATEGORIA_PRINCIPAL;
         }
-        return out.toByteArray();
+        String valor = categoria.trim().toUpperCase();
+        if (Prato.CATEGORIA_ENTRADA.equals(valor) || Prato.CATEGORIA_SOBREMESA.equals(valor)) {
+            return valor;
+        }
+        return Prato.CATEGORIA_PRINCIPAL;
     }
+
 }
