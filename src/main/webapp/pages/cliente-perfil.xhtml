@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -12,12 +12,12 @@
 <h:body>
     <button type="button" class="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">&#9776;</button>
     <div class="menu-overlay" onclick="closeMenu()"></div>
-    <aside class="side-menu" aria-label="Navegacao principal">
+    <aside class="side-menu" aria-label="Navegação principal">
         <h:form styleClass="side-menu-form">
             <div class="side-menu-header">Menu</div>
             <h:commandLink styleClass="side-menu-link" value="Home" action="/pages/cliente-home.xhtml?faces-redirect=true"/>
             <h:commandLink styleClass="side-menu-link" value="Perfil" action="/pages/cliente-perfil.xhtml?faces-redirect=true"/>
-            <h:commandLink styleClass="side-menu-link" value="Configuracoes" action="/pages/cliente-perfil-edicao.xhtml?faces-redirect=true"/>
+            <h:commandLink styleClass="side-menu-link" value="Configurações" action="/pages/cliente-perfil-edicao.xhtml?faces-redirect=true"/>
             <h:commandButton styleClass="btn-submit" value="Sair" action="#{authBean.sair}"/>
         </h:form>
     </aside>
@@ -25,11 +25,11 @@
     <div class="register-page">
         <div class="register-wrap">
             <h1>Perfil do cliente</h1>
-            <p>Acompanhe suas solicitacoes e finalize contratacoes com os chefs.</p>
+            <p>Acompanhe suas solicitações e finalize contratações com os chefs.</p>
             <h:messages id="clienteMsgs" globalOnly="true" showDetail="true" showSummary="false" styleClass="messages"/>
 
             <h:panelGroup rendered="#{not authBean.cliente}">
-                <p>Area exclusiva para clientes.</p>
+                <p>Área exclusiva para clientes.</p>
                 <h:link value="Ir para inicio" outcome="/pages/index.xhtml"/>
             </h:panelGroup>
 
@@ -63,13 +63,13 @@
                                     <strong>Telefone:</strong> #{authBean.usuarioLogado.telefone}
                                 </p>
                                 <p>
-                                    <strong>Cidade:</strong> #{empty authBean.usuarioLogado.cidade ? 'Nao informada' : authBean.usuarioLogado.cidade}
+                                    <strong>Cidade:</strong> #{empty authBean.usuarioLogado.cidade ? 'Não informada' : authBean.usuarioLogado.cidade}
                                     <span> | </span>
-                                    <strong>Estado:</strong> #{empty authBean.usuarioLogado.estado ? 'Nao informado' : authBean.usuarioLogado.estado}
+                                    <strong>Estado:</strong> #{empty authBean.usuarioLogado.estado ? 'Não informado' : authBean.usuarioLogado.estado}
                                 </p>
                                 <p>
-                                    <strong>Endereco:</strong>
-                                    #{empty authBean.usuarioLogado.endereco ? 'Nao informado' : authBean.usuarioLogado.endereco}
+                                    <strong>Endereço:</strong>
+                                    #{empty authBean.usuarioLogado.endereco ? 'Não informado' : authBean.usuarioLogado.endereco}
                                     #{authBean.usuarioLogado.numero}
                                 </p>
                             </div>
@@ -79,25 +79,32 @@
                             <h:panelGroup rendered="#{solicitacaoPainelBean.notificacoesClienteAceite > 0}">
                                 <section class="chef-order-shell">
                                     <h2>Notificacoes</h2>
-                                    <p>Voce tem #{solicitacaoPainelBean.notificacoesClienteAceite} solicitacao(oes) aceita(s). Abra a negociacao para alinhar os detalhes com o chef.</p>
+                                    <p>Você tem #{solicitacaoPainelBean.notificacoesClienteAceite} solicitação(ões) aceita(s). Abra a negociação para alinhar os detalhes com o chef.</p>
                                 </section>
                             </h:panelGroup>
                         </h:panelGroup>
 
                         <section class="chef-order-shell">
                             <h2>Como contratar</h2>
-                            <p class="order-help">1. Escolha um chef na Home. 2. Envie sua solicitacao com pratos e data. 3. Negocie aqui ate confirmar a contratacao.</p>
+                            <p class="order-help">1. Escolha um chef na Home. 2. Envie sua solicitação com pratos e data. 3. Negocie aqui até confirmar a contratação.</p>
                             <h:link styleClass="btn" value="Buscar chefs na Home" outcome="/pages/cliente-home.xhtml"/>
                             <h:link styleClass="btn" value="Atualizar meus dados" outcome="/pages/cliente-perfil-edicao.xhtml" style="margin-left:8px;"/>
                         </section>
                     </main>
 
-                    <aside class="public-chef-chat">
-                        <h2>Contratacoes e negociacoes</h2>
-                        <p class="chat-hint">Acompanhe todas as solicitacoes enviadas e converse com os chefs ate finalizar.</p>
+                    <aside class="public-chef-chat negotiation-aside">
+                        <header class="negotiation-aside-header">
+                            <h2>Contratações e negociações</h2>
+                            <p class="chat-hint">Acompanhe todas as solicitações enviadas e converse com os chefs até finalizar.</p>
+                            <p class="aside-counter-chip">
+                                Aceitas aguardando alinhamento: <strong>#{solicitacaoPainelBean.notificacoesClienteAceite}</strong>
+                            </p>
+                        </header>
 
-                        <h:form id="clienteSolicitacoesForm">
-                            <h:panelGroup id="solicitacoesClienteArea" layout="block">
+                        <h:form id="clienteSolicitaçõesForm">
+                            <section class="negotiation-aside-section">
+                                <h3>Negociações ativas</h3>
+                                <h:panelGroup id="solicitacoesClienteArea" layout="block">
                                 <h:panelGroup rendered="#{not empty solicitacaoPainelBean.solicitacoesCliente}">
                                     <div class="chef-request-list">
                                         <ui:repeat value="#{solicitacaoPainelBean.solicitacoesCliente}" var="sol">
@@ -127,14 +134,14 @@
                                                             <div class="chat-history sol-chat-history">
                                                                 <ui:repeat value="#{sol.mensagensNegociacao}" var="msgNeg">
                                                                     <div class="chat-bubble #{msgNeg.enviadaPorChef ? 'chef-bubble' : 'client-bubble'}">
-                                                                        <strong>#{msgNeg.enviadaPorChef ? 'Chef' : 'Voce'}</strong>
+                                                                        <strong>#{msgNeg.enviadaPorChef ? 'Chef' : 'Você'}</strong>
                                                                         <span>#{msgNeg.texto}</span>
                                                                     </div>
                                                                 </ui:repeat>
                                                             </div>
                                                         </h:panelGroup>
                                                         <h:panelGroup rendered="#{empty sol.mensagensNegociacao}">
-                                                            <p class="order-help">O chat esta liberado. Envie a primeira mensagem.</p>
+                                                            <p class="order-help">O chat está liberado. Envie a primeira mensagem.</p>
                                                         </h:panelGroup>
 
                                                         <h:inputTextarea value="#{solicitacaoPainelBean.rascunhosCliente[sol.id]}"
@@ -146,7 +153,7 @@
                                                                              action="#{solicitacaoPainelBean.enviarMensagemCliente(sol.id)}">
                                                                 <f:ajax execute="@form" render="@form :clienteMsgs :clienteNotificacoes"/>
                                                             </h:commandButton>
-                                                            <h:commandButton value="Confirmar contratacao"
+                                                            <h:commandButton value="Confirmar contratação"
                                                                              rendered="#{sol.status ne solicitacaoServicoBean.statusContratado and not sol.contratacaoConfirmadaCliente}"
                                                                              action="#{solicitacaoPainelBean.confirmarComoCliente(sol.id)}">
                                                                 <f:ajax execute="@this" render="@form :clienteMsgs :clienteNotificacoes"/>
@@ -154,10 +161,10 @@
                                                         </div>
 
                                                         <h:panelGroup rendered="#{sol.contratacaoConfirmadaCliente and sol.status ne solicitacaoServicoBean.statusContratado}">
-                                                            <p class="order-help">Confirmacao registrada. Aguardando confirmacao do chef.</p>
+                                                            <p class="order-help">Confirmação registrada. Aguardando confirmação do chef.</p>
                                                         </h:panelGroup>
                                                         <h:panelGroup rendered="#{sol.status eq solicitacaoServicoBean.statusContratado}">
-                                                            <p class="contracted-msg">Contratacao finalizada com sucesso.</p>
+                                                            <p class="contracted-msg">Contratação finalizada com sucesso.</p>
                                                         </h:panelGroup>
                                                     </div>
                                                 </h:panelGroup>
@@ -167,12 +174,14 @@
                                 </h:panelGroup>
 
                                 <h:panelGroup rendered="#{empty solicitacaoPainelBean.solicitacoesCliente}">
-                                    <p>Voce ainda nao enviou solicitacoes.</p>
+                                    <p>Você ainda não enviou solicitações.</p>
                                 </h:panelGroup>
-                            </h:panelGroup>
+                                </h:panelGroup>
+                            </section>
 
-                            <h:panelGroup id="contratacoesClienteArea" layout="block">
-                                <h3 style="margin-top:14px;">Comprovantes de chefs contratados</h3>
+                            <section class="negotiation-aside-section">
+                                <h3>Comprovantes de chefs contratados</h3>
+                                <h:panelGroup id="contratacoesClienteArea" layout="block">
                                 <h:panelGroup rendered="#{not empty solicitacaoPainelBean.contratacoesCliente}">
                                     <div class="contract-proof-list">
                                         <ui:repeat value="#{solicitacaoPainelBean.contratacoesCliente}" var="contrato">
@@ -184,7 +193,7 @@
                                                 <h:panelGroup rendered="#{solicitacaoPainelBean.podeAvaliarCliente(contrato)}">
                                                     <div class="rating-form-shell">
                                                         <p><strong>Avaliar chef</strong></p>
-                                                        <p class="order-help">Sua avaliacao aparece no perfil publico do chef.</p>
+                                                        <p class="order-help">Sua avaliação aparece no perfil público do chef.</p>
                                                         <h:selectOneMenu value="#{solicitacaoPainelBean.notasAvaliacaoCliente[contrato.id]}" styleClass="box rating-select">
                                                             <f:selectItem itemValue="#{null}" itemLabel="Selecione a nota"/>
                                                             <f:selectItem itemValue="5" itemLabel="5 - Excelente"/>
@@ -197,7 +206,7 @@
                                                                          styleClass="box"
                                                                          style="height:78px; margin-top:8px;"
                                                                          pt:placeholder="Conte como foi a experiencia com o chef"/>
-                                                        <h:commandButton value="Enviar avaliacao"
+                                                        <h:commandButton value="Enviar avaliação"
                                                                          styleClass="btn-submit"
                                                                          style="margin-top:8px;"
                                                                          action="#{solicitacaoPainelBean.enviarAvaliacaoCliente(contrato.id)}">
@@ -206,7 +215,7 @@
                                                     </div>
                                                 </h:panelGroup>
                                                 <h:panelGroup rendered="#{solicitacaoPainelBean.jaAvaliado(contrato.id)}">
-                                                    <p class="order-help" style="margin-top:6px;">Avaliacao enviada para este contrato.</p>
+                                                    <p class="order-help" style="margin-top:6px;">Avaliação enviada para este contrato.</p>
                                                 </h:panelGroup>
                                                 <p class="contract-proof-badge">Serviço confirmado</p>
                                             </article>
@@ -214,9 +223,10 @@
                                     </div>
                                 </h:panelGroup>
                                 <h:panelGroup rendered="#{empty solicitacaoPainelBean.contratacoesCliente}">
-                                    <p class="order-help">Nenhuma contratacao finalizada ainda.</p>
+                                    <p class="order-help">Nenhuma contratação finalizada ainda.</p>
                                 </h:panelGroup>
-                            </h:panelGroup>
+                                </h:panelGroup>
+                            </section>
                         </h:form>
                     </aside>
                 </div>

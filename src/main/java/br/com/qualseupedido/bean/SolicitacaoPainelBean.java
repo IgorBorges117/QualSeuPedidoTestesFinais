@@ -33,7 +33,7 @@ public class SolicitacaoPainelBean implements Serializable {
 
     private final Map<Long, String> rascunhosChef = new HashMap<>();
     private final Map<Long, String> rascunhosCliente = new HashMap<>();
-    private final Map<Long, Integer> notasAvaliacaoCliente = new HashMap<>();
+    private final Map<Long, String> notasAvaliacaoCliente = new HashMap<>();
     private final Map<Long, String> comentariosAvaliacaoCliente = new HashMap<>();
 
     public List<SolicitacaoServicoBean.SolicitacaoServico> getSolicitacoesChef() {
@@ -112,7 +112,7 @@ public class SolicitacaoPainelBean implements Serializable {
             rascunhosChef.put(solicitacaoId, "");
             adicionarMensagem(FacesMessage.SEVERITY_INFO, "Mensagem enviada", "Resposta enviada para o cliente.");
         } else {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Falha no envio", "Nao foi possivel enviar a mensagem.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Falha no envio", "Não foi possível enviar a mensagem.");
         }
         return null;
     }
@@ -127,7 +127,7 @@ public class SolicitacaoPainelBean implements Serializable {
             rascunhosCliente.put(solicitacaoId, "");
             adicionarMensagem(FacesMessage.SEVERITY_INFO, "Mensagem enviada", "Mensagem enviada para o chef.");
         } else {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Falha no envio", "Nao foi possivel enviar a mensagem.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Falha no envio", "Não foi possível enviar a mensagem.");
         }
         return null;
     }
@@ -138,9 +138,9 @@ public class SolicitacaoPainelBean implements Serializable {
         }
         boolean ok = solicitacaoServicoBean.confirmarContratacaoChef(solicitacaoId, authBean.getUsuarioLogado().getId());
         if (ok) {
-            adicionarMensagem(FacesMessage.SEVERITY_INFO, "Confirmacao registrada", "Agora aguarde a confirmacao do cliente.");
+            adicionarMensagem(FacesMessage.SEVERITY_INFO, "Confirmação registrada", "Agora aguarde a confirmação do cliente.");
         } else {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Falha", "Nao foi possivel confirmar esta contratacao.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Falha", "Não foi possível confirmar esta contratação.");
         }
         return null;
     }
@@ -151,9 +151,9 @@ public class SolicitacaoPainelBean implements Serializable {
         }
         boolean ok = solicitacaoServicoBean.confirmarContratacaoCliente(solicitacaoId, authBean.getUsuarioLogado().getId());
         if (ok) {
-            adicionarMensagem(FacesMessage.SEVERITY_INFO, "Confirmacao registrada", "Agora aguarde a confirmacao do chef.");
+            adicionarMensagem(FacesMessage.SEVERITY_INFO, "Confirmação registrada", "Agora aguarde a confirmação do chef.");
         } else {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Falha", "Nao foi possivel confirmar esta contratacao.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Falha", "Não foi possível confirmar esta contratação.");
         }
         return null;
     }
@@ -165,27 +165,27 @@ public class SolicitacaoPainelBean implements Serializable {
 
         SolicitacaoServicoBean.SolicitacaoServico solicitacao = solicitacaoServicoBean.buscarPorId(solicitacaoId);
         if (solicitacao == null || !authBean.getUsuarioLogado().getId().equals(solicitacao.getClienteId())) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Falha", "Nao foi possivel localizar este contrato.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Falha", "Não foi possível localizar este contrato.");
             return null;
         }
         if (!SolicitacaoServicoBean.STATUS_CONTRATADO.equals(solicitacao.getStatus())) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Avaliacao indisponivel", "Apenas contratos finalizados podem ser avaliados.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Avaliação indisponível", "Apenas contratos finalizados podem ser avaliados.");
             return null;
         }
         if (avaliacaoServicoBean.possuiAvaliacaoParaSolicitacao(solicitacaoId)) {
-            adicionarMensagem(FacesMessage.SEVERITY_INFO, "Avaliacao existente", "Este contrato ja foi avaliado.");
+            adicionarMensagem(FacesMessage.SEVERITY_INFO, "Avaliação existente", "Este contrato ja foi avaliado.");
             return null;
         }
 
-        Integer nota = notasAvaliacaoCliente.get(solicitacaoId);
+        Integer nota = parseNotaAvaliacao(notasAvaliacaoCliente.get(solicitacaoId));
         if (nota == null || nota < 1 || nota > 5) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Nota obrigatoria", "Selecione uma nota de 1 a 5 estrelas.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Nota obrigatória", "Selecione uma nota de 1 a 5 estrelas.");
             return null;
         }
 
         String comentario = comentariosAvaliacaoCliente.get(solicitacaoId);
         if (comentario == null || comentario.trim().isEmpty()) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Comentario obrigatorio", "Escreva um comentario sobre o servico.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Comentário obrigatório", "Escreva um comentário sobre o serviço.");
             return null;
         }
 
@@ -202,9 +202,9 @@ public class SolicitacaoPainelBean implements Serializable {
         if (ok) {
             notasAvaliacaoCliente.remove(solicitacaoId);
             comentariosAvaliacaoCliente.remove(solicitacaoId);
-            adicionarMensagem(FacesMessage.SEVERITY_INFO, "Avaliacao enviada", "Obrigado por avaliar o chef.");
+            adicionarMensagem(FacesMessage.SEVERITY_INFO, "Avaliação enviada", "Obrigado por avaliar o chef.");
         } else {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Falha", "Nao foi possivel registrar a avaliacao.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Falha", "Não foi possível registrar a avaliação.");
         }
         return null;
     }
@@ -220,7 +220,7 @@ public class SolicitacaoPainelBean implements Serializable {
         if (SolicitacaoServicoBean.STATUS_ACEITO.equals(status)) return "Aceito";
         if (SolicitacaoServicoBean.STATUS_RECUSADO.equals(status)) return "Recusado";
         if (SolicitacaoServicoBean.STATUS_CANCELADO.equals(status)) return "Cancelado";
-        if (SolicitacaoServicoBean.STATUS_EM_NEGOCIACAO.equals(status)) return "Em negociacao";
+        if (SolicitacaoServicoBean.STATUS_EM_NEGOCIACAO.equals(status)) return "Em negociação";
         if (SolicitacaoServicoBean.STATUS_CONTRATADO.equals(status)) return "Contratado";
         return status;
     }
@@ -243,7 +243,7 @@ public class SolicitacaoPainelBean implements Serializable {
         return rascunhosCliente;
     }
 
-    public Map<Long, Integer> getNotasAvaliacaoCliente() {
+    public Map<Long, String> getNotasAvaliacaoCliente() {
         return notasAvaliacaoCliente;
     }
 
@@ -288,6 +288,17 @@ public class SolicitacaoPainelBean implements Serializable {
             return "QSP-CONTRATO";
         }
         return String.format(Locale.ROOT, "QSP-%05d", solicitacaoId);
+    }
+
+    private Integer parseNotaAvaliacao(String notaTexto) {
+        if (notaTexto == null || notaTexto.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            return Integer.valueOf(notaTexto.trim());
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     private void adicionarMensagem(FacesMessage.Severity severity, String resumo, String detalhe) {

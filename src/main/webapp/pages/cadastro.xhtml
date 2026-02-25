@@ -31,7 +31,16 @@
                             </h:selectOneMenu>
                         </div>
                         <div class="stack">
-                            <h:inputText styleClass="box" value="#{cadastroBean.email}" label="E-mail" required="true" requiredMessage="Informe seu e-mail." pt:placeholder="Insira seu e-mail"/>
+                            <h:inputText styleClass="box"
+                                         value="#{cadastroBean.email}"
+                                         label="E-mail"
+                                         required="true"
+                                         requiredMessage="Informe seu e-mail."
+                                         validatorMessage="Informe um e-mail valido."
+                                         pt:type="email"
+                                         pt:placeholder="Insira seu e-mail">
+                                <f:validateRegex pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,63}$"/>
+                            </h:inputText>
                             <h:inputSecret styleClass="box" value="#{cadastroBean.senha}" label="Senha" required="true" requiredMessage="Informe sua senha." pt:placeholder="Crie uma senha de 6 dígitos"/>
                             <h:inputSecret styleClass="box" value="#{cadastroBean.confirmarSenha}" label="Confirmação de senha" required="true" requiredMessage="Confirme sua senha." pt:placeholder="Repita sua senha de 6 dígitos"/>
                             <h:inputText styleClass="box" value="#{cadastroBean.telefone}" pt:placeholder="Insira seu número de telefone"/>

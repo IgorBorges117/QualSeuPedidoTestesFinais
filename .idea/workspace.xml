@@ -11,21 +11,22 @@
   <component name="ChangeListManager">
     <list default="true" id="fb33f84c-fc43-4600-8ff0-acb1a85f4dae" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ChefConteudoBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ChefConteudoBean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/CadastroBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/CadastroBean.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ChefPerfilBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ChefPerfilBean.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ChefPerfilPainelBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ChefPerfilPainelBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ChefPerfilPublicoBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ChefPerfilPublicoBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ClientePerfilBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ClientePerfilBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/PratoBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/PratoBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/SolicitacaoServicoBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/SolicitacaoServicoBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/UsuarioSistema.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/UsuarioSistema.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/entidade/prato.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/entidade/prato.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/SolicitacaoPainelBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/SolicitacaoPainelBean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/UsuarioBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/UsuarioBean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/cadastro.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/cadastro.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/chef-onboarding.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/chef-onboarding.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/chef-perfil-publico.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/chef-perfil-publico.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/chef-perfil.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/chef-perfil.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/chef.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/chef.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/cliente-home.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/cliente-home.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/cliente-perfil-edicao.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/cliente-perfil-edicao.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/cliente-perfil.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/cliente-perfil.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/index.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/index.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/css/app.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -34,7 +35,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="747" />
+    <option name="cachedIndexableFilesCount" value="755" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -233,6 +234,12 @@
       <workItem from="1771959330975" duration="5763000" />
       <workItem from="1771971601228" duration="897000" />
       <workItem from="1771972735085" duration="8000" />
+      <workItem from="1771973013747" duration="642000" />
+      <workItem from="1771985987619" duration="2587000" />
+      <workItem from="1771989795231" duration="1327000" />
+      <workItem from="1772047518921" duration="135000" />
+      <workItem from="1772052660993" duration="2286000" />
+      <workItem from="1772059886334" duration="645000" />
     </task>
     <servers />
   </component>

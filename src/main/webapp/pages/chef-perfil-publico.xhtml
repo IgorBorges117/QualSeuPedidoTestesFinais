@@ -99,7 +99,7 @@
 
                             <h3>Pratos em destaque</h3>
                             <h:panelGroup rendered="#{not empty chefPerfilPublicoBean.pratosChefSelecionado}">
-                                <div class="chef-cardapio-categorias">
+                                <div class="chef-cardápio-categorias">
                                     <section class="chef-category-block">
                                         <h3>Entrada</h3>
                                         <h:panelGroup rendered="#{not empty chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('ENTRADA')}">
@@ -121,7 +121,7 @@
                                             </div>
                                         </h:panelGroup>
                                         <h:panelGroup rendered="#{empty chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('ENTRADA')}">
-                                            <p class="order-help">Nenhum prato de Entrada publicado.</p>
+                                            <p class="order-help">Nenhum prato de Entrada públicado.</p>
                                         </h:panelGroup>
                                     </section>
 
@@ -146,7 +146,7 @@
                                             </div>
                                         </h:panelGroup>
                                         <h:panelGroup rendered="#{empty chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('PRINCIPAL')}">
-                                            <p class="order-help">Nenhum prato principal publicado.</p>
+                                            <p class="order-help">Nenhum prato principal públicado.</p>
                                         </h:panelGroup>
                                     </section>
 
@@ -171,7 +171,7 @@
                                             </div>
                                         </h:panelGroup>
                                         <h:panelGroup rendered="#{empty chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('SOBREMESA')}">
-                                            <p class="order-help">Nenhuma sobremesa publicada.</p>
+                                            <p class="order-help">Nenhuma sobremesa públicada.</p>
                                         </h:panelGroup>
                                     </section>
                                 </div>
@@ -187,7 +187,7 @@
                                 <p class="order-help">Selecione pelo menos um prato:</p>
 
                                 <h:panelGroup rendered="#{not empty chefPerfilPublicoBean.pratosChefSelecionado}">
-                                    <div class="chef-cardapio-categorias">
+                                    <div class="chef-cardápio-categorias">
                                         <section class="chef-category-block">
                                             <h3>Entrada</h3>
                                             <h:panelGroup rendered="#{not empty chefPerfilPublicoBean.pratosChefSelecionadoPorCategoria('ENTRADA')}">
@@ -320,7 +320,7 @@
                         </section>
                     </main>
                     <aside class="public-chef-chat public-chef-ratings">
-                        <h2>Avaliacoes de clientes</h2>
+                        <h2>Avaliações de clientes</h2>
                         <p class="chat-hint">Veja as notas e comentarios de quem ja contratou este chef.</p>
 
                         <div class="chef-rating-summary">
@@ -330,11 +330,11 @@
                                     <span class="rating-star #{estrela &lt;= avaliacaoServicoBean.notaArredondadaChef(chefPerfilPublicoBean.chefSelecionado.id) ? 'on' : ''}">&#9733;</span>
                                 </ui:repeat>
                             </span>
-                            <span class="rating-count">#{avaliacaoServicoBean.totalAvaliacoesChef(chefPerfilPublicoBean.chefSelecionado.id)} avaliacao(oes)</span>
+                            <span class="rating-count">#{avaliacaoServicoBean.totalAvaliacoesChef(chefPerfilPublicoBean.chefSelecionado.id)} avaliações</span>
                         </div>
 
                         <h:panelGroup rendered="#{empty avaliacaoServicoBean.avaliacoesChef(chefPerfilPublicoBean.chefSelecionado.id)}">
-                            <p>Nenhuma avaliacao registrada ainda.</p>
+                            <p>Nenhuma avaliação registrada ainda.</p>
                         </h:panelGroup>
 
                         <h:panelGroup rendered="#{not empty avaliacaoServicoBean.avaliacoesChef(chefPerfilPublicoBean.chefSelecionado.id)}">
@@ -348,7 +348,7 @@
                                                 <p class="chef-rating-meta">Contrato #{solicitacaoPainelBean.codigoComprovante(av.solicitacaoId)} - #{av.dataAvaliacaoFormatada}</p>
                                             </div>
                                         </div>
-                                        <div class="rating-stars-line" aria-label="Nota da avaliacao">
+                                        <div class="rating-stars-line" aria-label="Nota da avaliação">
                                             <ui:repeat value="#{avaliacaoServicoBean.estrelas}" var="estrelaItem">
                                                 <span class="rating-star #{estrelaItem &lt;= av.nota ? 'on' : ''}">&#9733;</span>
                                             </ui:repeat>

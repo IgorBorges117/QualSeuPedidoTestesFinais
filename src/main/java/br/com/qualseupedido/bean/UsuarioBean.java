@@ -6,10 +6,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Named
 @ApplicationScoped
 public class UsuarioBean implements Serializable {
+
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,63}$");
 
     private final List<UsuarioSistema> usuarios = new ArrayList<>();
     private long seq = 1L;
@@ -48,6 +51,7 @@ public class UsuarioBean implements Serializable {
                                           String preferenciaAlimentar) {
         if (nome == null || nome.trim().isEmpty()) return false;
         if (email == null || email.trim().isEmpty()) return false;
+        if (!emailFormatoValido(email)) return false;
         if (senha == null || senha.trim().isEmpty()) return false;
         if (tipo == null) return false;
 
@@ -111,5 +115,36 @@ public class UsuarioBean implements Serializable {
             }
         }
         return Collections.unmodifiableList(chefs);
+    }
+
+    public boolean emailFormatoValido(String email) {
+        if (email == null) {
+            return false;
+        }
+        String valor = email.trim();
+        if (valor.isEmpty() || valor.length() > 254) {
+            return false;
+        }
+        if (!EMAIL_PATTERN.matcher(valor).matches()) {
+            return false;
+        }
+        int arroba = valor.indexOf('@');
+        String local = valor.substring(0, arroba);
+        String dominio = valor.substring(arroba + 1);
+
+        if (local.length() > 64 || local.startsWith(".") || local.endsWith(".") || local.contains("..")) {
+            return false;
+        }
+        if (dominio.startsWith(".") || dominio.endsWith(".") || dominio.contains("..")) {
+            return false;
+        }
+
+        String[] labels = dominio.split("\\.");
+        for (String label : labels) {
+            if (label.isEmpty() || label.startsWith("-") || label.endsWith("-")) {
+                return false;
+            }
+        }
+        return true;
     }
 }

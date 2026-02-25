@@ -8,41 +8,16 @@
     <meta charset="UTF-8"/>
     <title>Perfil do Chef</title>
     <h:outputStylesheet library="css" name="app.css"/>
-    <style type="text/css">
-        .public-chef-layout {
-            display: grid !important;
-            grid-template-columns: minmax(0, 1fr) 420px !important;
-            gap: 20px !important;
-            align-items: start !important;
-        }
-        .public-chef-chat {
-            width: 420px !important;
-            min-height: calc(100vh - 28px) !important;
-            position: sticky !important;
-            top: 10px !important;
-        }
-        @media (max-width: 760px) {
-            .public-chef-layout {
-                grid-template-columns: 1fr !important;
-            }
-            .public-chef-chat {
-                width: 100% !important;
-                min-height: auto !important;
-                position: static !important;
-                margin-top: 16px !important;
-            }
-        }
-    </style>
 </h:head>
 <h:body>
     <button type="button" class="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">&#9776;</button>
     <div class="menu-overlay" onclick="closeMenu()"></div>
-    <aside class="side-menu" aria-label="Navegacao principal">
+    <aside class="side-menu" aria-label="Navegação principal">
         <h:form styleClass="side-menu-form">
             <div class="side-menu-header">Menu</div>
             <h:commandLink styleClass="side-menu-link" value="Home" action="/pages/chef.xhtml?faces-redirect=true"/>
             <h:commandLink styleClass="side-menu-link" value="Perfil" action="/pages/chef-perfil.xhtml?faces-redirect=true"/>
-            <h:commandLink styleClass="side-menu-link" value="Configuracoes" action="/pages/chef-onboarding.xhtml?faces-redirect=true"/>
+            <h:commandLink styleClass="side-menu-link" value="Configurações" action="/pages/chef-onboarding.xhtml?faces-redirect=true"/>
             <h:commandButton styleClass="btn-submit" value="Sair" action="#{authBean.sair}"/>
         </h:form>
     </aside>
@@ -50,8 +25,8 @@
     <h:panelGroup rendered="#{not authBean.cozinheiro}">
         <div class="register-page">
             <div class="register-wrap">
-                <h1>Area exclusiva para chefs</h1>
-                <p>Faca login como chef para acessar este perfil.</p>
+                <h1>Área exclusiva para chefs</h1>
+                <p>Faça login como chef para acessar este perfil.</p>
                 <h:link value="Ir para login" outcome="/pages/login.xhtml"/>
             </div>
         </div>
@@ -97,12 +72,12 @@
                         </section>
 
                         <section class="chef-order-shell">
-                            <h2>Pratos visiveis para clientes</h2>
-                            <p class="order-help">Aqui voce escolhe quais pratos aparecem no seu perfil publico.</p>
+                            <h2>Pratos visíveis para clientes</h2>
+                            <p class="order-help">Aqui você escolhe quais pratos aparecem no seu perfil público.</p>
 
                             <h:panelGroup id="pratosArea" layout="block">
                                 <h:panelGroup rendered="#{not empty chefPerfilPainelBean.pratosDoChef}">
-                                    <div class="chef-cardapio-categorias">
+                                    <div class="chef-cardápio-categorias">
                                         <section class="chef-category-block">
                                             <h3>Entrada</h3>
                                             <h:panelGroup rendered="#{not empty chefPerfilPainelBean.pratosDoChefPorCategoria('ENTRADA')}">
@@ -121,7 +96,7 @@
                                                             <strong>R$ #{prato.preco}</strong>
 
                                                             <p class="dish-visibility-chip #{prato.visivelNoPerfilPublico ? 'on' : 'off'}">
-                                                                #{prato.visivelNoPerfilPublico ? 'Visivel no perfil publico' : 'Oculto no perfil publico'}
+                                                                #{prato.visivelNoPerfilPublico ? 'Visível no perfil público' : 'Oculto no perfil público'}
                                                             </p>
 
                                                             <h:form>
@@ -158,7 +133,7 @@
                                                             <strong>R$ #{prato.preco}</strong>
 
                                                             <p class="dish-visibility-chip #{prato.visivelNoPerfilPublico ? 'on' : 'off'}">
-                                                                #{prato.visivelNoPerfilPublico ? 'Visivel no perfil publico' : 'Oculto no perfil publico'}
+                                                                #{prato.visivelNoPerfilPublico ? 'Visível no perfil público' : 'Oculto no perfil público'}
                                                             </p>
 
                                                             <h:form>
@@ -195,7 +170,7 @@
                                                             <strong>R$ #{prato.preco}</strong>
 
                                                             <p class="dish-visibility-chip #{prato.visivelNoPerfilPublico ? 'on' : 'off'}">
-                                                                #{prato.visivelNoPerfilPublico ? 'Visivel no perfil publico' : 'Oculto no perfil publico'}
+                                                                #{prato.visivelNoPerfilPublico ? 'Visível no perfil público' : 'Oculto no perfil público'}
                                                             </p>
 
                                                             <h:form>
@@ -217,7 +192,7 @@
                                 </h:panelGroup>
 
                                 <h:panelGroup rendered="#{empty chefPerfilPainelBean.pratosDoChef}">
-                                    <p>Voce ainda nao cadastrou pratos. Use a tela Home para montar seu cardapio.</p>
+                                    <p>Você ainda não cadastrou pratos. Use a tela Home para montar seu cardápio.</p>
                                 </h:panelGroup>
                             </h:panelGroup>
                         </section>
@@ -230,7 +205,7 @@
                                                  value="#{chefPerfilPainelBean.novaPostagem}"
                                                  styleClass="box"
                                                  style="height:100px;"
-                                                 pt:placeholder="Escreva um aviso, novidade ou descricao da foto..."/>
+                                                 pt:placeholder="Escreva um aviso, novidade ou descrição da foto..."/>
                                 <h:message for="novaPostagemChef" styleClass="messages"/>
                                 <div class="field-stack" style="margin-top:10px;">
                                     <h:outputText value="Foto da postagem (opcional)" styleClass="field-label"/>
@@ -253,21 +228,60 @@
                                     </article>
                                 </ui:repeat>
                                 <h:panelGroup rendered="#{empty chefPerfilPainelBean.postagens}">
-                                    <p>Voce ainda nao publicou novidades.</p>
+                                    <p>Você ainda não publicou novidades.</p>
                                 </h:panelGroup>
+                            </h:panelGroup>
+                        </section>
+
+                        <section class="chef-posts-shell chef-reviews-shell">
+                            <h2>Avaliação de clientes</h2>
+                            <p class="order-help">
+                                Média atual:
+                                <strong>#{avaliacaoServicoBean.formatarMediaChef(authBean.usuarioLogado.id)} / 5</strong>
+                                (#{avaliacaoServicoBean.totalAvaliacoesChef(authBean.usuarioLogado.id)} avaliações)
+                            </p>
+
+                            <h:panelGroup rendered="#{empty avaliacaoServicoBean.avaliacoesChef(authBean.usuarioLogado.id)}">
+                                <p>Você ainda não recebeu avaliações.</p>
+                            </h:panelGroup>
+
+                            <h:panelGroup rendered="#{not empty avaliacaoServicoBean.avaliacoesChef(authBean.usuarioLogado.id)}">
+                                <div class="chef-rating-list">
+                                    <ui:repeat value="#{avaliacaoServicoBean.avaliacoesChef(authBean.usuarioLogado.id)}" var="av">
+                                        <article class="chef-rating-card">
+                                            <div class="chef-rating-head">
+                                                <span class="chef-rating-avatar">#{avaliacaoServicoBean.iniciaisNome(av.clienteNome)}</span>
+                                                <div>
+                                                    <p class="chef-rating-client">#{av.clienteNome}</p>
+                                                    <p class="chef-rating-meta">Contrato #{solicitacaoPainelBean.codigoComprovante(av.solicitacaoId)} - #{av.dataAvaliacaoFormatada}</p>
+                                                </div>
+                                            </div>
+                                            <div class="rating-stars-line" aria-label="Nota da avaliação">
+                                                <ui:repeat value="#{avaliacaoServicoBean.estrelas}" var="estrelaItem">
+                                                    <span class="rating-star #{estrelaItem &lt;= av.nota ? 'on' : ''}">&#9733;</span>
+                                                </ui:repeat>
+                                            </div>
+                                            <p class="chef-rating-comment">#{av.comentarioExibicao}</p>
+                                        </article>
+                                    </ui:repeat>
+                                </div>
                             </h:panelGroup>
                         </section>
                     </main>
 
-                    <aside class="public-chef-chat">
-                        <h2>Solicitacoes e contratacoes</h2>
-                        <p class="chat-hint">Gerencie pedidos recebidos, negocie com clientes e finalize contratos.</p>
-                        <p class="order-help">
-                            Pendentes agora: <strong>#{solicitacaoServicoBean.contarPendentesPorChef(authBean.usuarioLogado.id)}</strong>
-                        </p>
+                    <aside class="public-chef-chat negotiation-aside">
+                        <header class="negotiation-aside-header">
+                            <h2>Solicitações e contratações</h2>
+                            <p class="chat-hint">Gerencie pedidos recebidos, negocie com clientes e finalize contratos.</p>
+                            <p class="aside-counter-chip">
+                                Pendentes agora: <strong>#{solicitacaoServicoBean.contarPendentesPorChef(authBean.usuarioLogado.id)}</strong>
+                            </p>
+                        </header>
 
-                        <h:form id="solicitacoesPerfilChefForm">
-                            <h:panelGroup id="solicitacoesPerfilChefArea" layout="block">
+                        <h:form id="solicitaçõesPerfilChefForm">
+                            <section class="negotiation-aside-section">
+                                <h3>Negociações ativas</h3>
+                                <h:panelGroup id="solicitaçõesPerfilChefArea" layout="block">
                                 <h:panelGroup rendered="#{not empty solicitacaoPainelBean.solicitacoesChef}">
                                     <div class="chef-request-list">
                                         <ui:repeat value="#{solicitacaoPainelBean.solicitacoesChef}" var="sol">
@@ -295,14 +309,14 @@
                                                 <h:panelGroup rendered="#{solicitacaoPainelBean.exibeNegociacao(sol.status)}">
                                                     <div class="sol-chat-shell">
                                                         <p class="order-help" style="margin-top:10px;">
-                                                            Negociacao ativa com o cliente.
+                                                            Negociação ativa com o cliente.
                                                         </p>
 
                                                         <h:panelGroup rendered="#{not empty sol.mensagensNegociacao}">
                                                             <div class="chat-history sol-chat-history">
                                                                 <ui:repeat value="#{sol.mensagensNegociacao}" var="msgNeg">
                                                                     <div class="chat-bubble #{msgNeg.enviadaPorChef ? 'chef-bubble' : 'client-bubble'}">
-                                                                        <strong>#{msgNeg.enviadaPorChef ? 'Voce' : 'Cliente'}</strong>
+                                                                        <strong>#{msgNeg.enviadaPorChef ? 'Você' : 'Cliente'}</strong>
                                                                         <span>#{msgNeg.texto}</span>
                                                                     </div>
                                                                 </ui:repeat>
@@ -321,7 +335,7 @@
                                                                              action="#{solicitacaoPainelBean.enviarMensagemChef(sol.id)}">
                                                                 <f:ajax execute="@form" render="@form :msgsChef"/>
                                                             </h:commandButton>
-                                                            <h:commandButton value="Confirmar contratacao"
+                                                            <h:commandButton value="Confirmar contratação"
                                                                              rendered="#{sol.status ne solicitacaoServicoBean.statusContratado and not sol.contratacaoConfirmadaChef}"
                                                                              action="#{solicitacaoPainelBean.confirmarComoChef(sol.id)}">
                                                                 <f:ajax execute="@this" render="@form :msgsChef"/>
@@ -329,10 +343,10 @@
                                                         </div>
 
                                                         <h:panelGroup rendered="#{sol.contratacaoConfirmadaChef and sol.status ne solicitacaoServicoBean.statusContratado}">
-                                                            <p class="order-help">Confirmacao registrada. Aguardando confirmacao do cliente.</p>
+                                                            <p class="order-help">Confirmação registrada. Aguardando confirmação do cliente.</p>
                                                         </h:panelGroup>
                                                         <h:panelGroup rendered="#{sol.status eq solicitacaoServicoBean.statusContratado}">
-                                                            <p class="contracted-msg">Contratacao finalizada com sucesso.</p>
+                                                            <p class="contracted-msg">Contratação finalizada com sucesso.</p>
                                                         </h:panelGroup>
                                                     </div>
                                                 </h:panelGroup>
@@ -341,12 +355,14 @@
                                     </div>
                                 </h:panelGroup>
                                 <h:panelGroup rendered="#{empty solicitacaoPainelBean.solicitacoesChef}">
-                                    <p>Nenhuma solicitacao recebida ainda.</p>
+                                    <p>Nenhuma solicitação recebida ainda.</p>
                                 </h:panelGroup>
-                            </h:panelGroup>
+                                </h:panelGroup>
+                            </section>
 
-                            <h:panelGroup id="contratacoesChefArea" layout="block">
-                                <h3 style="margin-top:14px;">Comprovantes de contratacao</h3>
+                            <section class="negotiation-aside-section">
+                                <h3>Comprovantes de contratação</h3>
+                                <h:panelGroup id="contratacoesChefArea" layout="block">
                                 <h:panelGroup rendered="#{not empty solicitacaoPainelBean.contratacoesChef}">
                                     <div class="contract-proof-list">
                                         <ui:repeat value="#{solicitacaoPainelBean.contratacoesChef}" var="contrato">
@@ -361,9 +377,10 @@
                                     </div>
                                 </h:panelGroup>
                                 <h:panelGroup rendered="#{empty solicitacaoPainelBean.contratacoesChef}">
-                                    <p class="order-help">Nenhuma contratacao finalizada ainda.</p>
+                                    <p class="order-help">Nenhuma contratação finalizada ainda.</p>
                                 </h:panelGroup>
-                            </h:panelGroup>
+                                </h:panelGroup>
+                            </section>
                         </h:form>
                     </aside>
                 </div>

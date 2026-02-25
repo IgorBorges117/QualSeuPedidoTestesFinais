@@ -27,7 +27,7 @@
             <p>Complete sua vitrine profissional antes de aparecer para os clientes.</p>
 
             <h:panelGroup rendered="#{not authBean.cozinheiro}">
-                <p>Essa área é exclusiva para chefs.</p>
+                <p>Essa ?rea ? exclusiva para chefs.</p>
                 <h:link value="Ir para início" outcome="/pages/index.xhtml"/>
             </h:panelGroup>
 
@@ -108,10 +108,10 @@
                             <h:selectOneMenu value="#{authBean.usuarioLogado.preferenciaAlimentar}" styleClass="box">
                                 <f:selectItem itemLabel="Selecione a especialidade principal" itemValue="" noSelectionOption="true"/>
                                 <f:selectItem itemValue="Chef particular" itemLabel="Chef particular"/>
-                                <f:selectItem itemValue="Culinaria brasileira" itemLabel="Culinaria brasileira"/>
-                                <f:selectItem itemValue="Culinaria italiana" itemLabel="Culinaria italiana"/>
-                                <f:selectItem itemValue="Culinaria japonesa" itemLabel="Culinaria japonesa"/>
-                                <f:selectItem itemValue="Culinaria francesa" itemLabel="Culinaria francesa"/>
+                                <f:selectItem itemValue="Culinária brasileira" itemLabel="Culinária brasileira"/>
+                                <f:selectItem itemValue="Culinária italiana" itemLabel="Culinária italiana"/>
+                                <f:selectItem itemValue="Culinária japonesa" itemLabel="Culinária japonesa"/>
+                                <f:selectItem itemValue="Culinária francesa" itemLabel="Culinária francesa"/>
                                 <f:selectItem itemValue="Churrasco e grelhados" itemLabel="Churrasco e grelhados"/>
                                 <f:selectItem itemValue="Massas artesanais" itemLabel="Massas artesanais"/>
                                 <f:selectItem itemValue="Confeitaria e sobremesas" itemLabel="Confeitaria e sobremesas"/>
@@ -142,12 +142,12 @@
                 <h2>Próximos passos</h2>
                 <ul>
                     <li>Preencha seu cardápio e mantenha atualizado.</li>
-                    <li>Responda as mensagens dos clientes rapidamente.</li>
+                    <li>Responda as mensagens dos clientes rápidamente.</li>
                     <li>Publique novidades para gerar interesse no seu perfil.</li>
                 </ul>
 
                 <h:form style="margin-top:16px;">
-                    <h:commandButton styleClass="btn-submit" value="Finalizar e entrar na área do Chef" action="#{authBean.concluirOnboardingChef}"/>
+                    <h:commandButton styleClass="btn-submit" value="Finalizar e entrar na ?rea do Chef" action="#{authBean.concluirOnboardingChef}"/>
                 </h:form>
             </h:panelGroup>
         </div>

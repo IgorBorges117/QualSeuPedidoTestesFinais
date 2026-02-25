@@ -17,10 +17,10 @@ public class ChefPerfilBean implements Serializable {
 
     private static final String[] ESPECIALIDADES_DISPONIVEIS = new String[]{
             "Chef particular",
-            "Culinaria brasileira",
-            "Culinaria italiana",
-            "Culinaria japonesa",
-            "Culinaria francesa",
+            "Culinária brasileira",
+            "Culinária italiana",
+            "Culinária japonesa",
+            "Culinária francesa",
             "Churrasco e grelhados",
             "Massas artesanais",
             "Confeitaria e sobremesas",

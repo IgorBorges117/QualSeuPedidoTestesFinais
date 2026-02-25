@@ -11,12 +11,12 @@
 <h:body>
     <button type="button" class="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">&#9776;</button>
     <div class="menu-overlay" onclick="closeMenu()"></div>
-    <aside class="side-menu" aria-label="Navegacao principal">
+    <aside class="side-menu" aria-label="Navegação principal">
         <h:form styleClass="side-menu-form">
             <div class="side-menu-header">Menu</div>
             <h:commandLink styleClass="side-menu-link" value="Home" action="/pages/cliente-home.xhtml?faces-redirect=true"/>
             <h:commandLink styleClass="side-menu-link" value="Perfil" action="/pages/cliente-perfil.xhtml?faces-redirect=true"/>
-            <h:commandLink styleClass="side-menu-link" value="Configuracoes" action="/pages/cliente-perfil-edicao.xhtml?faces-redirect=true"/>
+            <h:commandLink styleClass="side-menu-link" value="Configurações" action="/pages/cliente-perfil-edicao.xhtml?faces-redirect=true"/>
             <h:commandButton styleClass="btn-submit" value="Sair" action="#{authBean.sair}"/>
         </h:form>
     </aside>
@@ -27,7 +27,7 @@
                 <div>
                     <p class="hero-kicker">Eventos sem dor de cabeca</p>
                     <h1>Monte seu evento com chefs avaliados em poucos minutos</h1>
-                    <p class="hero-sub">Escolha o profissional, monte o menu e receba confirmacao com rapidez.</p>
+                    <p class="hero-sub">Escolha o profissional, monte o menu e receba confirmação com rapidez.</p>
                     <h:link styleClass="btn btn-primary hero-main-cta" value="Encontrar chef agora" outcome="/pages/cliente-home.xhtml"/>
                 </div>
                 <div class="hero-stat-grid">
@@ -98,14 +98,14 @@
 
                             <div class="chef-card-stats-grid">
                                 <div class="chef-card-stat-box">
-                                    <span class="stat-label">Avaliacao</span>
+                                    <span class="stat-label">Avaliação</span>
                                     <strong>#{mediaChefFormatada} / 5</strong>
-                                    <span class="rating-stars-line" aria-label="Avaliacao ate 5 estrelas">
+                                    <span class="rating-stars-line" aria-label="Avaliação até 5 estrelas">
                                         <ui:repeat value="#{avaliacaoServicoBean.estrelas}" var="estrela">
                                             <span class="rating-star #{estrela &lt;= notaArredondadaChef ? 'on' : ''}">&#9733;</span>
                                         </ui:repeat>
                                     </span>
-                                    <span class="rating-count">#{totalAvaliacoesChef} avaliacao(oes)</span>
+                                    <span class="rating-count">#{totalAvaliacoesChef} avaliações</span>
                                 </div>
                                 <div class="chef-card-stat-box">
                                     <span class="stat-label">Especialidade</span>
@@ -114,19 +114,19 @@
                             </div>
 
                             <div class="chef-feed-meta chef-card-meta">
-                                <span>Cidade #{empty chef.cidade ? 'Nao informada' : chef.cidade}</span>
+                                <span>Cidade #{empty chef.cidade ? 'Não informada' : chef.cidade}</span>
                                 <span>Faixa #{empty chef.faixaPrecoChef ? '$$' : chef.faixaPrecoChef}</span>
                                 <span>Resposta ~#{chefConteudoBean.possuiRespostasDoChef(chef.id) ? 30 : 90} min</span>
                                 <h:panelGroup rendered="#{totalPratosChef > 0}">
                                     <span>#{totalPratosChef} pratos</span>
                                 </h:panelGroup>
                                 <h:panelGroup rendered="#{totalPratosChef == 0}">
-                                    <span>Sem pratos publicados</span>
+                                    <span>Sem pratos públicados</span>
                                 </h:panelGroup>
                             </div>
 
                             <div class="chef-feed-badges">
-                                <h:panelGroup rendered="#{chefConteudoBean.possuiRespostasDoChef(chef.id)}"><span class="chef-badge">Resposta rapida</span></h:panelGroup>
+                                <h:panelGroup rendered="#{chefConteudoBean.possuiRespostasDoChef(chef.id)}"><span class="chef-badge">Resposta rápida</span></h:panelGroup>
                             </div>
                         </article>
                     </ui:repeat>

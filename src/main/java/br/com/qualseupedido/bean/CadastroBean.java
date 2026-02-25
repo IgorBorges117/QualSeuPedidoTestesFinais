@@ -43,6 +43,11 @@ public class CadastroBean implements Serializable {
             return null;
         }
 
+        if (!usuarioBean.emailFormatoValido(email)) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "E-mail inválido", "Informe um e-mail válido."));
+            return null;
+        }
         if (!aceitouTermos) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Termos obrigatórios", "Você precisa aceitar os termos de uso."));
@@ -241,3 +246,4 @@ public class CadastroBean implements Serializable {
         this.aceitouTermos = aceitouTermos;
     }
 }
+

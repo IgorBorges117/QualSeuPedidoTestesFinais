@@ -81,13 +81,13 @@ public class ChefPerfilPainelBean implements Serializable {
         if (!semFoto) {
             if (fotoPostagem.getSize() > TAMANHO_MAXIMO) {
                 FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Arquivo muito grande", "Use uma imagem de ate 3MB."));
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Arquivo muito grande", "Use uma imagem de até 3MB."));
                 return null;
             }
             String contentType = fotoPostagem.getContentType();
             if (contentType == null || !contentType.startsWith("image/")) {
                 FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato invalido", "Envie apenas arquivos de imagem."));
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato inválido", "Envie apenas arquivos de imagem."));
                 return null;
             }
             try {
@@ -99,7 +99,7 @@ public class ChefPerfilPainelBean implements Serializable {
                 );
             } catch (IOException e) {
                 FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Falha no upload", "Nao foi possivel processar a foto da postagem."));
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Falha no upload", "Não foi possível processar a foto da postagem."));
                 return null;
             }
         }
@@ -107,9 +107,12 @@ public class ChefPerfilPainelBean implements Serializable {
         chefConteudoBean.adicionarPostagem(authBean.getUsuarioLogado().getId(), novaPostagem, fotoDataUrl);
         novaPostagem = "";
         fotoPostagem = null;
-        FacesContext.getCurrentInstance().addMessage(null,
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null,
                 new FacesMessage(FacesMessage.SEVERITY_INFO, "Publicado", "Postagem criada com sucesso."));
-        return null;
+        // PRG: evita repost da mesma publicação ao atualizar a página.
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        return "/pages/chef-perfil.xhtml?faces-redirect=true";
     }
 
     public List<ChefConteudoBean.PostagemChef> getPostagens() {
@@ -160,7 +163,7 @@ public class ChefPerfilPainelBean implements Serializable {
         }
         if (clienteSelecionadoId == null) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cliente obrigatorio", "Selecione um cliente para responder."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cliente obrigatório", "Selecione um cliente para responder."));
             return null;
         }
         if (respostaChat == null || respostaChat.trim().isEmpty()) {
@@ -172,7 +175,7 @@ public class ChefPerfilPainelBean implements Serializable {
         List<ChefConteudoBean.MensagemChef> conversa = getConversaClienteSelecionado();
         if (conversa.isEmpty()) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Sem mensagens", "Esse cliente ainda nao enviou mensagens."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Sem mensagens", "Esse cliente ainda não enviou mensagens."));
             return null;
         }
 
@@ -195,7 +198,7 @@ public class ChefPerfilPainelBean implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Resposta enviada", "Cliente respondido com sucesso."));
         } else {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Falha", "Nao foi possivel enviar a resposta."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Falha", "Não foi possível enviar a resposta."));
         }
         return null;
     }
