@@ -290,6 +290,7 @@
                                                     <p><strong>Cliente:</strong> #{sol.clienteNome}</p>
                                                     <p><strong>Pratos:</strong> #{sol.pratosResumo}</p>
                                                     <p><strong>Data/Hora:</strong> #{solicitacaoPainelBean.formatarData(sol.dataEvento)} #{solicitacaoPainelBean.formatarHorario(sol.horarioEvento)}</p>
+                                                    <p><strong>Convidados:</strong> #{sol.quantidadePessoasEvento}</p>
                                                     <p><strong>Status:</strong> <span class="#{solicitacaoPainelBean.statusClass(sol.status)}">#{solicitacaoPainelBean.statusLabel(sol.status)}</span></p>
                                                 </div>
 
@@ -369,7 +370,9 @@
                                             <article class="contract-proof-card">
                                                 <p><strong>Comprovante:</strong> #{solicitacaoPainelBean.codigoComprovante(contrato.id)}</p>
                                                 <p><strong>Cliente:</strong> #{contrato.clienteNome}</p>
+                                                <p><strong>Endereço do cliente:</strong> #{solicitacaoPainelBean.enderecoClienteComprovante(contrato)}</p>
                                                 <p><strong>Evento:</strong> #{solicitacaoPainelBean.formatarData(contrato.dataEvento)} #{solicitacaoPainelBean.formatarHorario(contrato.horarioEvento)}</p>
+                                                <p><strong>Convidados:</strong> #{contrato.quantidadePessoasEvento}</p>
                                                 <p><strong>Pratos:</strong> #{contrato.pratosResumo}</p>
                                                 <p class="contract-proof-badge">Serviço confirmado</p>
                                             </article>

@@ -7,9 +7,12 @@
     <h:outputStylesheet library="css" name="app.css"/>
 </h:head>
 <h:body>
-    <div class="page">
+    <div class="page landing-page">
         <header class="topbar">
-            <div class="logo">Qual o seu pedido?</div>
+            <h:link outcome="/pages/index.xhtml" styleClass="brand-logo-link" title="Qual o seu pedido">
+                <h:graphicImage library="images" name="brand-chef-icon.png" styleClass="brand-icon-image" alt=""/>
+                <span class="brand-wordmark">Qual o seu pedido?</span>
+            </h:link>
             <nav class="top-actions">
                 <h:link value="FAÇA SEU CADASTRO AGORA >" outcome="/pages/cadastro.xhtml"/>
                 <h:link value="LOGIN >" outcome="/pages/login.xhtml"/>
@@ -20,45 +23,141 @@
             <section>
                 <h1>A MAIOR PLATAFORMA PARA QUEM QUER CONTRATAR UM CHEFE PARTICULAR 5 ESTRELAS!</h1>
                 <p class="sub">Encontre cozinheiros e chefs para eventos, datas especiais e experiências personalizadas.</p>
+                <div class="hero-cta-block">
+                    <p class="hero-cta-copy">Crie seu cadastro agora e comece a contratar ou oferecer servi&#231;os ainda hoje.</p>
+                    <div class="hero-cta">
+                        <h:link styleClass="btn btn-primary" value="Anunciar como Chef" outcome="/pages/cadastro.xhtml"/>
+                        <h:link styleClass="btn" value="Cadastrar como cliente" outcome="/pages/cadastro.xhtml"/>
+                    </div>
+                    <div class="hero-cta-benefits">
+                        <span>Cadastro r&#225;pido</span>
+                        <span>Atendimento direto</span>
+                        <span>Avalia&#231;&#245;es reais</span>
+                    </div>
+                </div>
 
                 <div class="metrics">
                     <div class="metric">
-                        <strong>+ 1 milhão</strong>
-                        <span>de usuários</span>
+                        <strong>+ 1 milh&#227;o</strong>
+                        <span>de usu&#225;rios</span>
                     </div>
                     <div class="metric">
                         <strong>+ 500 mil</strong>
                         <span>chefs</span>
                     </div>
                     <div class="metric">
-                        <strong>+ 1 milhão</strong>
-                        <span>de opções de pratos</span>
+                        <strong>+ 1 milh&#227;o</strong>
+                        <span>de op&#231;&#245;es de pratos</span>
                     </div>
                     <div class="metric">
-                        <strong>+ 1 milhão</strong>
-                        <span>de avaliações</span>
+                        <strong>+ 1 milh&#227;o</strong>
+                        <span>de avalia&#231;&#245;es</span>
                     </div>
                 </div>
-
-                <div class="hero-cta">
-                    <h:link styleClass="btn btn-primary" value="Anunciar como Chef" outcome="/pages/cadastro.xhtml"/>
-                    <h:link styleClass="btn" value="Cadastrar como cliente" outcome="/pages/cadastro.xhtml"/>
-                </div>
-
-                <input class="hero-search" type="text" placeholder="Busque um chef agora na sua cidade"/>
             </section>
 
-            <aside class="hero-card">
-                <div class="chef-avatar"></div>
-                <div class="chef-name">Erick Jacquin</div>
-                <div class="stars">*****</div>
+            <aside class="hero-card" id="chefCarousel" aria-live="polite">
+                <div class="chef-spotlight-stage">
+                    <img id="chefCarouselPhotoPrimary" src="#{resource['images/chef-erick-home.png']}" class="chef-spotlight-photo is-active" alt="Chef &#201;rick Jacquin"/>
+                    <img id="chefCarouselPhotoSecondary" src="" class="chef-spotlight-photo" alt=""/>
+                </div>
+                <div class="chef-name" id="chefCarouselName">&#201;rick Jacquin</div>
+                <div class="chef-stars-row" aria-label="5 estrelas">
+                    <h:graphicImage library="images" name="chef-stars-home.png" styleClass="chef-star-item" alt=""/>
+                    <h:graphicImage library="images" name="chef-stars-home.png" styleClass="chef-star-item" alt=""/>
+                    <h:graphicImage library="images" name="chef-stars-home.png" styleClass="chef-star-item" alt=""/>
+                    <h:graphicImage library="images" name="chef-stars-home.png" styleClass="chef-star-item" alt=""/>
+                    <h:graphicImage library="images" name="chef-stars-home.png" styleClass="chef-star-item" alt=""/>
+                </div>
             </aside>
         </main>
 
-        <footer class="footer">
-            <div class="logo">Qual o seu pedido?</div>
-            <div>Copyright 2025 ? Dev/Telebogas.</div>
+        <footer class="footer home-footer">
+            <div class="home-footer-signature">
+                <h:graphicImage library="images" name="brand-chef-icon.png" styleClass="home-footer-icon" alt=""/>
+                <span class="home-footer-dev">Dev/Telebogas</span>
+            </div>
         </footer>
     </div>
+
+    <h:outputScript target="body">
+        (function () {
+            var primaryPhoto = document.getElementById('chefCarouselPhotoPrimary');
+            var secondaryPhoto = document.getElementById('chefCarouselPhotoSecondary');
+            var name = document.getElementById('chefCarouselName');
+            if (!primaryPhoto || !secondaryPhoto || !name) {
+                return;
+            }
+
+            var chefs = [
+                {
+                    name: '\u00c9rick Jacquin',
+                    alt: 'Chef \u00c9rick Jacquin',
+                    image: "#{resource['images/chef-erick-home.png']}",
+                    widthMultiplier: 1
+                },
+                {
+                    name: 'Henrique Aranha',
+                    alt: 'Chef Henrique Aranha',
+                    image: "#{resource['images/chef-henrique-home.png']}",
+                    widthMultiplier: 1.36
+                },
+                {
+                    name: 'Ana Maria',
+                    alt: 'Chef Ana Maria',
+                    image: "#{resource['images/chef-ana-home.png']}",
+                    widthMultiplier: 1.44
+                }
+            ];
+
+            if (chefs.length &lt; 2) {
+                return;
+            }
+
+            var current = 0;
+            var activePhoto = primaryPhoto;
+            var hiddenPhoto = secondaryPhoto;
+            var transitionMs = 760;
+            var intervalMs = 4600;
+            var isTransitioning = false;
+
+            activePhoto.style.setProperty('--chef-width-multiplier', chefs[0].widthMultiplier || 1);
+            hiddenPhoto.style.setProperty('--chef-width-multiplier', chefs[0].widthMultiplier || 1);
+
+            for (var i = 0; i &lt; chefs.length; i++) {
+                var preloadImage = new Image();
+                preloadImage.src = chefs[i].image;
+            }
+
+            window.setInterval(function () {
+                if (isTransitioning) {
+                    return;
+                }
+                var next = (current + 1) % chefs.length;
+                isTransitioning = true;
+
+                hiddenPhoto.src = chefs[next].image;
+                hiddenPhoto.alt = chefs[next].alt;
+                hiddenPhoto.style.setProperty('--chef-width-multiplier', chefs[next].widthMultiplier || 1);
+                hiddenPhoto.classList.add('is-active');
+                activePhoto.classList.remove('is-active');
+                name.classList.add('is-fading');
+
+                window.setTimeout(function () {
+                    name.textContent = chefs[next].name;
+                    name.classList.remove('is-fading');
+
+                    var swap = activePhoto;
+                    activePhoto = hiddenPhoto;
+                    hiddenPhoto = swap;
+                    hiddenPhoto.src = '';
+                    hiddenPhoto.alt = '';
+
+                    current = next;
+                    isTransitioning = false;
+                }, transitionMs);
+            }, intervalMs);
+        })();
+    </h:outputScript>
 </h:body>
 </html>

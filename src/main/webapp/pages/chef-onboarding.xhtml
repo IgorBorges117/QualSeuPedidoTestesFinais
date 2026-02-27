@@ -27,7 +27,7 @@
             <p>Complete sua vitrine profissional antes de aparecer para os clientes.</p>
 
             <h:panelGroup rendered="#{not authBean.cozinheiro}">
-                <p>Essa ?rea ? exclusiva para chefs.</p>
+                <p>Essa área é exclusiva para chefs.</p>
                 <h:link value="Ir para início" outcome="/pages/index.xhtml"/>
             </h:panelGroup>
 
@@ -142,12 +142,12 @@
                 <h2>Próximos passos</h2>
                 <ul>
                     <li>Preencha seu cardápio e mantenha atualizado.</li>
-                    <li>Responda as mensagens dos clientes rápidamente.</li>
+                    <li>Responda as mensagens dos clientes rapidamente.</li>
                     <li>Publique novidades para gerar interesse no seu perfil.</li>
                 </ul>
 
                 <h:form style="margin-top:16px;">
-                    <h:commandButton styleClass="btn-submit" value="Finalizar e entrar na ?rea do Chef" action="#{authBean.concluirOnboardingChef}"/>
+                    <h:commandButton styleClass="btn-submit" value="Finalizar e entrar na área do Chef" action="#{authBean.concluirOnboardingChef}"/>
                 </h:form>
             </h:panelGroup>
         </div>

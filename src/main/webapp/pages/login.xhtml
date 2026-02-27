@@ -8,32 +8,52 @@
     <h:outputStylesheet library="css" name="app.css"/>
 </h:head>
 <h:body>
-    <div class="card-page">
-        <section class="auth-card">
-            <div class="auth-logo">CHEF</div>
-            <h1 class="auth-title">Qual o seu pedido?</h1>
+    <div class="login-page">
+        <video class="login-bg-video" autoplay="autoplay" muted="muted" loop="loop" playsinline="playsinline">
+            <source src="#{resource['videos:login-bg.mp4']}" type="video/mp4"/>
+        </video>
+        <div class="login-backdrop"></div>
+
+        <section class="auth-card login-card">
+            <div class="login-brand-stack">
+                <h:graphicImage library="images" name="brand-chef-icon.png" styleClass="login-brand-icon" alt=""/>
+                <h1 class="login-brand-wordmark">Qual o seu pedido?</h1>
+            </div>
 
             <h:messages globalOnly="true" styleClass="messages"/>
 
             <h:form>
-                <h:inputText styleClass="field" value="#{authBean.login}" required="true"
-                             requiredMessage="Informe seu login" pt:placeholder="Telefone, usuário ou e-mail"/>
+                <div class="login-field-wrap">
+                    <span class="login-field-icon" aria-hidden="true">&#128100;</span>
+                    <h:inputText styleClass="field login-field" value="#{authBean.login}" required="true"
+                                 requiredMessage="Informe seu login" pt:placeholder="Telefone, nome de usu&#225;rio ou e-mail"/>
+                </div>
 
-                <h:inputSecret styleClass="field" value="#{authBean.senha}" required="true"
-                               requiredMessage="Informe sua senha" pt:placeholder="Senha"/>
+                <div class="login-field-wrap">
+                    <span class="login-field-icon" aria-hidden="true">&#128274;</span>
+                    <h:inputSecret styleClass="field login-field" value="#{authBean.senha}" required="true"
+                                   requiredMessage="Informe sua senha" pt:placeholder="Senha"/>
+                </div>
 
-                <h:commandButton styleClass="btn-submit" value="Entrar" action="#{authBean.entrar}"/>
+                <h:commandButton styleClass="btn-submit login-submit" value="Entrar" action="#{authBean.entrar}"/>
             </h:form>
 
-            <div class="auth-links">
+            <div class="auth-links login-links">
                 <h:link value="Esqueceu a senha?" outcome="/pages/recuperar-senha.xhtml"/>
                 <br/>
-                <span>Não tem uma conta? </span>
+                <span>N&#227;o tem uma conta? </span>
                 <h:link value="Cadastre-se" outcome="/pages/cadastro.xhtml"/>
                 <br/>
-                <h:link value="Voltar para início" outcome="/pages/index.xhtml"/>
+                <h:link value="Voltar para in&#237;cio" outcome="/pages/index.xhtml"/>
             </div>
         </section>
+
+        <footer class="login-footer">
+            <div class="login-footer-signature">
+                <h:graphicImage library="images" name="brand-chef-icon.png" styleClass="login-footer-icon" alt=""/>
+                <span class="login-footer-dev">Dev/Telebogas</span>
+            </div>
+        </footer>
     </div>
 </h:body>
 </html>

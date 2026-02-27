@@ -9,24 +9,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fb33f84c-fc43-4600-8ff0-acb1a85f4dae" name="Changes" comment="">
+    <list default="true" id="fb33f84c-fc43-4600-8ff0-acb1a85f4dae" name="Changes" comment="versão 85%">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/CadastroBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/CadastroBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ChefPerfilBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ChefPerfilBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ChefPerfilPainelBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ChefPerfilPainelBean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/AuthBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/AuthBean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ChefConteudoBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ChefConteudoBean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ChefPerfilPublicoBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ChefPerfilPublicoBean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/PratoBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/PratoBean.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/SolicitacaoPainelBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/SolicitacaoPainelBean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/SolicitacaoServicoBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/SolicitacaoServicoBean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/TipoUsuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/TipoUsuario.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/UsuarioBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/UsuarioBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/UsuarioSistema.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/UsuarioSistema.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/cadastro.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/cadastro.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/chef-onboarding.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/chef-onboarding.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/chef-perfil-publico.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/chef-perfil-publico.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/chef-perfil.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/chef-perfil.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/chef.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/chef.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/cliente-home.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/cliente-home.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/cliente-perfil-edicao.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/cliente-perfil-edicao.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/cliente-perfil.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/cliente-perfil.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/index.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/index.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/login.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/login.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/recuperar-senha.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/recuperar-senha.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/css/app.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -35,9 +37,14 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="755" />
+    <option name="cachedIndexableFilesCount" value="766" />
   </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="Igor &lt;igorbkzuki711@outlook.com&gt;" />
+      </list>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -239,12 +246,34 @@
       <workItem from="1771989795231" duration="1327000" />
       <workItem from="1772047518921" duration="135000" />
       <workItem from="1772052660993" duration="2286000" />
-      <workItem from="1772059886334" duration="645000" />
+      <workItem from="1772059886334" duration="916000" />
+      <workItem from="1772071465480" duration="3537000" />
+      <workItem from="1772140330245" duration="329000" />
+      <workItem from="1772142079235" duration="7640000" />
+      <workItem from="1772158295518" duration="13402000" />
+      <workItem from="1772222161431" duration="665000" />
+      <workItem from="1772227739797" duration="7939000" />
     </task>
+    <task id="LOCAL-00001" summary="versão 85%">
+      <option name="closed" value="true" />
+      <created>1772060979854</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1772060979854</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="versão 85%" />
+    <option name="LAST_COMMIT_MESSAGE" value="versão 85%" />
+    <option name="NON_MODAL_COMMIT_POSTPONE_SLOW_CHECKS" value="false" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

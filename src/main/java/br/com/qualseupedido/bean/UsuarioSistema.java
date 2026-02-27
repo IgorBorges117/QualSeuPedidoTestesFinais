@@ -1,11 +1,12 @@
 package br.com.qualseupedido.bean;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 public class UsuarioSistema implements Serializable {
 
     private final Long id;
-    private final String email;
+    private String email;
     private final String senha;
     private String nome;
     private final TipoUsuario tipo;
@@ -28,6 +29,9 @@ public class UsuarioSistema implements Serializable {
     private boolean chefVerificado;
     private String faixaPrecoChef;
     private String disponibilidadeChef;
+    private boolean suspensaoIndeterminada;
+    private LocalDateTime suspensoAte;
+    private String motivoSuspensao;
 
     public UsuarioSistema(Long id, String email, String senha, String nome, TipoUsuario tipo) {
         this.id = id;
@@ -40,6 +44,9 @@ public class UsuarioSistema implements Serializable {
         this.chefVerificado = false;
         this.faixaPrecoChef = "$$";
         this.disponibilidadeChef = "Hoje";
+        this.suspensaoIndeterminada = false;
+        this.suspensoAte = null;
+        this.motivoSuspensao = null;
     }
 
     public Long getId() {
@@ -48,6 +55,10 @@ public class UsuarioSistema implements Serializable {
 
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getSenha() {
@@ -216,5 +227,53 @@ public class UsuarioSistema implements Serializable {
 
     public void setDisponibilidadeChef(String disponibilidadeChef) {
         this.disponibilidadeChef = disponibilidadeChef;
+    }
+
+    public boolean isSuspensaoIndeterminada() {
+        return suspensaoIndeterminada;
+    }
+
+    public LocalDateTime getSuspensoAte() {
+        return suspensoAte;
+    }
+
+    public String getMotivoSuspensao() {
+        return motivoSuspensao;
+    }
+
+    public boolean isSuspensoAgora() {
+        if (suspensaoIndeterminada) {
+            return true;
+        }
+        return suspensoAte != null && LocalDateTime.now().isBefore(suspensoAte);
+    }
+
+    public void suspenderIndeterminado(String motivo) {
+        this.suspensaoIndeterminada = true;
+        this.suspensoAte = null;
+        this.motivoSuspensao = normalizarTexto(motivo);
+    }
+
+    public void suspenderAte(LocalDateTime ate, String motivo) {
+        if (ate == null) {
+            return;
+        }
+        this.suspensaoIndeterminada = false;
+        this.suspensoAte = ate;
+        this.motivoSuspensao = normalizarTexto(motivo);
+    }
+
+    public void removerSuspensao() {
+        this.suspensaoIndeterminada = false;
+        this.suspensoAte = null;
+        this.motivoSuspensao = null;
+    }
+
+    private String normalizarTexto(String texto) {
+        if (texto == null) {
+            return null;
+        }
+        String valor = texto.trim();
+        return valor.isEmpty() ? null : valor;
     }
 }

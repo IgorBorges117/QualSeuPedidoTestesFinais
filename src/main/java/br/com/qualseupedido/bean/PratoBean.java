@@ -2,9 +2,11 @@ package br.com.qualseupedido.bean;
 
 import br.com.qualseupedido.entidade.Prato;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.Part;
 import java.io.IOException;
@@ -26,12 +28,50 @@ public class PratoBean implements Serializable {
     private final List<Prato> pratos = new ArrayList<>();
     private long seq = 1L;
 
+    @Inject
+    private UsuarioBean usuarioBean;
+
     private String nome;
     private String descricao;
     private Double preco;
     private String precoTexto;
     private String categoria = Prato.CATEGORIA_PRINCIPAL;
     private transient Part fotoPrato;
+
+    @PostConstruct
+    private void carregarPratosDemo() {
+        if (!pratos.isEmpty() || usuarioBean == null) {
+            return;
+        }
+        Long chefId = null;
+        for (UsuarioSistema usuario : usuarioBean.getUsuarios()) {
+            if ("chef@demo.com".equalsIgnoreCase(usuario.getEmail())) {
+                chefId = usuario.getId();
+                break;
+            }
+        }
+        if (chefId == null) {
+            return;
+        }
+
+        adicionarPratoDemo(chefId, "Bruschetta classica", "Pao artesanal com tomate e azeite.", 22.0, Prato.CATEGORIA_ENTRADA);
+        adicionarPratoDemo(chefId, "Risoto de cogumelos", "Arroz cremoso com funghi e parmesao.", 58.0, Prato.CATEGORIA_PRINCIPAL);
+        adicionarPratoDemo(chefId, "File de frango ao molho", "File grelhado com ervas e molho suave.", 46.0, Prato.CATEGORIA_PRINCIPAL);
+        adicionarPratoDemo(chefId, "Pudim de leite", "Sobremesa classica com calda de caramelo.", 18.0, Prato.CATEGORIA_SOBREMESA);
+    }
+
+    private void adicionarPratoDemo(Long chefId, String nome, String descricao, Double preco, String categoria) {
+        pratos.add(new Prato(
+                seq++,
+                chefId,
+                nome,
+                descricao,
+                preco,
+                null,
+                true,
+                normalizarCategoria(categoria)
+        ));
+    }
 
     public List<Prato> getPratos() {
         return Collections.unmodifiableList(pratos);

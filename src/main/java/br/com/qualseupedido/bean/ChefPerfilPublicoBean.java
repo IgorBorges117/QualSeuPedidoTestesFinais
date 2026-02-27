@@ -31,20 +31,30 @@ public class ChefPerfilPublicoBean implements Serializable {
     @Inject
     private PratoBean pratoBean;
     @Inject
-    private SolicitacaoServicoBean solicitacaoServicoBean;
+    private PagamentoBean pagamentoBean;
 
     private String[] pratosSelecionados;
     private String pratosSelecionadosTexto;
     private String dataEvento;
     private String horarioEvento;
-    private String observacoes;
+    private Integer quantidadePessoasEvento;
 
     public UsuarioSistema getChefSelecionado() {
         Long id = getChefId();
         if (id == null) {
             return null;
         }
-        return usuarioBean.buscarPorId(id);
+        UsuarioSistema chef = usuarioBean.buscarPorId(id);
+        if (chef == null) {
+            return null;
+        }
+        if (chef.getTipo() != TipoUsuario.COZINHEIRO) {
+            return null;
+        }
+        if (chef.isSuspensoAgora()) {
+            return null;
+        }
+        return chef;
     }
 
     public List<ChefConteudoBean.PostagemChef> getPostagensChef() {
@@ -95,7 +105,7 @@ public class ChefPerfilPublicoBean implements Serializable {
         return false;
     }
 
-    public String solicitarMenu() {
+    public String iniciarPagamento() {
         UsuarioSistema chef = getChefSelecionado();
         if (chef == null) {
             FacesContext.getCurrentInstance().addMessage(null,
@@ -119,6 +129,11 @@ public class ChefPerfilPublicoBean implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Data e horario obrigatorios", "Informe a data e o horario do evento."));
             return null;
         }
+        if (quantidadePessoasEvento == null || quantidadePessoasEvento <= 0) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Quantidade obrigatoria", "Informe a quantidade de convidados do evento."));
+            return null;
+        }
 
         List<Prato> pratos = new ArrayList<>();
         for (Long id : idsSelecionados) {
@@ -133,7 +148,7 @@ public class ChefPerfilPublicoBean implements Serializable {
             return null;
         }
 
-        solicitacaoServicoBean.criarSolicitacao(
+        pagamentoBean.iniciarPagamento(
                 chef.getId(),
                 chef.getNome(),
                 authBean.getUsuarioLogado().getId(),
@@ -141,18 +156,10 @@ public class ChefPerfilPublicoBean implements Serializable {
                 pratos,
                 dataEvento,
                 horarioEvento,
-                observacoes
+                quantidadePessoasEvento
         );
 
-        pratosSelecionados = null;
-        pratosSelecionadosTexto = "";
-        dataEvento = "";
-        horarioEvento = "";
-        observacoes = "";
-
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitacao enviada", "O chef recebera seu pedido para avaliacao."));
-        return null;
+        return "/pages/pagamento.xhtml?faces-redirect=true";
     }
 
     public String enviarMensagem() {
@@ -272,11 +279,11 @@ public class ChefPerfilPublicoBean implements Serializable {
         this.horarioEvento = horarioEvento;
     }
 
-    public String getObservacoes() {
-        return observacoes;
+    public Integer getQuantidadePessoasEvento() {
+        return quantidadePessoasEvento;
     }
 
-    public void setObservacoes(String observacoes) {
-        this.observacoes = observacoes;
+    public void setQuantidadePessoasEvento(Integer quantidadePessoasEvento) {
+        this.quantidadePessoasEvento = quantidadePessoasEvento;
     }
 }

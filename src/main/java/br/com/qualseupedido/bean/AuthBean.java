@@ -6,10 +6,13 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.time.format.DateTimeFormatter;
 
 @Named
 @SessionScoped
 public class AuthBean implements Serializable {
+
+    private static final DateTimeFormatter FORMATO_DATA_HORA = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     private String login;
     private String senha;
@@ -22,7 +25,12 @@ public class AuthBean implements Serializable {
         UsuarioSistema usuario = usuarioBean.autenticar(login, senha);
         if (usuario == null) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login inválido", "Verifique login e senha."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login invalido", "Verifique login e senha."));
+            return null;
+        }
+        if (usuario.getTipo() != TipoUsuario.ADMIN && usuario.isSuspensoAgora()) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Acesso suspenso", montarDetalheSuspensao(usuario)));
             return null;
         }
 
@@ -39,6 +47,9 @@ public class AuthBean implements Serializable {
     public String redirecionarPosLogin() {
         if (usuarioLogado == null) {
             return "/pages/login.xhtml?faces-redirect=true";
+        }
+        if (usuarioLogado.getTipo() == TipoUsuario.ADMIN) {
+            return "/pages/admin.xhtml?faces-redirect=true";
         }
         if (usuarioLogado.getTipo() == TipoUsuario.COZINHEIRO) {
             if (!usuarioLogado.isPerfilChefConfigurado()) {
@@ -74,6 +85,12 @@ public class AuthBean implements Serializable {
     }
 
     public boolean isLogado() {
+        if (usuarioLogado != null
+                && usuarioLogado.getTipo() != TipoUsuario.ADMIN
+                && usuarioLogado.isSuspensoAgora()) {
+            usuarioLogado = null;
+            return false;
+        }
         return usuarioLogado != null;
     }
 
@@ -83,6 +100,10 @@ public class AuthBean implements Serializable {
 
     public boolean isCozinheiro() {
         return isLogado() && usuarioLogado.getTipo() == TipoUsuario.COZINHEIRO;
+    }
+
+    public boolean isAdmin() {
+        return isLogado() && usuarioLogado.getTipo() == TipoUsuario.ADMIN;
     }
 
     public String getLogin() {
@@ -103,5 +124,21 @@ public class AuthBean implements Serializable {
 
     public UsuarioSistema getUsuarioLogado() {
         return usuarioLogado;
+    }
+
+    private String montarDetalheSuspensao(UsuarioSistema usuario) {
+        StringBuilder detalhe = new StringBuilder();
+        if (usuario.isSuspensaoIndeterminada()) {
+            detalhe.append("Conta suspensa por tempo indeterminado.");
+        } else if (usuario.getSuspensoAte() != null) {
+            detalhe.append("Conta suspensa ate ").append(usuario.getSuspensoAte().format(FORMATO_DATA_HORA)).append(".");
+        } else {
+            detalhe.append("Conta suspensa.");
+        }
+
+        if (usuario.getMotivoSuspensao() != null && !usuario.getMotivoSuspensao().trim().isEmpty()) {
+            detalhe.append(" Motivo: ").append(usuario.getMotivoSuspensao().trim());
+        }
+        return detalhe.toString();
     }
 }

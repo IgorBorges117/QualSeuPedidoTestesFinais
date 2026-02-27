@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.StringJoiner;
 
 @Named
 @ViewScoped
@@ -30,6 +31,8 @@ public class SolicitacaoPainelBean implements Serializable {
     private SolicitacaoServicoBean solicitacaoServicoBean;
     @Inject
     private AvaliacaoServicoBean avaliacaoServicoBean;
+    @Inject
+    private UsuarioBean usuarioBean;
 
     private final Map<Long, String> rascunhosChef = new HashMap<>();
     private final Map<Long, String> rascunhosCliente = new HashMap<>();
@@ -288,6 +291,79 @@ public class SolicitacaoPainelBean implements Serializable {
             return "QSP-CONTRATO";
         }
         return String.format(Locale.ROOT, "QSP-%05d", solicitacaoId);
+    }
+
+    public String enderecoClienteComprovante(SolicitacaoServicoBean.SolicitacaoServico contrato) {
+        if (contrato == null || contrato.getClienteId() == null) {
+            return "Não informado";
+        }
+        UsuarioSistema cliente = usuarioBean.buscarPorId(contrato.getClienteId());
+        if (cliente == null) {
+            return "Não informado";
+        }
+        return formatarEnderecoCompleto(cliente);
+    }
+
+    private String formatarEnderecoCompleto(UsuarioSistema cliente) {
+        String endereco = valorTexto(cliente.getEndereco());
+        String numero = valorTexto(cliente.getNumero());
+        String complemento = valorTexto(cliente.getComplemento());
+        String bairro = valorTexto(cliente.getBairro());
+        String cidade = valorTexto(cliente.getCidade());
+        String estado = valorTexto(cliente.getEstado());
+        String cep = valorTexto(cliente.getCep());
+
+        StringBuilder logradouro = new StringBuilder();
+        if (endereco != null) {
+            logradouro.append(endereco);
+        }
+        if (numero != null) {
+            if (logradouro.length() > 0) {
+                logradouro.append(", ");
+            }
+            logradouro.append(numero);
+        }
+        if (complemento != null) {
+            if (logradouro.length() > 0) {
+                logradouro.append(" - ");
+            }
+            logradouro.append(complemento);
+        }
+
+        StringBuilder cidadeEstado = new StringBuilder();
+        if (cidade != null) {
+            cidadeEstado.append(cidade);
+        }
+        if (estado != null) {
+            if (cidadeEstado.length() > 0) {
+                cidadeEstado.append(" - ");
+            }
+            cidadeEstado.append(estado);
+        }
+
+        StringJoiner joiner = new StringJoiner(" | ");
+        if (logradouro.length() > 0) {
+            joiner.add(logradouro.toString());
+        }
+        if (bairro != null) {
+            joiner.add("Bairro: " + bairro);
+        }
+        if (cidadeEstado.length() > 0) {
+            joiner.add(cidadeEstado.toString());
+        }
+        if (cep != null) {
+            joiner.add("CEP: " + cep);
+        }
+
+        return joiner.length() == 0 ? "Não informado" : joiner.toString();
+    }
+
+    private String valorTexto(String valor) {
+        if (valor == null) {
+            return null;
+        }
+        String texto = valor.trim();
+        return texto.isEmpty() ? null : texto;
     }
 
     private Integer parseNotaAvaliacao(String notaTexto) {

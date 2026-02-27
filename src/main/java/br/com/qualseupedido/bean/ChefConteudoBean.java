@@ -116,6 +116,23 @@ public class ChefConteudoBean implements Serializable {
         return false;
     }
 
+    public synchronized boolean excluirPostagem(Long chefId, Long postagemId) {
+        if (chefId == null || postagemId == null) {
+            return false;
+        }
+        List<PostagemChef> posts = postagensPorChef.get(chefId);
+        if (posts == null) {
+            return false;
+        }
+        for (int i = 0; i < posts.size(); i++) {
+            if (postagemId.equals(posts.get(i).getId())) {
+                posts.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public synchronized boolean possuiRespostasDoChef(Long chefId) {
         if (chefId == null) {
             return false;
