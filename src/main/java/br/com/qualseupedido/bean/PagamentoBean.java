@@ -63,12 +63,12 @@ public class PagamentoBean implements Serializable {
     public String confirmarPagamento() {
         if (!pagamentoPendente || chefId == null || clienteId == null) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Pagamento invalido", "Nenhum pedido pendente encontrado."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Pagamento inválido", "Nenhum pedido pendente encontrado."));
             return "/pages/cliente-home.xhtml?faces-redirect=true";
         }
         if (statusPagamento != StatusPagamento.PENDENTE) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Pagamento nao autorizado", "O pagamento nao esta pendente."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Pagamento não autorizado", "O pagamento não está pendente."));
             return null;
         }
         if (!authBean.isCliente() || authBean.getUsuarioLogado() == null) {
@@ -78,7 +78,7 @@ public class PagamentoBean implements Serializable {
         }
         if (!clienteId.equals(authBean.getUsuarioLogado().getId())) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Sessao divergente", "O pedido nao pertence ao usuario atual."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Sessão divergente", "O pedido não pertence ao usuário atual."));
             return "/pages/cliente-home.xhtml?faces-redirect=true";
         }
 
@@ -176,7 +176,7 @@ public class PagamentoBean implements Serializable {
 
     public String getStatusPagamentoLabel() {
         if (statusPagamento == null) {
-            return "Nao informado";
+            return "Não informado";
         }
         switch (statusPagamento) {
             case CONFIRMADO:

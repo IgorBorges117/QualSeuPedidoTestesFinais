@@ -9,11 +9,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 @Named
@@ -41,18 +40,62 @@ public class UsuarioBean implements Serializable {
         chefDemo.setChefVerificado(true);
         chefDemo.setFaixaPrecoChef("$$$");
         chefDemo.setDisponibilidadeChef("Fim de semana");
-        chefDemo.setPreferenciaAlimentar("Culinaria brasileira");
-        chefDemo.setCidade("Sao Joaquim da Barra");
+        chefDemo.setPreferenciaAlimentar("Culinária brasileira");
+        chefDemo.setCidade("São Joaquim da Barra");
         chefDemo.setEstado("SP");
         chefDemo.setDataNascimento("01/04/1949");
         chefDemo.setSexo("Feminino");
-        chefDemo.setFotoPerfilDataUrl(carregarImagemLocal(
-                "C:\\Users\\IgorB\\Downloads\\chefes dm\\Ana M. perfil chef.png",
+        chefDemo.setFotoPerfilDataUrl(carregarImagemRecurso(
+                "/demo/ana-perfil.png",
                 MAX_LARGURA_PERFIL,
                 MAX_ALTURA_PERFIL
         ));
-        chefDemo.setFotoCapaDataUrl(carregarImagemLocal(
-                "C:\\Users\\IgorB\\Downloads\\chefes dm\\capa ana maria braga.webp",
+        chefDemo.setFotoCapaDataUrl(carregarImagemRecurso(
+                "/demo/ana-capa.webp",
+                MAX_LARGURA_CAPA,
+                MAX_ALTURA_CAPA
+        ));
+
+        UsuarioSistema chefErick = new UsuarioSistema(seq++, "erick@demo.com", SenhaUtil.hashSha256("123456"), "Erick Jacquin", TipoUsuario.COZINHEIRO);
+        chefErick.setPerfilChefConfigurado(true);
+        chefErick.setPerfilClienteConfigurado(true);
+        chefErick.setChefVerificado(true);
+        chefErick.setFaixaPrecoChef("$$$");
+        chefErick.setDisponibilidadeChef("Fim de semana");
+        chefErick.setPreferenciaAlimentar("Culinária francesa");
+        chefErick.setCidade("São Paulo");
+        chefErick.setEstado("SP");
+        chefErick.setDataNascimento("09/12/1964");
+        chefErick.setSexo("Masculino");
+        chefErick.setFotoPerfilDataUrl(carregarImagemRecurso(
+                "/demo/erick-perfil.png",
+                MAX_LARGURA_PERFIL,
+                MAX_ALTURA_PERFIL
+        ));
+        chefErick.setFotoCapaDataUrl(carregarImagemRecurso(
+                "/demo/erick-capa.png",
+                MAX_LARGURA_CAPA,
+                MAX_ALTURA_CAPA
+        ));
+
+        UsuarioSistema chefFogaca = new UsuarioSistema(seq++, "fogaca@demo.com", SenhaUtil.hashSha256("123456"), "Henrique Fogaca", TipoUsuario.COZINHEIRO);
+        chefFogaca.setPerfilChefConfigurado(true);
+        chefFogaca.setPerfilClienteConfigurado(true);
+        chefFogaca.setChefVerificado(true);
+        chefFogaca.setFaixaPrecoChef("$$$");
+        chefFogaca.setDisponibilidadeChef("Fim de semana");
+        chefFogaca.setPreferenciaAlimentar("Culinária brasileira");
+        chefFogaca.setCidade("Piracicaba");
+        chefFogaca.setEstado("SP");
+        chefFogaca.setDataNascimento("01/04/1974");
+        chefFogaca.setSexo("Masculino");
+        chefFogaca.setFotoPerfilDataUrl(carregarImagemRecurso(
+                "/demo/henrique-perfil.png",
+                MAX_LARGURA_PERFIL,
+                MAX_ALTURA_PERFIL
+        ));
+        chefFogaca.setFotoCapaDataUrl(carregarImagemRecurso(
+                "/demo/henrique-capa.png",
                 MAX_LARGURA_CAPA,
                 MAX_ALTURA_CAPA
         ));
@@ -63,23 +106,69 @@ public class UsuarioBean implements Serializable {
 
         usuarios.add(adminDemo);
         usuarios.add(chefDemo);
+        usuarios.add(chefErick);
+        usuarios.add(chefFogaca);
         usuarios.add(clienteDemo);
     }
 
-    private String carregarImagemLocal(String caminho, int maxWidth, int maxHeight) {
-        if (caminho == null || caminho.trim().isEmpty()) {
+    private String carregarImagemRecurso(String recurso, int maxWidth, int maxHeight) {
+        if (recurso == null || recurso.trim().isEmpty()) {
             return null;
         }
-        try {
-            Path path = Paths.get(caminho);
-            if (!Files.exists(path)) {
+        String normalizado = recurso.trim();
+        String lower = normalizado.toLowerCase(Locale.ROOT);
+        if (lower.endsWith(".webp")) {
+            return carregarDataUrlBruta(normalizado, "image/webp");
+        }
+
+        try (InputStream input = UsuarioBean.class.getResourceAsStream(normalizado)) {
+            if (input == null) {
                 return null;
             }
-            try (InputStream input = Files.newInputStream(path)) {
-                return ImagemUtil.processarDataUrl(input, maxWidth, maxHeight, QUALIDADE_JPEG);
+            return ImagemUtil.processarDataUrl(input, maxWidth, maxHeight, QUALIDADE_JPEG);
+        } catch (IOException e) {
+            String mime = guessMime(normalizado);
+            return carregarDataUrlBruta(normalizado, mime);
+        }
+    }
+
+    private String carregarDataUrlBruta(String recurso, String mime) {
+        if (mime == null || mime.trim().isEmpty()) {
+            mime = "image/png";
+        }
+        try (InputStream input = UsuarioBean.class.getResourceAsStream(recurso)) {
+            if (input == null) {
+                return null;
             }
+            byte[] bytes = readAllBytesCompat(input);
+            if (bytes.length == 0) {
+                return null;
+            }
+            return "data:" + mime + ";base64," + Base64.getEncoder().encodeToString(bytes);
         } catch (IOException e) {
             return null;
+        }
+    }
+
+    private String guessMime(String recurso) {
+        String lower = recurso == null ? "" : recurso.toLowerCase(Locale.ROOT);
+        if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) {
+            return "image/jpeg";
+        }
+        if (lower.endsWith(".webp")) {
+            return "image/webp";
+        }
+        return "image/png";
+    }
+
+    private byte[] readAllBytesCompat(InputStream input) throws IOException {
+        byte[] buffer = new byte[8192];
+        int read;
+        try (java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream()) {
+            while ((read = input.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            return out.toByteArray();
         }
     }
 

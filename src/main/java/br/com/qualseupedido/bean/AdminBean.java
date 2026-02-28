@@ -28,10 +28,10 @@ public class AdminBean implements Serializable {
 
     private static final String[] ESPECIALIDADES_CHEF = new String[]{
             "Chef particular",
-            "Culinaria brasileira",
-            "Culinaria italiana",
-            "Culinaria japonesa",
-            "Culinaria francesa",
+            "Culinária brasileira",
+            "Culinária italiana",
+            "Culinária japonesa",
+            "Culinária francesa",
             "Churrasco e grelhados",
             "Massas artesanais",
             "Confeitaria e sobremesas",
@@ -41,10 +41,10 @@ public class AdminBean implements Serializable {
             "Eventos corporativos"
     };
     private static final String[] PREFERENCIAS_CLIENTE = new String[]{
-            "Sem restricao",
+            "Sem restrição",
             "Vegetariana",
             "Vegana",
-            "Sem gluten",
+            "Sem glúten",
             "Sem lactose"
     };
     private static final String[] DISPONIBILIDADES_CHEF = new String[]{
@@ -124,7 +124,7 @@ public class AdminBean implements Serializable {
         }
         UsuarioSistema usuario = usuarioBean.buscarPorId(usuarioId);
         if (usuario == null || usuario.getTipo() == TipoUsuario.ADMIN) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Usuario invalido", "Nao foi possivel selecionar o usuario.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Usuário inválido", "Não foi possível selecionar o usuário.");
             return null;
         }
 
@@ -151,7 +151,7 @@ public class AdminBean implements Serializable {
         mensagemIdSelecionada = null;
         mensagemTextoEdicao = null;
 
-        adicionarMensagem(FacesMessage.SEVERITY_INFO, "Usuario selecionado", "Agora voce pode editar perfil ou suspensao.");
+        adicionarMensagem(FacesMessage.SEVERITY_INFO, "Usuário selecionado", "Agora você pode editar perfil ou suspensão.");
         return null;
     }
 
@@ -161,35 +161,35 @@ public class AdminBean implements Serializable {
         }
         UsuarioSistema usuario = getUsuarioSelecionado();
         if (usuario == null) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Usuario obrigatorio", "Selecione um usuario antes de salvar.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Usuário obrigatório", "Selecione um usuário antes de salvar.");
             return null;
         }
         if (nomeEdicao == null || nomeEdicao.trim().isEmpty()) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Nome obrigatorio", "Informe o nome do usuario.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Nome obrigatório", "Informe o nome do usuário.");
             return null;
         }
         if (emailEdicao == null || emailEdicao.trim().isEmpty()) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "E-mail obrigatorio", "Informe um e-mail valido.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "E-mail obrigatório", "Informe um e-mail válido.");
             return null;
         }
         if (!usuarioBean.emailFormatoValido(emailEdicao)) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "E-mail invalido", "Informe um e-mail no formato correto.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "E-mail inválido", "Informe um e-mail no formato correto.");
             return null;
         }
         if (!usuarioBean.atualizarEmail(usuario.getId(), emailEdicao)) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "E-mail indisponivel", "E-mail invalido ou ja utilizado.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "E-mail indisponível", "E-mail inválido ou já utilizado.");
             return null;
         }
         if (!telefoneValido(telefoneEdicao)) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Telefone invalido", "Use apenas numeros e simbolos validos.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Telefone inválido", "Use apenas números e símbolos válidos.");
             return null;
         }
         if (!cepValido(cepEdicao)) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "CEP invalido", "Informe um CEP no formato 00000-000.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "CEP inválido", "Informe um CEP no formato 00000-000.");
             return null;
         }
         if (!numeroValido(numeroEdicao)) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Numero invalido", "Informe um numero de endereco valido.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Número inválido", "Informe um número de endereço válido.");
             return null;
         }
 
@@ -203,15 +203,15 @@ public class AdminBean implements Serializable {
         usuario.setCep(textoOuNull(cepEdicao));
         if (usuario.getTipo() == TipoUsuario.COZINHEIRO) {
             if (!valorEmListaOpcional(preferenciaEdicao, SET_ESPECIALIDADES_CHEF)) {
-                adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Especialidade invalida", "Selecione uma especialidade valida.");
+                adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Especialidade inválida", "Selecione uma especialidade válida.");
                 return null;
             }
             if (!valorEmListaOpcional(disponibilidadeChefEdicao, SET_DISPONIBILIDADES_CHEF)) {
-                adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Disponibilidade invalida", "Selecione uma disponibilidade valida.");
+                adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Disponibilidade inválida", "Selecione uma disponibilidade válida.");
                 return null;
             }
             if (!valorEmListaOpcional(faixaPrecoChefEdicao, SET_FAIXAS_PRECO_CHEF)) {
-                adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Faixa de preco invalida", "Selecione uma faixa de preco valida.");
+                adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Faixa de preço inválida", "Selecione uma faixa de preço válida.");
                 return null;
             }
             usuario.setPreferenciaAlimentar(textoOuNull(preferenciaEdicao));
@@ -219,14 +219,14 @@ public class AdminBean implements Serializable {
             usuario.setFaixaPrecoChef(textoOuNull(faixaPrecoChefEdicao));
         } else {
             if (!valorEmListaOpcional(preferenciaEdicao, SET_PREFERENCIAS_CLIENTE)) {
-                adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Preferencia invalida", "Selecione uma preferencia valida.");
+                adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Preferência inválida", "Selecione uma preferência válida.");
                 return null;
             }
             usuario.setPreferenciaAlimentar(textoOuNull(preferenciaEdicao));
         }
 
 
-        adicionarMensagem(FacesMessage.SEVERITY_INFO, "Perfil atualizado", "Dados do usuario salvos com sucesso.");
+        adicionarMensagem(FacesMessage.SEVERITY_INFO, "Perfil atualizado", "Dados do usuário salvos com sucesso.");
         return null;
     }
 
@@ -236,26 +236,26 @@ public class AdminBean implements Serializable {
         }
         UsuarioSistema usuario = getUsuarioSelecionado();
         if (usuario == null) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Usuario obrigatorio", "Selecione um usuario antes de suspender.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Usuário obrigatório", "Selecione um usuário antes de suspender.");
             return null;
         }
         if (motivoSuspensao == null || motivoSuspensao.trim().isEmpty()) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Motivo obrigatorio", "Informe o motivo da suspensao.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Motivo obrigatório", "Informe o motivo da suspensão.");
             return null;
         }
         if (suspensaoIndeterminada) {
             usuario.suspenderIndeterminado(motivoSuspensao);
-            adicionarMensagem(FacesMessage.SEVERITY_INFO, "Suspensao aplicada", "Usuario suspenso por tempo indeterminado.");
+            adicionarMensagem(FacesMessage.SEVERITY_INFO, "Suspensão aplicada", "Usuário suspenso por tempo indeterminado.");
             return null;
         }
         if (diasSuspensao == null || diasSuspensao <= 0) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Periodo invalido", "Informe dias de suspensao maiores que zero.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Período inválido", "Informe dias de suspensão maiores que zero.");
             return null;
         }
 
         LocalDateTime fim = LocalDateTime.now().plusDays(diasSuspensao);
         usuario.suspenderAte(fim, motivoSuspensao);
-        adicionarMensagem(FacesMessage.SEVERITY_INFO, "Suspensao aplicada", "Usuario suspenso ate " + fim.format(FORMATO_DATA_HORA) + ".");
+        adicionarMensagem(FacesMessage.SEVERITY_INFO, "Suspensão aplicada", "Usuário suspenso até " + fim.format(FORMATO_DATA_HORA) + ".");
         return null;
     }
 
@@ -265,11 +265,11 @@ public class AdminBean implements Serializable {
         }
         UsuarioSistema usuario = getUsuarioSelecionado();
         if (usuario == null) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Usuario obrigatorio", "Selecione um usuario antes de remover suspensao.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Usuário obrigatório", "Selecione um usuário antes de remover suspensão.");
             return null;
         }
         usuario.removerSuspensao();
-        adicionarMensagem(FacesMessage.SEVERITY_INFO, "Suspensao removida", "Usuario liberado novamente.");
+        adicionarMensagem(FacesMessage.SEVERITY_INFO, "Suspensão removida", "Usuário liberado novamente.");
         return null;
     }
 
@@ -284,7 +284,7 @@ public class AdminBean implements Serializable {
                     : "Suspenso por tempo indeterminado. Motivo: " + motivo;
         }
         if (usuario.getSuspensoAte() != null) {
-            String base = "Suspenso ate " + usuario.getSuspensoAte().format(FORMATO_DATA_HORA);
+            String base = "Suspenso até " + usuario.getSuspensoAte().format(FORMATO_DATA_HORA);
             return motivo == null ? base : base + ". Motivo: " + motivo;
         }
         return motivo == null ? "Suspenso" : "Suspenso. Motivo: " + motivo;
@@ -318,13 +318,13 @@ public class AdminBean implements Serializable {
             return null;
         }
         if (chefId == null || postagemId == null) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Postagem invalida", "Selecione uma postagem valida.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Postagem inválida", "Selecione uma postagem válida.");
             return null;
         }
 
         ChefConteudoBean.PostagemChef postagem = buscarPostagem(chefId, postagemId);
         if (postagem == null) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Postagem nao encontrada", "Atualize a lista e tente novamente.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Postagem não encontrada", "Atualize a lista e tente novamente.");
             return null;
         }
 
@@ -340,14 +340,14 @@ public class AdminBean implements Serializable {
             return null;
         }
         if (postagemChefIdSelecionada == null || postagemIdSelecionada == null) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Postagem obrigatoria", "Selecione uma postagem para editar.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Postagem obrigatória", "Selecione uma postagem para editar.");
             return null;
         }
         boolean ok = chefConteudoBean.editarPostagem(postagemChefIdSelecionada, postagemIdSelecionada, postagemTextoEdicao);
         if (ok) {
             adicionarMensagem(FacesMessage.SEVERITY_INFO, "Postagem atualizada", "Texto da postagem salvo.");
         } else {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Falha", "Nao foi possivel salvar a postagem.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Falha", "Não foi possível salvar a postagem.");
         }
         return null;
     }
@@ -357,7 +357,7 @@ public class AdminBean implements Serializable {
             return null;
         }
         if (postagemChefIdSelecionada == null || postagemIdSelecionada == null) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Postagem obrigatoria", "Selecione uma postagem para excluir.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Postagem obrigatória", "Selecione uma postagem para excluir.");
             return null;
         }
         boolean ok = chefConteudoBean.excluirPostagem(postagemChefIdSelecionada, postagemIdSelecionada);
@@ -365,9 +365,9 @@ public class AdminBean implements Serializable {
             postagemChefIdSelecionada = null;
             postagemIdSelecionada = null;
             postagemTextoEdicao = null;
-            adicionarMensagem(FacesMessage.SEVERITY_INFO, "Postagem removida", "Postagem excluida com sucesso.");
+            adicionarMensagem(FacesMessage.SEVERITY_INFO, "Postagem removida", "Postagem excluída com sucesso.");
         } else {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Falha", "Nao foi possivel excluir a postagem.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Falha", "Não foi possível excluir a postagem.");
         }
         return null;
     }
@@ -410,7 +410,7 @@ public class AdminBean implements Serializable {
         }
         SolicitacaoServicoBean.MensagemNegociacao mensagem = buscarMensagem(solicitacaoId, mensagemId);
         if (mensagem == null) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Mensagem nao encontrada", "Atualize a lista e tente novamente.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Mensagem não encontrada", "Atualize a lista e tente novamente.");
             return null;
         }
 
@@ -429,7 +429,7 @@ public class AdminBean implements Serializable {
         if (ok) {
             adicionarMensagem(FacesMessage.SEVERITY_INFO, "Mensagem atualizada", "Mensagem editada com sucesso.");
         } else {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Falha", "Nao foi possivel editar a mensagem.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Falha", "Não foi possível editar a mensagem.");
         }
         return null;
     }
@@ -443,9 +443,9 @@ public class AdminBean implements Serializable {
             solicitacaoIdSelecionada = null;
             mensagemIdSelecionada = null;
             mensagemTextoEdicao = null;
-            adicionarMensagem(FacesMessage.SEVERITY_INFO, "Mensagem removida", "Mensagem excluida com sucesso.");
+            adicionarMensagem(FacesMessage.SEVERITY_INFO, "Mensagem removida", "Mensagem excluída com sucesso.");
         } else {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Falha", "Nao foi possivel remover a mensagem.");
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Falha", "Não foi possível remover a mensagem.");
         }
         return null;
     }

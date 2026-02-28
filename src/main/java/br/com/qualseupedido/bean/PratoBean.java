@@ -11,10 +11,14 @@ import javax.inject.Named;
 import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import br.com.qualseupedido.util.ImagemUtil;
+import java.io.InputStream;
 
 @Named
 @ApplicationScoped
@@ -43,34 +47,88 @@ public class PratoBean implements Serializable {
         if (!pratos.isEmpty() || usuarioBean == null) {
             return;
         }
-        Long chefId = null;
-        for (UsuarioSistema usuario : usuarioBean.getUsuarios()) {
-            if ("chef@demo.com".equalsIgnoreCase(usuario.getEmail())) {
-                chefId = usuario.getId();
-                break;
-            }
-        }
-        if (chefId == null) {
-            return;
+        Long anaId = buscarChefIdPorEmail("chef@demo.com");
+        if (anaId != null) {
+            adicionarPratoDemo(anaId, "Bruschetta clássica", "Pão artesanal com tomate e azeite.", 22.0, Prato.CATEGORIA_ENTRADA, "/demo/pratos/ana-bruschetta.jpg");
+            adicionarPratoDemo(anaId, "Risoto de cogumelos", "Arroz cremoso com funghi e parmesão.", 58.0, Prato.CATEGORIA_PRINCIPAL, "/demo/pratos/ana-risoto.jpg");
+            adicionarPratoDemo(anaId, "Filé de frango ao molho", "Filé grelhado com ervas e molho suave.", 46.0, Prato.CATEGORIA_PRINCIPAL, "/demo/pratos/ana-frango.png");
+            adicionarPratoDemo(anaId, "Pudim de leite", "Sobremesa clássica com calda de caramelo.", 18.0, Prato.CATEGORIA_SOBREMESA, "/demo/pratos/ana-pudim.png");
         }
 
-        adicionarPratoDemo(chefId, "Bruschetta classica", "Pao artesanal com tomate e azeite.", 22.0, Prato.CATEGORIA_ENTRADA);
-        adicionarPratoDemo(chefId, "Risoto de cogumelos", "Arroz cremoso com funghi e parmesao.", 58.0, Prato.CATEGORIA_PRINCIPAL);
-        adicionarPratoDemo(chefId, "File de frango ao molho", "File grelhado com ervas e molho suave.", 46.0, Prato.CATEGORIA_PRINCIPAL);
-        adicionarPratoDemo(chefId, "Pudim de leite", "Sobremesa classica com calda de caramelo.", 18.0, Prato.CATEGORIA_SOBREMESA);
+        Long erickId = buscarChefIdPorEmail("erick@demo.com");
+        if (erickId != null) {
+            adicionarPratoDemo(erickId, "Soupe à l'oignon", "Sopa francesa com cebolas caramelizadas e gratinada.", 32.0, Prato.CATEGORIA_ENTRADA, "/demo/pratos/erick-soupe-oignon.jpg");
+            adicionarPratoDemo(erickId, "Boeuf bourguignon", "Carne cozida lentamente no vinho tinto.", 78.0, Prato.CATEGORIA_PRINCIPAL, "/demo/pratos/erick-boeuf-bourguignon.png");
+            adicionarPratoDemo(erickId, "Filé mignon ao molho de vinho", "Filé alto com molho intenso e batatas.", 84.0, Prato.CATEGORIA_PRINCIPAL, "/demo/pratos/erick-file-mignon.jpg");
+            adicionarPratoDemo(erickId, "Crème brûlée", "Sobremesa cremosa com açúcar caramelizado.", 26.0, Prato.CATEGORIA_SOBREMESA, "/demo/pratos/erick-creme-brulee.png");
+        }
+
+        Long fogacaId = buscarChefIdPorEmail("fogaca@demo.com");
+        if (fogacaId != null) {
+            adicionarPratoDemo(fogacaId, "Pão de alho artesanal", "Pão tostado com manteiga temperada e alho.", 24.0, Prato.CATEGORIA_ENTRADA, "/demo/pratos/henrique-pao-de-alho.png");
+            adicionarPratoDemo(fogacaId, "Costela assada ao fogo", "Costela suculenta preparada lentamente.", 92.0, Prato.CATEGORIA_PRINCIPAL, "/demo/pratos/henrique-costela.jpg");
+            adicionarPratoDemo(fogacaId, "Burger defumado", "Blend bovino, queijo e molho especial.", 48.0, Prato.CATEGORIA_PRINCIPAL, "/demo/pratos/henrique-burger-defumado.jpg");
+            adicionarPratoDemo(fogacaId, "Pudim de doce de leite", "Sobremesa cremosa com caramelo.", 22.0, Prato.CATEGORIA_SOBREMESA, "/demo/pratos/henrique-pudim-doce-leite.jpg");
+        }
     }
 
-    private void adicionarPratoDemo(Long chefId, String nome, String descricao, Double preco, String categoria) {
+    private Long buscarChefIdPorEmail(String email) {
+        if (email == null) {
+            return null;
+        }
+        for (UsuarioSistema usuario : usuarioBean.getUsuarios()) {
+            if (email.equalsIgnoreCase(usuario.getEmail())) {
+                return usuario.getId();
+            }
+        }
+        return null;
+    }
+
+    private void adicionarPratoDemo(Long chefId, String nome, String descricao, Double preco, String categoria, String fotoRecurso) {
+        String fotoDataUrl = carregarFotoRecurso(fotoRecurso);
         pratos.add(new Prato(
                 seq++,
                 chefId,
                 nome,
                 descricao,
                 preco,
-                null,
+                fotoDataUrl,
                 true,
                 normalizarCategoria(categoria)
         ));
+    }
+
+    private String carregarFotoRecurso(String recurso) {
+        if (recurso == null || recurso.trim().isEmpty()) {
+            return null;
+        }
+        String normalizado = recurso.trim();
+        String dataUrl = carregarFotoDoClasspath(normalizado);
+        if (dataUrl != null) {
+            return dataUrl;
+        }
+
+        String recursoRelativo = normalizado.startsWith("/") ? normalizado.substring(1) : normalizado;
+        Path path = Paths.get("src", "main", "resources").resolve(recursoRelativo.replace("/", java.io.File.separator));
+        if (!Files.exists(path)) {
+            return null;
+        }
+        try (InputStream input = Files.newInputStream(path)) {
+            return ImagemUtil.processarDataUrl(input, MAX_LARGURA_PRATO, MAX_ALTURA_PRATO, QUALIDADE_JPEG);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    private String carregarFotoDoClasspath(String recurso) {
+        try (InputStream input = PratoBean.class.getResourceAsStream(recurso)) {
+            if (input == null) {
+                return null;
+            }
+            return ImagemUtil.processarDataUrl(input, MAX_LARGURA_PRATO, MAX_ALTURA_PRATO, QUALIDADE_JPEG);
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     public List<Prato> getPratos() {
@@ -165,7 +223,7 @@ public class PratoBean implements Serializable {
         Prato prato = buscarDoChefPorId(chefId, pratoId);
         if (prato == null) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prato nao encontrado", "Nao foi possivel localizar o prato para alterar visibilidade."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prato não encontrado", "Não foi possível localizar o prato para alterar visibilidade."));
             return;
         }
         prato.setVisivelNoPerfilPublico(!prato.isVisivelNoPerfilPublico());
@@ -281,17 +339,17 @@ public class PratoBean implements Serializable {
     public void adicionarPrato(Long chefId) {
         if (chefId == null) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chef invalido", "Nao foi possivel identificar o chef."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chef inválido", "Não foi possível identificar o chef."));
             return;
         }
         if (nome == null || nome.trim().isEmpty()) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nome obrigatorio", "Informe o nome do prato."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nome obrigatório", "Informe o nome do prato."));
             return;
         }
         if (descricao == null || descricao.trim().isEmpty()) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Descricao obrigatoria", "Informe a descricao do prato."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Descrição obrigatória", "Informe a descrição do prato."));
             return;
         }
         Double precoValido = parsePreco(precoTexto);
@@ -300,7 +358,7 @@ public class PratoBean implements Serializable {
         }
         if (precoValido == null || precoValido <= 0) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Preco invalido", "Informe um preco maior que zero."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Preço inválido", "Informe um preço maior que zero."));
             return;
         }
 
@@ -308,13 +366,13 @@ public class PratoBean implements Serializable {
         if (fotoPrato != null && fotoPrato.getSize() > 0) {
             if (fotoPrato.getSize() > TAMANHO_MAXIMO) {
                 FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Arquivo muito grande", "Use uma imagem de ate 3MB."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Arquivo muito grande", "Use uma imagem de até 3MB."));
                 return;
             }
             String contentType = fotoPrato.getContentType();
             if (contentType == null || !contentType.startsWith("image/")) {
                 FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato invalido", "Envie apenas imagem para a foto do prato."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato inválido", "Envie apenas imagem para a foto do prato."));
                 return;
             }
             try {
@@ -326,7 +384,7 @@ public class PratoBean implements Serializable {
                 );
             } catch (IOException e) {
                 FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Falha no upload", "Nao foi possivel salvar a foto do prato."));
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Falha no upload", "Não foi possível salvar a foto do prato."));
                 return;
             }
         }

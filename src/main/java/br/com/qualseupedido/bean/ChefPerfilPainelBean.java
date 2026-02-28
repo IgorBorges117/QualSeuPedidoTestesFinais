@@ -168,7 +168,7 @@ public class ChefPerfilPainelBean implements Serializable {
         }
         if (respostaChat == null || respostaChat.trim().isEmpty()) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Resposta obrigatoria", "Digite a resposta para o cliente."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Resposta obrigatória", "Digite a resposta para o cliente."));
             return null;
         }
 

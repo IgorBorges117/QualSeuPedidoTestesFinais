@@ -176,7 +176,7 @@ public class SolicitacaoPainelBean implements Serializable {
             return null;
         }
         if (avaliacaoServicoBean.possuiAvaliacaoParaSolicitacao(solicitacaoId)) {
-            adicionarMensagem(FacesMessage.SEVERITY_INFO, "Avaliação existente", "Este contrato ja foi avaliado.");
+            adicionarMensagem(FacesMessage.SEVERITY_INFO, "Avaliação existente", "Este contrato já foi avaliado.");
             return null;
         }
 

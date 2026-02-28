@@ -26,7 +26,7 @@ public final class ImagemUtil {
                                           float quality) throws IOException {
         BufferedImage original = ImageIO.read(input);
         if (original == null) {
-            throw new IOException("Imagem invalida");
+            throw new IOException("Imagem inválida");
         }
 
         int width = original.getWidth();
@@ -63,7 +63,7 @@ public final class ImagemUtil {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpg");
         if (!writers.hasNext()) {
-            throw new IOException("Writer JPEG indisponivel");
+            throw new IOException("Writer JPEG indisponível");
         }
         ImageWriter writer = writers.next();
         ImageWriteParam param = writer.getDefaultWriteParam();

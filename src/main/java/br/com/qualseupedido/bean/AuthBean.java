@@ -25,7 +25,7 @@ public class AuthBean implements Serializable {
         UsuarioSistema usuario = usuarioBean.autenticar(login, senha);
         if (usuario == null) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login invalido", "Verifique login e senha."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login inválido", "Verifique login e senha."));
             return null;
         }
         if (usuario.getTipo() != TipoUsuario.ADMIN && usuario.isSuspensoAgora()) {
@@ -131,7 +131,7 @@ public class AuthBean implements Serializable {
         if (usuario.isSuspensaoIndeterminada()) {
             detalhe.append("Conta suspensa por tempo indeterminado.");
         } else if (usuario.getSuspensoAte() != null) {
-            detalhe.append("Conta suspensa ate ").append(usuario.getSuspensoAte().format(FORMATO_DATA_HORA)).append(".");
+            detalhe.append("Conta suspensa até ").append(usuario.getSuspensoAte().format(FORMATO_DATA_HORA)).append(".");
         } else {
             detalhe.append("Conta suspensa.");
         }

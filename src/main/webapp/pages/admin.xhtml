@@ -12,7 +12,7 @@
 <h:body>
     <button type="button" class="hamburger-btn" aria-label="Menu" onclick="toggleMenu()">&#9776;</button>
     <div class="menu-overlay" onclick="closeMenu()"></div>
-    <aside class="side-menu" aria-label="Navegacao principal">
+    <aside class="side-menu" aria-label="Navegação principal">
         <h:form styleClass="side-menu-form">
             <div class="side-menu-header">Menu Admin</div>
             <h:commandLink styleClass="side-menu-link" value="Painel" action="/pages/admin.xhtml?faces-redirect=true"/>
@@ -24,7 +24,7 @@
         <div class="register-wrap">
             <h:panelGroup rendered="#{not authBean.admin}">
                 <h1>Acesso restrito</h1>
-                <p>Esta area e exclusiva para administrador.</p>
+                <p>Esta área é exclusiva para administrador.</p>
                 <h:link value="Ir para login" outcome="/pages/login.xhtml"/>
             </h:panelGroup>
 
@@ -37,10 +37,10 @@
                 </section>
 
                 <section class="auth-card chef-dashboard-section">
-                    <h2>Gestao de usuarios</h2>
+                    <h2>Gestão de usuários</h2>
                     <h:form id="usuariosFiltroForm">
                         <div class="row2">
-                            <h:inputText styleClass="box" value="#{adminBean.filtroUsuarios}" pt:placeholder="Filtrar por nome, email, cidade ou telefone"/>
+                            <h:inputText styleClass="box" value="#{adminBean.filtroUsuarios}" pt:placeholder="Filtrar por nome, e-mail, cidade ou telefone"/>
                             <h:commandButton styleClass="btn-submit" value="Aplicar filtro">
                                 <f:ajax execute="@form" render=":usuariosArea"/>
                             </h:commandButton>
@@ -54,7 +54,7 @@
                                     <p><strong>ID:</strong> #{usuario.id}</p>
                                     <p><strong>Tipo:</strong> #{adminBean.tipoLabel(usuario.tipo)}</p>
                                     <p><strong>Nome:</strong> #{usuario.nome}</p>
-                                    <p><strong>Email:</strong> #{usuario.email}</p>
+                                    <p><strong>E-mail:</strong> #{usuario.email}</p>
                                     <p><strong>Status:</strong> #{adminBean.descricaoSuspensao(usuario)}</p>
                                 </div>
                                 <div class="chef-request-actions">
@@ -65,7 +65,7 @@
                             </article>
                         </ui:repeat>
                         <h:panelGroup rendered="#{empty adminBean.usuariosGerenciaveis}">
-                            <p>Nenhum usuario encontrado para o filtro atual.</p>
+                            <p>Nenhum usuário encontrado para o filtro atual.</p>
                         </h:panelGroup>
                     </h:panelGroup>
                 </section>
@@ -73,21 +73,21 @@
                 <h:panelGroup id="usuarioEdicaoArea" layout="block">
                     <h:panelGroup rendered="#{not empty adminBean.usuarioSelecionado}">
                         <section class="auth-card chef-dashboard-section">
-                            <h2>Editar perfil do usuario selecionado</h2>
-                            <p><strong>Usuario:</strong> #{adminBean.usuarioSelecionado.nome} (#{adminBean.tipoLabel(adminBean.usuarioSelecionado.tipo)})</p>
+                            <h2>Editar perfil do usuário selecionado</h2>
+                            <p><strong>Usuário:</strong> #{adminBean.usuarioSelecionado.nome} (#{adminBean.tipoLabel(adminBean.usuarioSelecionado.tipo)})</p>
 
                             <h:form id="usuarioEdicaoForm">
                                 <div class="row2">
                                     <h:inputText styleClass="box"
                                                  value="#{adminBean.nomeEdicao}"
                                                  required="true"
-                                                 requiredMessage="Informe o nome do usuario."
+                                                 requiredMessage="Informe o nome do usuário."
                                                  pt:placeholder="Nome"/>
                                     <h:inputText styleClass="box"
                                                  value="#{adminBean.emailEdicao}"
                                                  required="true"
                                                  requiredMessage="Informe o e-mail."
-                                                 validatorMessage="Informe um e-mail valido."
+                                                 validatorMessage="Informe um e-mail válido."
                                                  pt:type="email"
                                                  pt:placeholder="E-mail">
                                         <f:validateRegex pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,63}$"/>
@@ -96,7 +96,7 @@
                                 <div class="row2">
                                     <h:inputText styleClass="box"
                                                  value="#{adminBean.telefoneEdicao}"
-                                                 validatorMessage="Telefone invalido."
+                                                 validatorMessage="Telefone inválido."
                                                  pt:type="tel"
                                                  pt:placeholder="Telefone">
                                         <f:validateRegex pattern="^$|^[0-9()+\-\s]{8,20}$"/>
@@ -105,13 +105,13 @@
                                 </div>
                                 <div class="row2">
                                     <h:inputText styleClass="box" value="#{adminBean.estadoEdicao}" pt:placeholder="Estado"/>
-                                    <h:inputText styleClass="box" value="#{adminBean.enderecoEdicao}" pt:placeholder="Endereco"/>
+                                    <h:inputText styleClass="box" value="#{adminBean.enderecoEdicao}" pt:placeholder="Endereço"/>
                                 </div>
                                 <div class="row2">
                                     <h:inputText styleClass="box"
                                                  value="#{adminBean.numeroEdicao}"
-                                                 validatorMessage="Numero invalido."
-                                                 pt:placeholder="Numero">
+                                                 validatorMessage="Número inválido."
+                                                 pt:placeholder="Número">
                                         <f:validateRegex pattern="^$|^[0-9A-Za-z\-/]{1,20}$"/>
                                     </h:inputText>
                                     <h:inputText styleClass="box" value="#{adminBean.bairroEdicao}" pt:placeholder="Bairro"/>
@@ -119,7 +119,7 @@
                                 <div class="row2">
                                     <h:inputText styleClass="box"
                                                  value="#{adminBean.cepEdicao}"
-                                                 validatorMessage="CEP invalido. Use 00000-000."
+                                                 validatorMessage="CEP inválido. Use 00000-000."
                                                  pt:placeholder="CEP">
                                         <f:validateRegex pattern="^$|^\d{5}-?\d{3}$"/>
                                     </h:inputText>
@@ -131,7 +131,7 @@
                                     </h:panelGroup>
                                     <h:panelGroup rendered="#{adminBean.usuarioSelecionadoCliente}">
                                         <h:selectOneMenu styleClass="box" value="#{adminBean.preferenciaEdicao}">
-                                            <f:selectItem itemLabel="Preferencia alimentar do cliente" itemValue="" noSelectionOption="true"/>
+                                            <f:selectItem itemLabel="Preferência alimentar do cliente" itemValue="" noSelectionOption="true"/>
                                             <f:selectItems value="#{adminBean.preferenciasClienteDisponiveis}"/>
                                         </h:selectOneMenu>
                                     </h:panelGroup>
@@ -145,22 +145,22 @@
                                     </h:panelGroup>
                                     <h:panelGroup rendered="#{adminBean.usuarioSelecionadoCliente}">
                                         <h:panelGroup styleClass="box" layout="block" style="display:flex;align-items:center;color:#666;">
-                                            Campos exclusivos de chef nao se aplicam a cliente.
+                                            Campos exclusivos de chef não se aplicam a cliente.
                                         </h:panelGroup>
                                     </h:panelGroup>
                                 </div>
                                 <div class="row2">
                                     <h:panelGroup rendered="#{adminBean.usuarioSelecionadoChef}">
                                         <h:selectOneMenu styleClass="box" value="#{adminBean.faixaPrecoChefEdicao}">
-                                            <f:selectItem itemLabel="Faixa de preco do chef" itemValue="" noSelectionOption="true"/>
-                                            <f:selectItem itemValue="$" itemLabel="$ - Economico"/>
-                                            <f:selectItem itemValue="$$" itemLabel="$$ - Intermediario"/>
+                                            <f:selectItem itemLabel="Faixa de preço do chef" itemValue="" noSelectionOption="true"/>
+                                            <f:selectItem itemValue="$" itemLabel="$ - Econômico"/>
+                                            <f:selectItem itemValue="$$" itemLabel="$$ - Intermediário"/>
                                             <f:selectItem itemValue="$$$" itemLabel="$$$ - Premium"/>
                                         </h:selectOneMenu>
                                     </h:panelGroup>
                                     <h:panelGroup rendered="#{adminBean.usuarioSelecionadoCliente}">
                                         <h:panelGroup styleClass="box" layout="block" style="display:flex;align-items:center;color:#666;">
-                                            Faixa de preco exclusiva de chef.
+                                            Faixa de preço exclusiva de chef.
                                         </h:panelGroup>
                                     </h:panelGroup>
                                     <h:commandButton styleClass="btn-submit" value="Salvar perfil" action="#{adminBean.salvarPerfilUsuarioSelecionado}">
@@ -171,7 +171,7 @@
                         </section>
 
                         <section class="auth-card chef-dashboard-section">
-                            <h2>Suspensao de acesso</h2>
+                            <h2>Suspensão de acesso</h2>
                             <p>Status atual: <strong>#{adminBean.descricaoSuspensao(adminBean.usuarioSelecionado)}</strong></p>
 
                             <h:form id="suspensaoForm">
@@ -179,11 +179,11 @@
                                     <h:selectBooleanCheckbox value="#{adminBean.suspensaoIndeterminada}">
                                         <f:ajax execute="@this" render="@form"/>
                                     </h:selectBooleanCheckbox>
-                                    <h:outputText value="Suspensao por tempo indeterminado" styleClass="admin-ban-toggle-label"/>
+                                    <h:outputText value="Suspensão por tempo indeterminado" styleClass="admin-ban-toggle-label"/>
                                 </div>
                                 <div class="admin-ban-config-row">
                                     <div class="field-stack admin-ban-days-field">
-                                        <h:outputText value="Periodo da suspensao (dias)" styleClass="field-label"/>
+                                        <h:outputText value="Período da suspensão (dias)" styleClass="field-label"/>
                                         <h:inputText styleClass="box admin-ban-days-input"
                                                      value="#{adminBean.diasSuspensao}"
                                                      pt:type="number"
@@ -191,15 +191,15 @@
                                                      disabled="#{adminBean.suspensaoIndeterminada}"/>
                                     </div>
                                     <div class="field-stack">
-                                        <h:outputText value="Motivo da suspensao (obrigatorio)" styleClass="field-label"/>
+                                        <h:outputText value="Motivo da suspensão (obrigatório)" styleClass="field-label"/>
                                         <h:inputText styleClass="box" value="#{adminBean.motivoSuspensao}" pt:placeholder="Descreva o motivo"/>
                                     </div>
                                 </div>
                                 <div class="chef-request-actions">
-                                    <h:commandButton value="Aplicar suspensao" action="#{adminBean.aplicarSuspensaoUsuarioSelecionado}">
+                                    <h:commandButton value="Aplicar suspensão" action="#{adminBean.aplicarSuspensaoUsuarioSelecionado}">
                                         <f:ajax execute="@form" render=":adminMsgs :usuariosArea :usuarioEdicaoArea"/>
                                     </h:commandButton>
-                                    <h:commandButton value="Remover suspensao" action="#{adminBean.removerSuspensaoUsuarioSelecionado}">
+                                    <h:commandButton value="Remover suspensão" action="#{adminBean.removerSuspensaoUsuarioSelecionado}">
                                         <f:ajax execute="@this" render=":adminMsgs :usuariosArea :usuarioEdicaoArea"/>
                                     </h:commandButton>
                                 </div>
@@ -210,18 +210,18 @@
 
                 <h:panelGroup rendered="#{empty adminBean.usuarioSelecionado}">
                     <section class="auth-card chef-dashboard-section">
-                        <h2>Moderacao de conteudo</h2>
-                        <p>Selecione um usuario para abrir a moderacao de postagens e mensagens.</p>
+                        <h2>Moderação de conteúdo</h2>
+                        <p>Selecione um usuário para abrir a moderação de postagens e mensagens.</p>
                     </section>
                 </h:panelGroup>
 
                 <h:panelGroup rendered="#{not empty adminBean.usuarioSelecionado}">
                     <section class="auth-card chef-dashboard-section">
-                        <h2>Moderacao de conteudo</h2>
-                        <p>Moderando conteudo de: <strong>#{adminBean.usuarioSelecionado.nome}</strong></p>
+                        <h2>Moderação de conteúdo</h2>
+                        <p>Moderando conteúdo de: <strong>#{adminBean.usuarioSelecionado.nome}</strong></p>
                         <h:form id="conteudoFiltroForm">
                             <div class="row2">
-                                <h:inputText styleClass="box" value="#{adminBean.filtroConteudo}" pt:placeholder="Filtrar postagens e mensagens do usuario selecionado"/>
+                                <h:inputText styleClass="box" value="#{adminBean.filtroConteudo}" pt:placeholder="Filtrar postagens e mensagens do usuário selecionado"/>
                                 <h:commandButton styleClass="btn-submit" value="Aplicar filtro">
                                     <f:ajax execute="@form" render=":postagensArea :mensagensArea"/>
                                 </h:commandButton>
@@ -236,7 +236,7 @@
                                         <p><strong>Chef:</strong> #{postItem.chefNome}</p>
                                         <p><strong>ID postagem:</strong> #{postItem.postagemId}</p>
                                         <p><strong>Texto:</strong> #{empty postItem.texto ? '(sem texto)' : postItem.texto}</p>
-                                        <p><strong>Foto:</strong> #{postItem.possuiFoto ? 'Sim' : 'Nao'}</p>
+                                        <p><strong>Foto:</strong> #{postItem.possuiFoto ? 'Sim' : 'Não'}</p>
                                     </div>
                                     <div class="chef-request-actions">
                                         <h:commandButton value="Selecionar postagem" action="#{adminBean.selecionarPostagem(postItem.chefId, postItem.postagemId)}">
@@ -246,7 +246,7 @@
                                 </article>
                             </ui:repeat>
                             <h:panelGroup rendered="#{empty adminBean.postagensModeracao}">
-                                <p>Nenhuma postagem encontrada para o usuario selecionado.</p>
+                                <p>Nenhuma postagem encontrada para o usuário selecionado.</p>
                             </h:panelGroup>
                         </h:panelGroup>
 
@@ -285,7 +285,7 @@
                                 </article>
                             </ui:repeat>
                             <h:panelGroup rendered="#{empty adminBean.mensagensModeracao}">
-                                <p>Nenhuma mensagem encontrada para o usuario selecionado.</p>
+                                <p>Nenhuma mensagem encontrada para o usuário selecionado.</p>
                             </h:panelGroup>
                         </h:panelGroup>
 

@@ -16,7 +16,7 @@
 
             <h:panelGroup rendered="#{!pagamentoBean.pagamentoPendente}">
                 <div class="auth-card">
-                    <h2>Pagamento nao encontrado</h2>
+                    <h2>Pagamento não encontrado</h2>
                     <p>Nenhum pedido pendente para processar.</p>
                     <h:link styleClass="btn btn-primary" outcome="/pages/cliente-home.xhtml" value="Voltar para home"/>
                 </div>
@@ -34,7 +34,7 @@
                     <div class="chef-request-card" style="margin-top: 12px;">
                         <p><strong>Chef:</strong> #{pagamentoBean.chefNome}</p>
                         <p><strong>Data:</strong> #{pagamentoBean.dataEvento}</p>
-                        <p><strong>Horario:</strong> #{pagamentoBean.horarioEvento}</p>
+                        <p><strong>Horário:</strong> #{pagamentoBean.horarioEvento}</p>
                         <p><strong>Convidados:</strong> #{pagamentoBean.quantidadePessoasEvento}</p>
                     </div>
 
@@ -65,7 +65,7 @@
                     <h:form styleClass="chef-request-actions" style="margin-top: 16px;">
                         <h:commandButton styleClass="btn-submit" value="Pagar agora (mock)" action="#{pagamentoBean.confirmarPagamento}"/>
                         <h:commandButton styleClass="btn-submit" value="Simular falha" action="#{pagamentoBean.simularFalhaPagamento}"/>
-                        <h:commandButton styleClass="btn-submit" value="Simular pendencia" action="#{pagamentoBean.simularPendenciaPagamento}"/>
+                        <h:commandButton styleClass="btn-submit" value="Simular pendência" action="#{pagamentoBean.simularPendenciaPagamento}"/>
                         <h:commandButton styleClass="btn-submit" value="Cancelar" action="#{pagamentoBean.cancelarPagamento}"/>
                     </h:form>
                 </div>

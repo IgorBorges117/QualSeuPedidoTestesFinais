@@ -109,29 +109,29 @@ public class ChefPerfilPublicoBean implements Serializable {
         UsuarioSistema chef = getChefSelecionado();
         if (chef == null) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chef nao encontrado", "Selecione um chef valido."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chef não encontrado", "Selecione um chef válido."));
             return null;
         }
         if (!authBean.isCliente()) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Acesso negado", "Apenas clientes podem enviar solicitacoes."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Acesso negado", "Apenas clientes podem enviar solicitações."));
             return null;
         }
 
         List<Long> idsSelecionados = idsPratosSelecionados();
         if (idsSelecionados.isEmpty()) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Pratos obrigatorios", "Selecione pelo menos um prato."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Pratos obrigatórios", "Selecione pelo menos um prato."));
             return null;
         }
         if (dataEvento == null || dataEvento.trim().isEmpty() || horarioEvento == null || horarioEvento.trim().isEmpty()) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Data e horario obrigatorios", "Informe a data e o horario do evento."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Data e horário obrigatórios", "Informe a data e o horário do evento."));
             return null;
         }
         if (quantidadePessoasEvento == null || quantidadePessoasEvento <= 0) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Quantidade obrigatoria", "Informe a quantidade de convidados do evento."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Quantidade obrigatória", "Informe a quantidade de convidados do evento."));
             return null;
         }
 
@@ -144,7 +144,7 @@ public class ChefPerfilPublicoBean implements Serializable {
         }
         if (pratos.isEmpty()) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Pratos invalidos", "Selecione pratos validos do chef."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Pratos inválidos", "Selecione pratos válidos do chef."));
             return null;
         }
 
@@ -166,7 +166,7 @@ public class ChefPerfilPublicoBean implements Serializable {
         UsuarioSistema chef = getChefSelecionado();
         if (chef == null) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chef nao encontrado", "Selecione um chef valido."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chef não encontrado", "Selecione um chef válido."));
             return null;
         }
         if (!authBean.isCliente()) {
@@ -176,7 +176,7 @@ public class ChefPerfilPublicoBean implements Serializable {
         }
         if (mensagemCliente == null || mensagemCliente.trim().isEmpty()) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Mensagem obrigatoria", "Escreva uma mensagem para o chef."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Mensagem obrigatória", "Escreva uma mensagem para o chef."));
             return null;
         }
         chefConteudoBean.enviarMensagemCliente(
@@ -187,7 +187,7 @@ public class ChefPerfilPublicoBean implements Serializable {
         );
         mensagemCliente = "";
         FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_INFO, "Mensagem enviada", "O chef recebera sua mensagem."));
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Mensagem enviada", "O chef receberá sua mensagem."));
         return null;
     }
 

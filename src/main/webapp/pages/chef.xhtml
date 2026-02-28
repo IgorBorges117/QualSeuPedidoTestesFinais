@@ -27,7 +27,7 @@
         <div class="register-page">
             <div class="register-wrap">
                 <h1>Acesso restrito</h1>
-                <p>Você precisa fazer login para acessar esta area.</p>
+                <p>Você precisa fazer login para acessar esta área.</p>
                 <h:button value="Ir para login" outcome="/pages/login.xhtml"/>
             </div>
         </div>
@@ -52,7 +52,7 @@
 
                             <div class="chef-dashboard-intro">
                                 <p class="hero-kicker">Painel operacional</p>
-                                <h1>Area do chef: #{authBean.usuarioLogado.nome}</h1>
+                                <h1>Área do chef: #{authBean.usuarioLogado.nome}</h1>
                                 <p class="hero-sub">Gerencie perfil, cardápio e solicitações em um unico lugar.</p>
 
                                 <div class="chef-stats-row">
@@ -94,18 +94,18 @@
                             </div>
 
                             <div class="field-stack">
-                                <h:outputText value="Descricao" styleClass="field-label"/>
-                                <h:inputText id="descricaoPrato" styleClass="box" value="#{pratoBean.descricao}" required="true" requiredMessage="Informe a descricao do prato."/>
+                                <h:outputText value="Descrição" styleClass="field-label"/>
+                                <h:inputText id="descricaoPrato" styleClass="box" value="#{pratoBean.descricao}" required="true" requiredMessage="Informe a descrição do prato."/>
                                 <h:message for="descricaoPrato" styleClass="messages"/>
                             </div>
 
                             <div class="field-stack">
-                                <h:outputText value="Preco" styleClass="field-label"/>
+                                <h:outputText value="Preço" styleClass="field-label"/>
                                 <h:inputText id="precoPrato"
                                              styleClass="box"
                                              value="#{pratoBean.precoTexto}"
                                              required="true"
-                                             requiredMessage="Informe o preco do prato."
+                                             requiredMessage="Informe o preço do prato."
                                              pt:placeholder="Ex.: 45,90"
                                              pt:inputmode="decimal"/>
                                 <h:message for="precoPrato" styleClass="messages"/>

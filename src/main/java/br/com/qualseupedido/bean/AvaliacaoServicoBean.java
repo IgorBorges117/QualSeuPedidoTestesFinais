@@ -212,7 +212,7 @@ public class AvaliacaoServicoBean implements Serializable {
 
         public String getComentarioExibicao() {
             if (comentario == null || comentario.trim().isEmpty()) {
-                return "Cliente nao deixou comentario.";
+                return "Cliente não deixou comentário.";
             }
             return comentario;
         }
