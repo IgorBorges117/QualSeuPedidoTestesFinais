@@ -9,28 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fb33f84c-fc43-4600-8ff0-acb1a85f4dae" name="Changes" comment="versão 85%">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/AuthBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/AuthBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ChefConteudoBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ChefConteudoBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ChefPerfilPublicoBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/ChefPerfilPublicoBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/PratoBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/PratoBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/SolicitacaoPainelBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/SolicitacaoPainelBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/SolicitacaoServicoBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/SolicitacaoServicoBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/TipoUsuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/TipoUsuario.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/UsuarioBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/UsuarioBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/UsuarioSistema.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/qualseupedido/bean/UsuarioSistema.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/cadastro.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/cadastro.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/chef-onboarding.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/chef-onboarding.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/chef-perfil-publico.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/chef-perfil-publico.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/chef-perfil.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/chef-perfil.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/cliente-perfil-edicao.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/cliente-perfil-edicao.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/cliente-perfil.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/cliente-perfil.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/index.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/index.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/login.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/login.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/recuperar-senha.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/recuperar-senha.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/css/app.css" afterDir="false" />
-    </list>
+    <list default="true" id="fb33f84c-fc43-4600-8ff0-acb1a85f4dae" name="Changes" comment="versão 95%" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -252,7 +231,7 @@
       <workItem from="1772142079235" duration="7640000" />
       <workItem from="1772158295518" duration="13402000" />
       <workItem from="1772222161431" duration="665000" />
-      <workItem from="1772227739797" duration="7939000" />
+      <workItem from="1772227739797" duration="8622000" />
     </task>
     <task id="LOCAL-00001" summary="versão 85%">
       <option name="closed" value="true" />
@@ -262,7 +241,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772060979854</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="versão 95%">
+      <option name="closed" value="true" />
+      <created>1772236199482</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1772236199482</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -272,7 +259,8 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="versão 85%" />
-    <option name="LAST_COMMIT_MESSAGE" value="versão 85%" />
+    <MESSAGE value="versão 95%" />
+    <option name="LAST_COMMIT_MESSAGE" value="versão 95%" />
     <option name="NON_MODAL_COMMIT_POSTPONE_SLOW_CHECKS" value="false" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
