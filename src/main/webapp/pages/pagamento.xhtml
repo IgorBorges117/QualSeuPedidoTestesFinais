@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>Pagamento</title>
+    <h:outputStylesheet library="css" name="app.css"/>
+</h:head>
+<h:body>
+    <div class="register-page">
+        <div class="register-wrap">
+            <h:messages globalOnly="true" showDetail="true" showSummary="false" styleClass="messages"/>
+
+            <h:panelGroup rendered="#{!pagamentoBean.pagamentoPendente}">
+                <div class="auth-card">
+                    <h2>Pagamento nao encontrado</h2>
+                    <p>Nenhum pedido pendente para processar.</p>
+                    <h:link styleClass="btn btn-primary" outcome="/pages/cliente-home.xhtml" value="Voltar para home"/>
+                </div>
+            </h:panelGroup>
+
+            <h:panelGroup rendered="#{pagamentoBean.pagamentoPendente}">
+                <div class="auth-card">
+                    <h2>Confirmar pagamento</h2>
+                    <p class="hero-cta-copy">Revise os dados do pedido antes de finalizar o pagamento.</p>
+                    <span class="status-chip #{pagamentoBean.statusPendente ? 'pending' : (pagamentoBean.statusFalha ? 'rejected' : 'accepted')}"
+                          style="margin-top: 10px;">
+                        #{pagamentoBean.statusPagamentoLabel}
+                    </span>
+
+                    <div class="chef-request-card" style="margin-top: 12px;">
+                        <p><strong>Chef:</strong> #{pagamentoBean.chefNome}</p>
+                        <p><strong>Data:</strong> #{pagamentoBean.dataEvento}</p>
+                        <p><strong>Horario:</strong> #{pagamentoBean.horarioEvento}</p>
+                        <p><strong>Convidados:</strong> #{pagamentoBean.quantidadePessoasEvento}</p>
+                    </div>
+
+                    <div class="chef-request-card" style="margin-top: 12px;">
+                        <p><strong>Itens selecionados</strong></p>
+                        <ui:repeat value="#{pagamentoBean.pratos}" var="prato">
+                            <div class="dish-highlight-card" style="margin-top: 8px;">
+                                <h4>#{prato.nome}</h4>
+                                <p>#{prato.descricao}</p>
+                                <strong>
+                                    <h:outputText value="#{prato.preco}">
+                                        <f:convertNumber type="currency" currencySymbol="R$ "/>
+                                    </h:outputText>
+                                </strong>
+                            </div>
+                        </ui:repeat>
+                    </div>
+
+                    <div class="chef-request-card" style="margin-top: 12px;">
+                        <p><strong>Total</strong></p>
+                        <h3>
+                            <h:outputText value="#{pagamentoBean.totalPedido}">
+                                <f:convertNumber type="currency" currencySymbol="R$ "/>
+                            </h:outputText>
+                        </h3>
+                    </div>
+
+                    <h:form styleClass="chef-request-actions" style="margin-top: 16px;">
+                        <h:commandButton styleClass="btn-submit" value="Pagar agora (mock)" action="#{pagamentoBean.confirmarPagamento}"/>
+                        <h:commandButton styleClass="btn-submit" value="Simular falha" action="#{pagamentoBean.simularFalhaPagamento}"/>
+                        <h:commandButton styleClass="btn-submit" value="Simular pendencia" action="#{pagamentoBean.simularPendenciaPagamento}"/>
+                        <h:commandButton styleClass="btn-submit" value="Cancelar" action="#{pagamentoBean.cancelarPagamento}"/>
+                    </h:form>
+                </div>
+            </h:panelGroup>
+        </div>
+    </div>
+</h:body>
+</html>
