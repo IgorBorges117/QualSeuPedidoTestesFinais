@@ -274,17 +274,19 @@
                             <h2>Solicitações e contratações</h2>
                             <p class="chat-hint">Gerencie pedidos recebidos, negocie com clientes e finalize contratos.</p>
                             <p class="aside-counter-chip">
-                                Pendentes agora: <strong>#{solicitacaoServicoBean.contarPendentesPorChef(authBean.usuarioLogado.id)}</strong>
+                                Pendentes: <strong>#{solicitacaoPainelBean.totalSolicitacoesChefPendentes}</strong>
+                                <span> | </span>
+                                Em negociação: <strong>#{solicitacaoPainelBean.totalSolicitacoesChefNegociacao}</strong>
                             </p>
                         </header>
 
                         <h:form id="solicitaçõesPerfilChefForm">
                             <section class="negotiation-aside-section">
-                                <h3>Negociações ativas</h3>
-                                <h:panelGroup id="solicitaçõesPerfilChefArea" layout="block">
-                                <h:panelGroup rendered="#{not empty solicitacaoPainelBean.solicitacoesChef}">
+                                <h3>Solicitações pendentes</h3>
+                                <h:panelGroup id="solicitacoesPendentesChefArea" layout="block">
+                                <h:panelGroup rendered="#{not empty solicitacaoPainelBean.solicitacoesChefPendentes}">
                                     <div class="chef-request-list">
-                                        <ui:repeat value="#{solicitacaoPainelBean.solicitacoesChef}" var="sol">
+                                        <ui:repeat value="#{solicitacaoPainelBean.solicitacoesChefPendentes}" var="sol">
                                             <article class="chef-request-card">
                                                 <div class="chef-request-meta">
                                                     <p><strong>Cliente:</strong> #{sol.clienteNome}</p>
@@ -305,6 +307,31 @@
                                                                      action="#{solicitacaoServicoBean.recusar(sol.id, authBean.usuarioLogado.id)}">
                                                         <f:ajax execute="@this" render="@form :msgsChef"/>
                                                     </h:commandButton>
+                                                </div>
+
+                                            </article>
+                                        </ui:repeat>
+                                    </div>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{empty solicitacaoPainelBean.solicitacoesChefPendentes}">
+                                    <p>Nenhuma solicitação pendente no momento.</p>
+                                </h:panelGroup>
+                                </h:panelGroup>
+                            </section>
+
+                            <section class="negotiation-aside-section">
+                                <h3>Negociações ativas</h3>
+                                <h:panelGroup id="solicitacoesAtivasChefArea" layout="block">
+                                <h:panelGroup rendered="#{not empty solicitacaoPainelBean.solicitacoesChefNegociacao}">
+                                    <div class="chef-request-list">
+                                        <ui:repeat value="#{solicitacaoPainelBean.solicitacoesChefNegociacao}" var="sol">
+                                            <article class="chef-request-card">
+                                                <div class="chef-request-meta">
+                                                    <p><strong>Cliente:</strong> #{sol.clienteNome}</p>
+                                                    <p><strong>Pratos:</strong> #{sol.pratosResumo}</p>
+                                                    <p><strong>Data/Hora:</strong> #{solicitacaoPainelBean.formatarData(sol.dataEvento)} #{solicitacaoPainelBean.formatarHorario(sol.horarioEvento)}</p>
+                                                    <p><strong>Convidados:</strong> #{sol.quantidadePessoasEvento}</p>
+                                                    <p><strong>Status:</strong> <span class="#{solicitacaoPainelBean.statusClass(sol.status)}">#{solicitacaoPainelBean.statusLabel(sol.status)}</span></p>
                                                 </div>
 
                                                 <h:panelGroup rendered="#{solicitacaoPainelBean.exibeNegociacao(sol.status)}">
@@ -355,8 +382,8 @@
                                         </ui:repeat>
                                     </div>
                                 </h:panelGroup>
-                                <h:panelGroup rendered="#{empty solicitacaoPainelBean.solicitacoesChef}">
-                                    <p>Nenhuma solicitação recebida ainda.</p>
+                                <h:panelGroup rendered="#{empty solicitacaoPainelBean.solicitacoesChefNegociacao}">
+                                    <p>Nenhuma negociação ativa no momento.</p>
                                 </h:panelGroup>
                                 </h:panelGroup>
                             </section>

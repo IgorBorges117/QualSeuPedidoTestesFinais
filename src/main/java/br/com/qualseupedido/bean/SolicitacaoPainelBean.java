@@ -46,11 +46,47 @@ public class SolicitacaoPainelBean implements Serializable {
         return solicitacaoServicoBean.listarPorChef(authBean.getUsuarioLogado().getId());
     }
 
+    public List<SolicitacaoServicoBean.SolicitacaoServico> getSolicitacoesChefPendentes() {
+        return filtrarSolicitacoes(getSolicitacoesChef(), SolicitacaoServicoBean.STATUS_PENDENTE);
+    }
+
+    public List<SolicitacaoServicoBean.SolicitacaoServico> getSolicitacoesChefNegociacao() {
+        return filtrarSolicitacoes(getSolicitacoesChef(),
+                SolicitacaoServicoBean.STATUS_ACEITO,
+                SolicitacaoServicoBean.STATUS_EM_NEGOCIACAO);
+    }
+
     public List<SolicitacaoServicoBean.SolicitacaoServico> getSolicitacoesCliente() {
         if (!authBean.isCliente() || authBean.getUsuarioLogado() == null) {
             return Collections.emptyList();
         }
         return solicitacaoServicoBean.listarPorCliente(authBean.getUsuarioLogado().getId());
+    }
+
+    public List<SolicitacaoServicoBean.SolicitacaoServico> getSolicitacoesClientePendentes() {
+        return filtrarSolicitacoes(getSolicitacoesCliente(), SolicitacaoServicoBean.STATUS_PENDENTE);
+    }
+
+    public List<SolicitacaoServicoBean.SolicitacaoServico> getSolicitacoesClienteNegociacao() {
+        return filtrarSolicitacoes(getSolicitacoesCliente(),
+                SolicitacaoServicoBean.STATUS_ACEITO,
+                SolicitacaoServicoBean.STATUS_EM_NEGOCIACAO);
+    }
+
+    public int getTotalSolicitacoesChefPendentes() {
+        return getSolicitacoesChefPendentes().size();
+    }
+
+    public int getTotalSolicitacoesChefNegociacao() {
+        return getSolicitacoesChefNegociacao().size();
+    }
+
+    public int getTotalSolicitacoesClientePendentes() {
+        return getSolicitacoesClientePendentes().size();
+    }
+
+    public int getTotalSolicitacoesClienteNegociacao() {
+        return getSolicitacoesClienteNegociacao().size();
     }
 
     public int getNotificacoesClienteAceite() {
@@ -379,5 +415,32 @@ public class SolicitacaoPainelBean implements Serializable {
 
     private void adicionarMensagem(FacesMessage.Severity severity, String resumo, String detalhe) {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, resumo, detalhe));
+    }
+
+    private List<SolicitacaoServicoBean.SolicitacaoServico> filtrarSolicitacoes(
+            List<SolicitacaoServicoBean.SolicitacaoServico> origem,
+            String... status) {
+        if (origem == null || origem.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<SolicitacaoServicoBean.SolicitacaoServico> resultado = new ArrayList<>();
+        for (SolicitacaoServicoBean.SolicitacaoServico solicitacao : origem) {
+            if (solicitacao != null && statusEm(solicitacao.getStatus(), status)) {
+                resultado.add(solicitacao);
+            }
+        }
+        return resultado;
+    }
+
+    private boolean statusEm(String valor, String... status) {
+        if (valor == null || status == null) {
+            return false;
+        }
+        for (String item : status) {
+            if (valor.equals(item)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

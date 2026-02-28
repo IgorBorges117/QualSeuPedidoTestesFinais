@@ -85,7 +85,12 @@
 
                 <section class="auth-card chef-dashboard-section">
                     <h2>Cadastrar prato</h2>
-                    <h:form enctype="multipart/form-data">
+                    <h:form id="pratoForm" enctype="multipart/form-data">
+                        <h:panelGroup rendered="#{pratoBean.editando}">
+                            <div class="dish-edit-banner">
+                                Editando prato: <strong>#{pratoBean.nome}</strong>
+                            </div>
+                        </h:panelGroup>
                         <div class="chef-dish-form-grid">
                             <div class="field-stack">
                                 <h:outputText value="Nome do prato" styleClass="field-label"/>
@@ -115,6 +120,7 @@
                                 <h:outputText value="Foto do prato (opcional)" styleClass="field-label"/>
                                 <h:inputFile id="fotoPrato" value="#{pratoBean.fotoPrato}" pt:accept="image/*"/>
                                 <h:message for="fotoPrato" styleClass="messages"/>
+                                <small class="field-hint" rendered="#{pratoBean.editando}">Se não enviar nova foto, a atual será mantida.</small>
                             </div>
 
                             <div class="field-stack">
@@ -127,9 +133,20 @@
                             </div>
                         </div>
 
-                        <h:commandButton styleClass="btn-submit" value="Adicionar prato" action="#{pratoBean.adicionarPrato(authBean.usuarioLogado.id)}">
-                            <f:ajax execute="@form" render="@form :chefMsgs :chefStatsArea :pratosChefArea"/>
-                        </h:commandButton>
+                        <div class="dish-form-actions">
+                            <h:commandButton rendered="#{not pratoBean.editando}" styleClass="btn btn-primary" value="Adicionar prato"
+                                             action="#{pratoBean.adicionarPrato(authBean.usuarioLogado.id)}">
+                                <f:ajax execute="@form" render="@form :chefMsgs :chefStatsArea :pratosChefArea"/>
+                            </h:commandButton>
+                            <h:commandButton rendered="#{pratoBean.editando}" styleClass="btn btn-primary" value="Salvar alterações"
+                                             action="#{pratoBean.salvarEdicao(authBean.usuarioLogado.id)}">
+                                <f:ajax execute="@form" render="@form :chefMsgs :chefStatsArea :pratosChefArea"/>
+                            </h:commandButton>
+                            <h:commandButton rendered="#{pratoBean.editando}" styleClass="btn btn-neutral" value="Cancelar edição"
+                                             action="#{pratoBean.cancelarEdicao}">
+                                <f:ajax execute="@this" render="@form :chefMsgs :pratosChefArea"/>
+                            </h:commandButton>
+                        </div>
                     </h:form>
                 </section>
 
@@ -137,12 +154,13 @@
                     <section class="auth-card chef-dashboard-section">
                         <h2>Meu cardápio</h2>
                         <h:panelGroup rendered="#{not empty pratoBean.pratosDoChef(authBean.usuarioLogado.id)}">
-                            <div class="chef-cardápio-categorias">
-                                <section class="chef-category-block">
-                                    <h3>Entrada</h3>
-                                    <h:panelGroup rendered="#{not empty pratoBean.pratosDoChefPorCategoria(authBean.usuarioLogado.id, 'ENTRADA')}">
-                                        <div class="chef-carousel-strip">
-                                            <ui:repeat value="#{pratoBean.pratosDoChefPorCategoria(authBean.usuarioLogado.id, 'ENTRADA')}" var="p">
+                            <h:form id="pratosForm">
+                                <div class="chef-cardápio-categorias">
+                                    <section class="chef-category-block">
+                                        <h3>Entrada</h3>
+                                        <h:panelGroup rendered="#{not empty pratoBean.pratosDoChefPorCategoria(authBean.usuarioLogado.id, 'ENTRADA')}">
+                                            <div class="chef-carousel-strip">
+                                                <ui:repeat value="#{pratoBean.pratosDoChefPorCategoria(authBean.usuarioLogado.id, 'ENTRADA')}" var="p">
                                                 <article class="dish-highlight-card">
                                                     <h:panelGroup rendered="#{not empty p.fotoDataUrl}">
                                                         <img src="#{p.fotoDataUrl}" alt="Foto do prato" class="dish-highlight-photo"/>
@@ -154,6 +172,17 @@
                                                     <p>#{p.descricao}</p>
                                                     <p class="dish-highlight-category">#{pratoBean.categoriaLabel(p.categoria)}</p>
                                                     <strong>R$ #{p.preco}</strong>
+                                                    <div class="dish-highlight-actions">
+                                                        <h:commandButton styleClass="dish-action primary" value="Editar"
+                                                                         action="#{pratoBean.selecionarParaEdicao(authBean.usuarioLogado.id, p.id)}">
+                                                            <f:ajax execute="@this" render=":pratoForm :chefMsgs :pratosChefArea"/>
+                                                        </h:commandButton>
+                                                        <h:commandButton styleClass="dish-action danger" value="Excluir"
+                                                                         action="#{pratoBean.excluirPrato(authBean.usuarioLogado.id, p.id)}"
+                                                                         pt:onclick="return confirm('Deseja excluir este prato?');">
+                                                            <f:ajax execute="@this" render=":pratosChefArea :chefStatsArea :chefMsgs :pratoForm"/>
+                                                        </h:commandButton>
+                                                    </div>
                                                 </article>
                                             </ui:repeat>
                                         </div>
@@ -164,10 +193,10 @@
                                 </section>
 
                                 <section class="chef-category-block">
-                                    <h3>Prato principal</h3>
-                                    <h:panelGroup rendered="#{not empty pratoBean.pratosDoChefPorCategoria(authBean.usuarioLogado.id, 'PRINCIPAL')}">
-                                        <div class="chef-carousel-strip">
-                                            <ui:repeat value="#{pratoBean.pratosDoChefPorCategoria(authBean.usuarioLogado.id, 'PRINCIPAL')}" var="p">
+                                        <h3>Prato principal</h3>
+                                        <h:panelGroup rendered="#{not empty pratoBean.pratosDoChefPorCategoria(authBean.usuarioLogado.id, 'PRINCIPAL')}">
+                                            <div class="chef-carousel-strip">
+                                                <ui:repeat value="#{pratoBean.pratosDoChefPorCategoria(authBean.usuarioLogado.id, 'PRINCIPAL')}" var="p">
                                                 <article class="dish-highlight-card">
                                                     <h:panelGroup rendered="#{not empty p.fotoDataUrl}">
                                                         <img src="#{p.fotoDataUrl}" alt="Foto do prato" class="dish-highlight-photo"/>
@@ -179,6 +208,17 @@
                                                     <p>#{p.descricao}</p>
                                                     <p class="dish-highlight-category">#{pratoBean.categoriaLabel(p.categoria)}</p>
                                                     <strong>R$ #{p.preco}</strong>
+                                                    <div class="dish-highlight-actions">
+                                                        <h:commandButton styleClass="dish-action primary" value="Editar"
+                                                                         action="#{pratoBean.selecionarParaEdicao(authBean.usuarioLogado.id, p.id)}">
+                                                            <f:ajax execute="@this" render=":pratoForm :chefMsgs :pratosChefArea"/>
+                                                        </h:commandButton>
+                                                        <h:commandButton styleClass="dish-action danger" value="Excluir"
+                                                                         action="#{pratoBean.excluirPrato(authBean.usuarioLogado.id, p.id)}"
+                                                                         pt:onclick="return confirm('Deseja excluir este prato?');">
+                                                            <f:ajax execute="@this" render=":pratosChefArea :chefStatsArea :chefMsgs :pratoForm"/>
+                                                        </h:commandButton>
+                                                    </div>
                                                 </article>
                                             </ui:repeat>
                                         </div>
@@ -189,10 +229,10 @@
                                 </section>
 
                                 <section class="chef-category-block">
-                                    <h3>Sobremesa</h3>
-                                    <h:panelGroup rendered="#{not empty pratoBean.pratosDoChefPorCategoria(authBean.usuarioLogado.id, 'SOBREMESA')}">
-                                        <div class="chef-carousel-strip">
-                                            <ui:repeat value="#{pratoBean.pratosDoChefPorCategoria(authBean.usuarioLogado.id, 'SOBREMESA')}" var="p">
+                                        <h3>Sobremesa</h3>
+                                        <h:panelGroup rendered="#{not empty pratoBean.pratosDoChefPorCategoria(authBean.usuarioLogado.id, 'SOBREMESA')}">
+                                            <div class="chef-carousel-strip">
+                                                <ui:repeat value="#{pratoBean.pratosDoChefPorCategoria(authBean.usuarioLogado.id, 'SOBREMESA')}" var="p">
                                                 <article class="dish-highlight-card">
                                                     <h:panelGroup rendered="#{not empty p.fotoDataUrl}">
                                                         <img src="#{p.fotoDataUrl}" alt="Foto do prato" class="dish-highlight-photo"/>
@@ -204,6 +244,17 @@
                                                     <p>#{p.descricao}</p>
                                                     <p class="dish-highlight-category">#{pratoBean.categoriaLabel(p.categoria)}</p>
                                                     <strong>R$ #{p.preco}</strong>
+                                                    <div class="dish-highlight-actions">
+                                                        <h:commandButton styleClass="dish-action primary" value="Editar"
+                                                                         action="#{pratoBean.selecionarParaEdicao(authBean.usuarioLogado.id, p.id)}">
+                                                            <f:ajax execute="@this" render=":pratoForm :chefMsgs :pratosChefArea"/>
+                                                        </h:commandButton>
+                                                        <h:commandButton styleClass="dish-action danger" value="Excluir"
+                                                                         action="#{pratoBean.excluirPrato(authBean.usuarioLogado.id, p.id)}"
+                                                                         pt:onclick="return confirm('Deseja excluir este prato?');">
+                                                            <f:ajax execute="@this" render=":pratosChefArea :chefStatsArea :chefMsgs :pratoForm"/>
+                                                        </h:commandButton>
+                                                    </div>
                                                 </article>
                                             </ui:repeat>
                                         </div>
@@ -212,7 +263,8 @@
                                         <p class="order-help">Nenhum prato cadastrado em Sobremesa.</p>
                                     </h:panelGroup>
                                 </section>
-                            </div>
+                                </div>
+                            </h:form>
                         </h:panelGroup>
                         <h:panelGroup rendered="#{empty pratoBean.pratosDoChef(authBean.usuarioLogado.id)}">
                             <p>Você ainda não cadastrou pratos.</p>

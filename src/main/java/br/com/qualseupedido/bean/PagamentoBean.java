@@ -38,6 +38,8 @@ public class PagamentoBean implements Serializable {
     private SolicitacaoServicoBean solicitacaoServicoBean;
     @Inject
     private AuthBean authBean;
+    @Inject
+    private UsuarioBean usuarioBean;
 
     public void iniciarPagamento(Long chefId,
                                  String chefNome,
@@ -97,9 +99,9 @@ public class PagamentoBean implements Serializable {
         statusPagamento = StatusPagamento.CONFIRMADO;
         limparPedido();
         FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_INFO, "Pagamento confirmado", "O pedido foi enviado ao chef."));
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Pagamento confirmado", "Pedido enviado ao chef. Acesse seu perfil para continuar a negociação."));
 
-        return "/pages/chef-perfil-publico.xhtml?faces-redirect=true&chefId=" + chefIdRetorno;
+        return "/pages/cliente-perfil.xhtml?faces-redirect=true";
     }
 
     public String cancelarPagamento() {
@@ -196,6 +198,17 @@ public class PagamentoBean implements Serializable {
         return chefNome;
     }
 
+    public String getChefFotoDataUrl() {
+        if (chefId == null || usuarioBean == null) {
+            return null;
+        }
+        UsuarioSistema chef = usuarioBean.buscarPorId(chefId);
+        if (chef == null) {
+            return null;
+        }
+        return chef.getFotoPerfilDataUrl();
+    }
+
     public String getDataEvento() {
         return dataEvento;
     }
@@ -208,7 +221,18 @@ public class PagamentoBean implements Serializable {
         return quantidadePessoasEvento;
     }
 
+    public int getQuantidadePessoasExibicao() {
+        return quantidadePessoasEvento != null && quantidadePessoasEvento > 0 ? quantidadePessoasEvento : 1;
+    }
+
     public Double getTotalPedido() {
         return totalPedido;
+    }
+
+    public Double totalItem(Prato prato) {
+        if (prato == null || prato.getPreco() == null) {
+            return 0.0;
+        }
+        return prato.getPreco() * getQuantidadePessoasExibicao();
     }
 }

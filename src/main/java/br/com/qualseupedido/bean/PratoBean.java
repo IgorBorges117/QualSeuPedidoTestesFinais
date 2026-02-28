@@ -14,11 +14,14 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import br.com.qualseupedido.util.ImagemUtil;
 import java.io.InputStream;
+import java.util.Locale;
 
 @Named
 @ApplicationScoped
@@ -41,6 +44,7 @@ public class PratoBean implements Serializable {
     private String precoTexto;
     private String categoria = Prato.CATEGORIA_PRINCIPAL;
     private transient Part fotoPrato;
+    private Long pratoEmEdicaoId;
 
     @PostConstruct
     private void carregarPratosDemo() {
@@ -399,11 +403,137 @@ public class PratoBean implements Serializable {
                 true,
                 normalizarCategoria(categoria)
         ));
+        limparFormularioBasico();
+    }
+
+    public void selecionarParaEdicao(Long chefId, Long pratoId) {
+        Prato prato = buscarDoChefPorId(chefId, pratoId);
+        if (prato == null) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prato não encontrado", "Não foi possível localizar o prato para edição."));
+            return;
+        }
+        pratoEmEdicaoId = pratoId;
+        nome = prato.getNome();
+        descricao = prato.getDescricao();
+        preco = prato.getPreco();
+        precoTexto = formatarPrecoEdicao(prato.getPreco());
+        categoria = prato.getCategoria();
+        fotoPrato = null;
+    }
+
+    public void salvarEdicao(Long chefId) {
+        if (pratoEmEdicaoId == null) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Edição inválida", "Selecione um prato para editar."));
+            return;
+        }
+        Prato prato = buscarDoChefPorId(chefId, pratoEmEdicaoId);
+        if (prato == null) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prato não encontrado", "Não foi possível localizar o prato para salvar alterações."));
+            pratoEmEdicaoId = null;
+            return;
+        }
+        if (nome == null || nome.trim().isEmpty()) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nome obrigatório", "Informe o nome do prato."));
+            return;
+        }
+        if (descricao == null || descricao.trim().isEmpty()) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Descrição obrigatória", "Informe a descrição do prato."));
+            return;
+        }
+        Double precoValido = parsePreco(precoTexto);
+        if (precoValido == null) {
+            precoValido = preco;
+        }
+        if (precoValido == null || precoValido <= 0) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Preço inválido", "Informe um preço maior que zero."));
+            return;
+        }
+
+        String fotoDataUrl = prato.getFotoDataUrl();
+        if (fotoPrato != null && fotoPrato.getSize() > 0) {
+            if (fotoPrato.getSize() > TAMANHO_MAXIMO) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Arquivo muito grande", "Use uma imagem de até 3MB."));
+                return;
+            }
+            String contentType = fotoPrato.getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato inválido", "Envie apenas imagem para a foto do prato."));
+                return;
+            }
+            try {
+                fotoDataUrl = ImagemUtil.processarDataUrl(
+                        fotoPrato.getInputStream(),
+                        MAX_LARGURA_PRATO,
+                        MAX_ALTURA_PRATO,
+                        QUALIDADE_JPEG
+                );
+            } catch (IOException e) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Falha no upload", "Não foi possível salvar a foto do prato."));
+                return;
+            }
+        }
+
+        prato.setNome(nome.trim());
+        prato.setDescricao(descricao.trim());
+        prato.setPreco(precoValido);
+        prato.setFotoDataUrl(fotoDataUrl);
+        prato.setCategoria(normalizarCategoria(categoria));
+
+        pratoEmEdicaoId = null;
+        limparFormularioBasico();
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Prato atualizado", "As alterações foram salvas."));
+    }
+
+    public void cancelarEdicao() {
+        pratoEmEdicaoId = null;
+        categoria = Prato.CATEGORIA_PRINCIPAL;
+        limparFormularioBasico();
+    }
+
+    public void excluirPrato(Long chefId, Long pratoId) {
+        Prato prato = buscarDoChefPorId(chefId, pratoId);
+        if (prato == null) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prato não encontrado", "Não foi possível localizar o prato para excluir."));
+            return;
+        }
+        pratos.remove(prato);
+        if (pratoEmEdicaoId != null && pratoEmEdicaoId.equals(pratoId)) {
+            cancelarEdicao();
+        }
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Prato excluído", "O prato foi removido do cardápio."));
+    }
+
+    public boolean isEditando() {
+        return pratoEmEdicaoId != null;
+    }
+
+    private void limparFormularioBasico() {
         nome = "";
         descricao = "";
         preco = null;
         precoTexto = "";
         fotoPrato = null;
+    }
+
+    private String formatarPrecoEdicao(Double valor) {
+        if (valor == null) {
+            return "";
+        }
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(new Locale("pt", "BR"));
+        DecimalFormat df = new DecimalFormat("0.00", symbols);
+        return df.format(valor);
     }
 
     private Double parsePreco(String valor) {

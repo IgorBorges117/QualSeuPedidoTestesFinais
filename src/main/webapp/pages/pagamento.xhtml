@@ -23,51 +23,87 @@
             </h:panelGroup>
 
             <h:panelGroup rendered="#{pagamentoBean.pagamentoPendente}">
-                <div class="auth-card">
-                    <h2>Confirmar pagamento</h2>
-                    <p class="hero-cta-copy">Revise os dados do pedido antes de finalizar o pagamento.</p>
-                    <span class="status-chip #{pagamentoBean.statusPendente ? 'pending' : (pagamentoBean.statusFalha ? 'rejected' : 'accepted')}"
-                          style="margin-top: 10px;">
-                        #{pagamentoBean.statusPagamentoLabel}
-                    </span>
+                <div class="payment-layout">
+                    <section class="auth-card payment-main">
+                        <h2>Confirmar pagamento</h2>
+                        <p class="hero-cta-copy">Revise os dados do pedido antes de finalizar o pagamento.</p>
+                        <span class="status-chip #{pagamentoBean.statusPendente ? 'pending' : (pagamentoBean.statusFalha ? 'rejected' : 'accepted')}"
+                              style="margin-top: 10px;">
+                            #{pagamentoBean.statusPagamentoLabel}
+                        </span>
 
-                    <div class="chef-request-card" style="margin-top: 12px;">
-                        <p><strong>Chef:</strong> #{pagamentoBean.chefNome}</p>
-                        <p><strong>Data:</strong> #{pagamentoBean.dataEvento}</p>
-                        <p><strong>Horário:</strong> #{pagamentoBean.horarioEvento}</p>
-                        <p><strong>Convidados:</strong> #{pagamentoBean.quantidadePessoasEvento}</p>
-                    </div>
+                        <div class="chef-request-card" style="margin-top: 12px;">
+                            <p><strong>Data:</strong> #{pagamentoBean.dataEvento}</p>
+                            <p><strong>Horário:</strong> #{pagamentoBean.horarioEvento}</p>
+                            <p><strong>Convidados:</strong> #{pagamentoBean.quantidadePessoasEvento}</p>
+                        </div>
 
-                    <div class="chef-request-card" style="margin-top: 12px;">
-                        <p><strong>Itens selecionados</strong></p>
-                        <ui:repeat value="#{pagamentoBean.pratos}" var="prato">
-                            <div class="dish-highlight-card" style="margin-top: 8px;">
-                                <h4>#{prato.nome}</h4>
-                                <p>#{prato.descricao}</p>
-                                <strong>
-                                    <h:outputText value="#{prato.preco}">
-                                        <f:convertNumber type="currency" currencySymbol="R$ "/>
-                                    </h:outputText>
-                                </strong>
+                        <h:form styleClass="chef-request-actions payment-actions" style="margin-top: 16px;">
+                            <h:commandButton styleClass="btn-submit" value="Pagar agora (mock)" action="#{pagamentoBean.confirmarPagamento}"/>
+                            <h:commandButton styleClass="btn-submit" value="Simular falha" action="#{pagamentoBean.simularFalhaPagamento}"/>
+                            <h:commandButton styleClass="btn-submit" value="Simular pendência" action="#{pagamentoBean.simularPendenciaPagamento}"/>
+                            <h:commandButton styleClass="btn-submit" value="Cancelar" action="#{pagamentoBean.cancelarPagamento}"/>
+                        </h:form>
+                    </section>
+
+                    <aside class="auth-card payment-summary">
+                        <div class="payment-chef-header">
+                            <div class="payment-chef-avatar">
+                                <h:panelGroup rendered="#{not empty pagamentoBean.chefFotoDataUrl}">
+                                    <img src="#{pagamentoBean.chefFotoDataUrl}" alt="Foto do chef" class="profile-photo"/>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{empty pagamentoBean.chefFotoDataUrl}">
+                                    <div class="profile-photo placeholder">Sem foto</div>
+                                </h:panelGroup>
                             </div>
-                        </ui:repeat>
-                    </div>
+                            <div>
+                                <p class="hero-kicker">Chef selecionado</p>
+                                <h3 class="payment-chef-name">#{pagamentoBean.chefNome}</h3>
+                            </div>
+                        </div>
 
-                    <div class="chef-request-card" style="margin-top: 12px;">
-                        <p><strong>Total</strong></p>
-                        <h3>
-                            <h:outputText value="#{pagamentoBean.totalPedido}">
-                                <f:convertNumber type="currency" currencySymbol="R$ "/>
-                            </h:outputText>
-                        </h3>
-                    </div>
+                        <div class="chef-request-card payment-items">
+                            <p><strong>Itens selecionados</strong></p>
+                            <ui:repeat value="#{pagamentoBean.pratos}" var="prato">
+                                <div class="payment-item-card">
+                                    <div class="payment-item-media">
+                                        <h:panelGroup rendered="#{not empty prato.fotoDataUrl}">
+                                            <img src="#{prato.fotoDataUrl}" alt="Foto do prato" class="payment-item-photo"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{empty prato.fotoDataUrl}">
+                                            <div class="payment-item-photo placeholder" aria-label="Prato sem foto"></div>
+                                        </h:panelGroup>
+                                    </div>
+                                    <div class="payment-item-info">
+                                        <h4>#{prato.nome}</h4>
+                                        <p>#{prato.descricao}</p>
+                                        <p class="payment-item-mult">
+                                            <h:outputText value="#{prato.preco}">
+                                                <f:convertNumber type="currency" currencySymbol="R$ "/>
+                                            </h:outputText>
+                                            x #{pagamentoBean.quantidadePessoasExibicao} pessoas
+                                        </p>
+                                    </div>
+                                    <div class="payment-item-total">
+                                        <strong>
+                                            <h:outputText value="#{pagamentoBean.totalItem(prato)}">
+                                                <f:convertNumber type="currency" currencySymbol="R$ "/>
+                                            </h:outputText>
+                                        </strong>
+                                    </div>
+                                </div>
+                            </ui:repeat>
+                        </div>
 
-                    <h:form styleClass="chef-request-actions" style="margin-top: 16px;">
-                        <h:commandButton styleClass="btn-submit" value="Pagar agora (mock)" action="#{pagamentoBean.confirmarPagamento}"/>
-                        <h:commandButton styleClass="btn-submit" value="Simular falha" action="#{pagamentoBean.simularFalhaPagamento}"/>
-                        <h:commandButton styleClass="btn-submit" value="Simular pendência" action="#{pagamentoBean.simularPendenciaPagamento}"/>
-                        <h:commandButton styleClass="btn-submit" value="Cancelar" action="#{pagamentoBean.cancelarPagamento}"/>
-                    </h:form>
+                        <div class="chef-request-card payment-total">
+                            <p><strong>Total</strong></p>
+                            <h3>
+                                <h:outputText value="#{pagamentoBean.totalPedido}">
+                                    <f:convertNumber type="currency" currencySymbol="R$ "/>
+                                </h:outputText>
+                            </h3>
+                        </div>
+                    </aside>
                 </div>
             </h:panelGroup>
         </div>
